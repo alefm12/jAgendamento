@@ -1132,7 +1132,7 @@ app.use('/api/locations', locationsNewRoutes)
 if (env.NODE_ENV === 'production') {
   const distPath = path.join(process.cwd(), 'dist')
   app.use(express.static(distPath))
-  app.get('*', (_req: Request, res: Response) => {
+  app.get('/{*path}', (_req: Request, res: Response) => {
     res.sendFile(path.join(distPath, 'index.html'))
   })
 }
