@@ -1,0 +1,27 @@
+No linha:1 caractere:200
++ ... ep -Seconds 1; Start-Process cmd -ArgumentList /k,cd,/d,$PWD,&&,npx,t ...
++                                                                  ~
+Express∆o ausente ap¢s ',' no elemento pipeline.
+No linha:1 caractere:200
++ ...  -Seconds 1; Start-Process cmd -ArgumentList /k,cd,/d,$PWD,&&,npx,tsx ...
++                                                                ~~
+O token '&&' n∆o Ç um separador de instruá‰es v†lido nesta vers∆o.
+No linha:1 caractere:203
++ ... -Seconds 1; Start-Process cmd -ArgumentList /k,cd,/d,$PWD,&&,npx,tsx, ...
++                                                                  ~
+Express∆o ausente ap¢s operador un†rio ','.
+No linha:1 caractere:202
++ ... -Seconds 1; Start-Process cmd -ArgumentList /k,cd,/d,$PWD,&&,npx,tsx, ...
++                                                                 ~
+Express‰es s∆o permitidas apenas como o primeiro elemento de um pipeline.
+No linha:1 caractere:203
++ ... conds 1; Start-Process cmd -ArgumentList /k,cd,/d,$PWD,&&,npx,tsx,ser ...
++                                                               ~~~
+Token 'npx' inesperado na express∆o ou instruá∆o.
+No linha:1 caractere:206
++ ... onds 1; Start-Process cmd -ArgumentList /k,cd,/d,$PWD,&&,npx,tsx,serv ...
++                                                                 ~
+Argumento ausente na lista de parÉmetros.
+    + CategoryInfo          : ParserError: (:) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : MissingExpression
+ 

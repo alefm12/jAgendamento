@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>jAgendamento — Apresentação Comercial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --g1: #9333ea; --g2: #7c3aed; --g3: #ede9fe;
+      --b1: #a855f7; --b2: #c084fc; --b3: #f3e8ff;
+      --sl8: #09090b; --sl6: #18181b; --sl4: #27272a;
+      --gray: #71717a; --light: #fafafa;
+      --white: #fff; --yellow: #f59e0b;
+      --red: #dc2626; --purple: #c026d3;
+    }
+    html, body {
+      width: 100%; height: 100%;
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: #09090b; color: #3f3f46;
+      overflow: hidden;
+    }
+
+    /* ── SLIDES ── */
+    .slide {
+      display: none; position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      flex-direction: column; justify-content: center; align-items: center;
+      animation: fadeIn .4s ease; overflow: hidden;
+    }
+    .slide.active { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── PHOTO SLIDES ── */
+    .slide-photo { position: relative; }
+    .photo-bg { position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center; }
+    .photo-overlay { position: absolute; inset: 0; z-index: 1; }
+    .slide-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      width: 100%; height: 100%; padding: 44px 64px;
+    }
+
+    /* ── BACKGROUNDS ── */
+    .bg-hero    { background: var(--sl8); }
+    .bg-white   { background: #18181b; }
+    .bg-light   { background: #1c1c1f; }
+    .bg-green   { background: linear-gradient(135deg, #1a0533, #2d0a5e); }
+    .bg-blue    { background: linear-gradient(135deg, #1a0533, #2d0a5e); }
+    .bg-dark    { background: linear-gradient(135deg, #18181b, #09090b); }
+    .bg-end     { background: linear-gradient(135deg, #6b21a8, #4c1d95, #09090b); }
+    .bg-problem { background: linear-gradient(135deg, #18181b, #09090b); }
+
+    /* ── NAVIGATION ── */
+    #nav {
+      position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 12px; z-index: 999;
+      background: rgba(15,23,42,.88); backdrop-filter: blur(14px);
+      padding: 10px 22px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    }
+    #nav button {
+      background: rgba(255,255,255,.12); border: none; color: #fff;
+      width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+      font-size: 1.1rem; transition: background .2s; display: flex; align-items: center; justify-content: center;
+    }
+    #nav button:hover { background: var(--g1); }
+    #slide-counter { color: #a1a1aa; font-size: .75rem; font-weight: 600; min-width: 52px; text-align: center; }
+    .dot-row { display: flex; gap: 5px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.22); cursor: pointer; transition: all .2s; }
+    .dot.active { background: #c084fc; transform: scale(1.4); }
+
+    /* ── EXPORT ── */
+    #export-wrap { position: relative; }
+    #export-btn {
+      background: rgba(168,85,247,.18); border: 1px solid rgba(192,132,252,.35);
+      color: #c084fc; padding: 5px 13px; border-radius: 999px; cursor: pointer;
+      font-size: .7rem; font-weight: 700; letter-spacing: .04em;
+      transition: background .2s; white-space: nowrap;
+    }
+    #export-btn:hover { background: rgba(168,85,247,.38); }
+    #export-dropdown {
+      display: none; position: absolute; bottom: calc(100% + 10px); right: 0;
+      background: rgba(12,12,18,.97); backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,.14); border-radius: 14px;
+      padding: 7px; min-width: 185px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.6);
+    }
+    #export-dropdown.open { display: flex; flex-direction: column; gap: 3px; }
+    .exp-opt {
+      background: transparent; border: none; color: #f4f4f5;
+      padding: 9px 13px; border-radius: 9px; cursor: pointer;
+      font-size: .78rem; text-align: left; display: flex;
+      align-items: center; gap: 9px; transition: background .15s; width: 100%;
+    }
+    .exp-opt:hover { background: rgba(168,85,247,.2); color: #e9d5ff; }
+    .exp-opt .exp-icon { font-size: 1rem; }
+    .exp-opt small { display: block; font-size: .65rem; color: #71717a; margin-top:1px; }
+    #export-progress {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.82);
+      z-index: 99999; align-items: center; justify-content: center;
+      flex-direction: column; gap: 18px; backdrop-filter: blur(6px);
+    }
+    #export-progress.show { display: flex; }
+    #exp-bar-wrap {
+      width: 320px; background: rgba(255,255,255,.1); border-radius: 999px;
+      height: 6px; overflow: hidden;
+    }
+    #exp-bar { height: 100%; background: linear-gradient(90deg,#9333ea,#c084fc); border-radius: 999px; width: 0%; transition: width .3s; }
+    #exp-label { color: #e9d5ff; font-size: .85rem; font-weight: 600; }
+    #exp-sub { color: #71717a; font-size: .72rem; }
+
+    /* ── PRINT / PDF EXPORT ── */
+    @media print {
+      *, *::before, *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+      }
+      html, body {
+        width: 100vw !important; height: auto !important;
+        overflow: visible !important; background: #09090b !important;
+      }
+      #nav, #export-progress { display: none !important; }
+      .slide {
+        display: flex !important;
+        position: relative !important;
+        width: 100vw !important; height: 100vh !important;
+        min-height: 100vh !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+      }
+      .photo-bg {
+        position: absolute !important;
+        print-color-adjust: exact !important;
+      }
+      .scroll-w { overflow: visible !important; }
+    }
+
+    /* ── SCROLLABLE WRAPPER ── */
+    .scroll-w {
+      overflow-y: auto; width: 100%; height: 100%;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 36px 52px 90px; gap: 22px;
+    }
+
+    /* ── LABELS ── */
+    .label {
+      display: inline-block; font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 4px 14px; border-radius: 999px; margin-bottom: 10px;
+    }
+    .lbl-g  { background: rgba(147,51,234,.25); color: #e9d5ff; border: 1px solid rgba(192,132,252,.4); }
+    .lbl-b  { background: rgba(168,85,247,.2); color: #ddd6fe; border: 1px solid rgba(167,139,250,.4); }
+    .lbl-w  { background: rgba(255,255,255,.1); color: #e4e4e7; border: 1px solid rgba(255,255,255,.18); }
+    .lbl-y  { background: #fef3c7; color: #92400e; }
+    .lbl-r  { background: rgba(220,38,38,.2); color: #fca5a5; border: 1px solid rgba(220,38,38,.4); }
+    .lbl-p  { background: rgba(192,38,211,.2); color: #f0abfc; border: 1px solid rgba(192,38,211,.4); }
+
+    /* ── TYPOGRAPHY ── */
+    .t1 { font-size: clamp(2.2rem, 4.8vw, 3.8rem); font-weight: 900; line-height: 1.08; text-align: center; }
+    .t2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; line-height: 1.15; text-align: center; }
+    .tc-white { color: #fff; }
+    .tc-dark  { color: #f4f4f5; }
+    .tc-green { color: #c084fc; }
+    .sub { font-size: clamp(.9rem, 1.6vw, 1.05rem); line-height: 1.65; max-width: 680px; text-align: center; margin-top: 10px; }
+    .sub-white { color: #a1a1aa; }
+    .sub-dark  { color: #a1a1aa; }
+    .divider { width: 60px; height: 4px; background: var(--g1); border-radius: 2px; margin: 12px auto; }
+
+    /* ── CARDS ── */
+    .grid { display: grid; gap: 16px; width: 100%; max-width: 1060px; }
+    .g2 { grid-template-columns: 1fr 1fr; }
+    .g3 { grid-template-columns: 1fr 1fr 1fr; }
+    .g4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .card {
+      background: #1c1c1f; border-radius: 18px; padding: 22px 20px;
+      box-shadow: 0 2px 14px rgba(0,0,0,.4); border: 1px solid #3f3f46;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(147,51,234,.2); }
+    .card-icon  { font-size: 2rem; margin-bottom: 10px; }
+    .card-title { font-size: .97rem; font-weight: 700; color: #f4f4f5; margin-bottom: 6px; }
+    .card-text  { font-size: .83rem; color: #a1a1aa; line-height: 1.6; }
+    .card-gl { border-left: 4px solid var(--g1); }
+    .card-bl { border-left: 4px solid var(--b1); }
+    .card-pl { border-left: 4px solid var(--purple); }
+    .card-yl { border-left: 4px solid var(--yellow); }
+    .card-rl { border-left: 4px solid var(--red); }
+
+    /* ── IMPACT BOXES ── */
+    .impact-box {
+      background: rgba(220,38,38,.1); border: 1px solid rgba(220,38,38,.3);
+      border-radius: 16px; padding: 22px 20px;
+    }
+    .impact-num  { font-size: 2.4rem; font-weight: 900; color: #f87171; line-height: 1; }
+    .impact-desc { font-size: .83rem; color: #fca5a5; line-height: 1.55; margin-top: 6px; }
+
+    /* ── STATS ── */
+    .stats { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+    .stat {
+      background: #1c1c1f; border-radius: 20px; padding: 22px 30px;
+      text-align: center; box-shadow: 0 4px 24px rgba(147,51,234,.15);
+      min-width: 130px; flex: 1; border: 1px solid #3f3f46;
+    }
+    .stat-num {
+      font-size: 2.5rem; font-weight: 900;
+      background: linear-gradient(135deg, #c084fc, #e879f9);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+    .stat-lbl { font-size: .76rem; color: #a1a1aa; font-weight: 600; margin-top: 6px; }
+
+    /* ── FEATURE LIST ── */
+    .flist { list-style: none; width: 100%; max-width: 860px; display: flex; flex-direction: column; gap: 12px; }
+    .fitem {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: #1c1c1f; border-radius: 14px; padding: 16px 20px;
+      box-shadow: 0 1px 8px rgba(0,0,0,.3); border: 1px solid #3f3f46;
+    }
+    .fnum {
+      min-width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .78rem; font-weight: 800; flex-shrink: 0; color: #fff;
+    }
+    .fnum-g { background: var(--g1); }
+    .fnum-b { background: var(--b1); }
+    .ftitle { font-size: .94rem; font-weight: 700; color: #f4f4f5; margin-bottom: 3px; }
+    .fdesc  { font-size: .82rem; color: #a1a1aa; line-height: 1.55; }
+
+    /* ── STEPS ── */
+    .steps { display: flex; align-items: flex-start; flex-wrap: wrap; justify-content: center; gap: 0; width: 100%; max-width: 1020px; }
+    .step  { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 100px; }
+    .step-c {
+      width: 56px; height: 56px; border-radius: 50%; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem; font-weight: 800; z-index: 1;
+    }
+    .step-c-g  { background: var(--g1);   box-shadow: 0 4px 16px rgba(147,51,234,.5); }
+    .step-c-b  { background: var(--b1);   box-shadow: 0 4px 16px rgba(168,85,247,.5); }
+    .step-c-p  { background: var(--purple); box-shadow: 0 4px 16px rgba(192,38,211,.5); }
+    .step-c-y  { background: var(--yellow); box-shadow: 0 4px 16px rgba(245,158,11,.4); }
+    .step-lbl  { font-size: .77rem; font-weight: 600; color: #d4d4d8; margin-top: 10px; text-align: center; max-width: 108px; line-height: 1.35; }
+    .step-arr  { font-size: 1.3rem; color: #71717a; flex-shrink: 0; padding: 0 4px; margin-bottom: 30px; }
+
+    /* ── COMPARE TABLE ── */
+    .compare { width: 100%; max-width: 900px; border-collapse: collapse; border-radius: 16px; overflow: hidden; font-size: .86rem; }
+    .compare thead tr { background: var(--g1); color: #fff; }
+    .compare th, .compare td { padding: 13px 18px; text-align: left; }
+    .compare thead th:nth-child(2) { background: #b91c1c; }
+    .compare tbody tr:nth-child(even) { background: #18181b; color: #d4d4d8; }
+    .compare tbody tr:nth-child(odd)  { background: #1c1c1f; color: #d4d4d8; }
+
+    /* ── PILLS ── */
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 960px; }
+    .pill { padding: 8px 18px; border-radius: 999px; font-size: .84rem; font-weight: 600; border: 1px solid; transition: transform .15s; }
+    .pill:hover { transform: scale(1.04); }
+    .pill-g { background: rgba(147,51,234,.15); color: #e9d5ff; border-color: rgba(192,132,252,.5); }
+    .pill-b { background: rgba(168,85,247,.15); color: #ddd6fe; border-color: rgba(167,139,250,.5); }
+
+    /* ── QUOTE ── */
+    .quote {
+      background: linear-gradient(135deg, #6b21a8, #7c3aed); color: #fff; border-radius: 20px; padding: 24px 34px;
+      max-width: 780px; text-align: center; box-shadow: 0 8px 36px rgba(147,51,234,.5);
+    }
+    .quote p { font-size: 1.1rem; font-weight: 600; line-height: 1.65; }
+
+    /* ── HERO BADGE ── */
+    .badge-hero {
+      background: rgba(147,51,234,.25); border: 1px solid rgba(192,132,252,.4);
+      color: #e9d5ff; padding: 6px 20px; border-radius: 999px;
+      font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 22px;
+    }
+    .hpills { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+    .hpill {
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.22);
+      color: #e2e8f0; padding: 7px 16px; border-radius: 999px; font-size: .82rem; font-weight: 500;
+    }
+
+    /* ── TWO COL ── */
+    .two-col { display: flex; gap: 48px; align-items: center; width: 100%; max-width: 1080px; }
+
+    /* ── HL BOX ── */
+    .hl-box {
+      background: linear-gradient(135deg, #3b0764, #4c1d95);
+      border-radius: 20px; padding: 24px 36px;
+      max-width: 900px; width: 100%; text-align: center;
+      box-shadow: 0 12px 36px rgba(147,51,234,.4);
+    }
+    .hl-box p { font-size: 1.08rem; color: #e9d5ff; line-height: 1.65; font-weight: 500; }
+    .hl-box strong { color: #fff; }
+
+    /* ── SEC HDR ── */
+    .sec-hdr { text-align: center; margin-bottom: 24px; flex-shrink: 0; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 820px) {
+      .scroll-w { padding: 20px 16px 80px; }
+      .slide-content { padding: 24px 20px; }
+      .g3, .g4 { grid-template-columns: 1fr 1fr; }
+      .g2 { grid-template-columns: 1fr; }
+      .two-col { flex-direction: column; gap: 24px; }
+      .step-arr { display: none; }
+    }
+    @media (max-width: 520px) {
+      .g2, .g3, .g4 { grid-template-columns: 1fr; }
+      .stats { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 1 — CAPA
+══════════════════════════════════════════════ -->
+<div class="slide slide-photo bg-hero active" id="s1">
+  <div class="photo-bg" style="background-image:url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="photo-overlay" style="background:linear-gradient(135deg,rgba(59,7,100,.95) 0%,rgba(9,9,11,.97) 100%)"></div>
+  <div class="slide-content">
+    <div class="badge-hero">Plataforma de Gestão Municipal Digital</div>
+    <h1 class="t1 tc-white" style="margin-bottom:12px">
+      <span class="tc-green">jAgendamento</span><br>Atendimento Público<br>do Século XXI
+    </h1>
+    <p class="sub sub-white" style="max-width:680px;margin-bottom:30px">
+      Modernize sua prefeitura, elimine filas, reduza custos e ofereça ao cidadão o atendimento rápido, digital e transparente que ele merece.
+    </p>
+    <div class="hpills">
+      <span class="hpill">🏛️ Gestão Municipal</span>
+      <span class="hpill">📱 100% Digital</span>
+      <span class="hpill">🔒 Seguro e Conforme a LGPD</span>
+      <span class="hpill">🤖 Assistente Virtual com IA</span>
+      <span class="hpill">⚡ Implantado em 48 horas</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 2 — O PROBLEMA REAL
+══════════════════════════════════════════════ -->
+<div class="slide slide-photo bg-problem" id="s2">
+  <div class="photo-bg" style="background-image:url('https://images.unsplash.com/photo-1568992688065-536aad8a12f6?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="photo-overlay" style="background:linear-gradient(to right,rgba(9,9,11,.97) 42%,rgba(9,9,11,.62) 100%)"></div>
+  <div class="slide-content" style="align-items:flex-start;padding:44px 64px">
+    <div style="max-width:580px">
+      <span class="label lbl-r">A Realidade Hoje</span>
+      <h2 class="t2 tc-white" style="text-align:left;margin-bottom:12px">O cidadão perde dois dias de trabalho — e ainda corre o risco de não ser atendido</h2>
+      <p style="color:#94a3b8;font-size:.87rem;line-height:1.68;margin-bottom:20px">
+        Na maioria das prefeituras o processo é o mesmo: o cidadão precisa sair de casa <strong style="color:#fca5a5">um dia só para fazer o agendamento</strong> — e retornar <strong style="color:#fca5a5">outro dia para ser atendido</strong>. E mesmo assim, <strong style="color:#fca5a5">não existe confirmação</strong>: ele vai à secretaria sem saber se a vaga ainda está garantida.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:38px;height:38px;border-radius:10px;background:rgba(220,38,38,.2);border:1px solid rgba(220,38,38,.4);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0">📅</div>
+          <div>
+            <div style="font-size:.87rem;font-weight:700;color:#f1f5f9">Dois dias perdidos para um único atendimento</div>
+            <div style="font-size:.77rem;color:#94a3b8">1º dia: vai presencialmente para agendar. 2º dia: volta para ser atendido. Duas ausências do trabalho.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:38px;height:38px;border-radius:10px;background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.4);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0">🎰</div>
+          <div>
+            <div style="font-size:.87rem;font-weight:700;color:#f1f5f9">Vai sem saber se terá vaga disponível</div>
+            <div style="font-size:.77rem;color:#94a3b8">Quando chega, pode não ter mais horários. O cidadão volta para casa sem ser atendido, de mãos vazias.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:38px;height:38px;border-radius:10px;background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0">📵</div>
+          <div>
+            <div style="font-size:.87rem;font-weight:700;color:#f1f5f9">Nenhuma confirmação enviada ao cidadão</div>
+            <div style="font-size:.77rem;color:#94a3b8">Ele vai à secretaria sem protocolo, sem comprovante — confiando apenas na memória e no papel rabiscado.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:38px;height:38px;border-radius:10px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0">😤</div>
+          <div>
+            <div style="font-size:.87rem;font-weight:700;color:#f1f5f9">Fila desde a madrugada sem garantia nenhuma</div>
+            <div style="font-size:.77rem;color:#94a3b8">Cidadãos chegam às 5h da manhã para pegar senha. Quem chega depois vai embora sem atendimento.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="width:38px;height:38px;border-radius:10px;background:rgba(30,64,175,.2);border:1px solid rgba(30,64,175,.4);display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0">📞</div>
+          <div>
+            <div style="font-size:.87rem;font-weight:700;color:#f1f5f9">Telefone ocupado — informação zero</div>
+            <div style="font-size:.77rem;color:#94a3b8">Ninguém atende ou a linha está sempre ocupada. O cidadão não sabe horários, documentos nem disponibilidade.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 3 — CUSTO DO PROBLEMA
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="s3">
+  <div style="text-align:center;margin-bottom:28px;flex-shrink:0;padding:0 20px">
+    <span class="label lbl-r">O Custo Real do Problema</span>
+    <h2 class="t2 tc-white" style="margin-bottom:8px">O que o atendimento manual custa ao seu município</h2>
+    <p class="sub sub-white" style="margin:0 auto">Números que impactam o orçamento, a imagem e a satisfação da população.</p>
+  </div>
+  <div class="grid g4" style="max-width:1000px;padding:0 20px">
+    <div class="impact-box" style="text-align:center">
+      <div class="impact-num">3h+</div>
+      <div class="impact-desc">Tempo médio perdido por cidadão a cada atendimento incluindo deslocamento e espera</div>
+    </div>
+    <div class="impact-box" style="background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3)">
+      <div class="impact-num" style="color:#fbbf24">40%</div>
+      <div class="impact-desc" style="color:#fde68a">Das vagas desperdiçadas — o cidadão falta e a vaga fica vazia sem aviso</div>
+    </div>
+    <div class="impact-box" style="background:rgba(124,58,237,.1);border-color:rgba(124,58,237,.3)">
+      <div class="impact-num" style="color:#c4b5fd">8h/dia</div>
+      <div class="impact-desc" style="color:#ddd6fe">Funcionário desperdiça respondendo ligações e organizando agenda manualmente</div>
+    </div>
+    <div class="impact-box" style="background:rgba(30,64,175,.1);border-color:rgba(30,64,175,.3)">
+      <div class="impact-num" style="color:#93c5fd">0</div>
+      <div class="impact-desc" style="color:#bfdbfe">Dados históricos disponíveis — gestão completamente às cegas</div>
+    </div>
+  </div>
+  <div class="hl-box" style="margin-top:28px;padding:20px 36px">
+    <p>Cada cidadão que vai embora sem atendimento é um eleitor frustrado. Cada planilha errada é um risco jurídico. <strong>A modernização não é um luxo — é uma necessidade urgente.</strong></p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 4 — A SOLUÇÃO
+══════════════════════════════════════════════ -->
+<div class="slide slide-photo" id="s4">
+  <div class="photo-bg" style="background-image:url('https://images.unsplash.com/photo-1512314889357-e157c22f938d?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="photo-overlay" style="background:linear-gradient(135deg,rgba(59,7,100,.96),rgba(9,9,11,.94))"></div>
+  <div class="slide-content">
+    <span class="label lbl-w">A Solução</span>
+    <h2 class="t2 tc-white" style="margin-bottom:12px">jAgendamento:<br>O sistema que transforma sua prefeitura</h2>
+    <p class="sub sub-white" style="margin-bottom:32px">Uma plataforma completa que digitaliza todo o processo de agendamento — do cidadão ao gestor — sem burocracia e sem complicações.</p>
+    <div class="stats" style="max-width:880px">
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-lbl">Filas na porta da prefeitura</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">24h</div>
+        <div class="stat-lbl">Disponível para o cidadão</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">48h</div>
+        <div class="stat-lbl">Para estar no ar</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-lbl">Rastreável e transparente</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 5 — BENEFÍCIOS PARA O CIDADÃO
+══════════════════════════════════════════════ -->
+<div class="slide bg-white" id="s5">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-g">Para o Cidadão</span>
+      <h2 class="t2 tc-dark">O atendimento que a população merece</h2>
+      <div class="divider"></div>
+      <p class="sub sub-dark" style="margin:0 auto">Simples, rápido e acessível de qualquer celular, a qualquer hora do dia.</p>
+    </div>
+    <div class="grid g3" style="max-width:1020px">
+      <div class="card card-gl">
+        <div class="card-icon">📱</div>
+        <div class="card-title">Agende pelo celular, sem sair de casa</div>
+        <div class="card-text">O cidadão acessa a página da prefeitura, escolhe o dia e o horário e confirma em menos de 2 minutos. Sem ligação, sem fila, sem estresse.</div>
+      </div>
+      <div class="card card-bl">
+        <div class="card-icon">🔔</div>
+        <div class="card-title">Confirmação por WhatsApp e e-mail</div>
+        <div class="card-text">Assim que confirma, o cidadão recebe protocolo, data, horário, endereço e lista exata dos documentos necessários — tudo em segundos.</div>
+      </div>
+      <div class="card card-yl">
+        <div class="card-icon">⏰</div>
+        <div class="card-title">Lembrete automático no dia anterior</div>
+        <div class="card-text">O sistema envia lembrete 24 horas antes. Isso reduz drasticamente as faltas e o desperdício de vagas sem nenhum esforço da equipe.</div>
+      </div>
+      <div class="card card-gl">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">Consulta e cancela pelo CPF</div>
+        <div class="card-text">Digitando o CPF, o cidadão vê o status do agendamento, pode cancelar e liberar a vaga para outra pessoa — sem precisar ligar.</div>
+      </div>
+      <div class="card card-bl">
+        <div class="card-icon">📍</div>
+        <div class="card-title">Link direto para o local no mapa</div>
+        <div class="card-text">A confirmação já inclui o link do Google Maps para o local de atendimento. Ninguém chega no endereço errado.</div>
+      </div>
+      <div class="card card-pl">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">Assistente virtual 24 horas por dia</div>
+        <div class="card-text">A Ayla responde dúvidas sobre documentos, horários e procedimentos a qualquer hora — sábado, domingo e feriado, sem custo extra.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 6 — COMO FUNCIONA
+══════════════════════════════════════════════ -->
+<div class="slide bg-green" id="s6">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-g">Passo a Passo</span>
+      <h2 class="t2 tc-dark">Do celular ao agendamento em menos de 2 minutos</h2>
+      <div class="divider"></div>
+      <p class="sub sub-dark" style="margin:0 auto">Um processo tão simples que qualquer pessoa consegue — do celular mais básico ao computador.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-c step-c-g">📲</div>
+        <div class="step-lbl">Acessa o site da prefeitura</div>
+      </div>
+      <div class="step-arr">→</div>
+      <div class="step">
+        <div class="step-c step-c-b">🏢</div>
+        <div class="step-lbl">Escolhe o local de atendimento</div>
+      </div>
+      <div class="step-arr">→</div>
+      <div class="step">
+        <div class="step-c step-c-b">📅</div>
+        <div class="step-lbl">Seleciona o dia disponível</div>
+      </div>
+      <div class="step-arr">→</div>
+      <div class="step">
+        <div class="step-c step-c-p">⏰</div>
+        <div class="step-lbl">Escolhe o melhor horário</div>
+      </div>
+      <div class="step-arr">→</div>
+      <div class="step">
+        <div class="step-c step-c-y">📋</div>
+        <div class="step-lbl">Preenche nome, CPF e contato</div>
+      </div>
+      <div class="step-arr">→</div>
+      <div class="step">
+        <div class="step-c" style="background:#7c3aed;box-shadow:0 4px 16px rgba(124,58,237,.4)">✅</div>
+        <div class="step-lbl">Recebe protocolo e confirmação</div>
+      </div>
+    </div>
+    <div class="quote" style="margin-top:20px">
+      <p>Nenhum aplicativo para instalar. Nenhuma senha para criar. Funciona em qualquer celular com internet. <strong>O cidadão está a um toque do agendamento.</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 7PUB — TELA INICIAL DO CIDADÃO (SCREENSHOT)
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="s7pub">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-p">Tela do Cidadão</span>
+      <h2 class="t2 tc-white">Página inicial — simples, clara e com a cara do município</h2>
+      <div class="divider"></div>
+    </div>
+    <div style="display:flex;gap:36px;align-items:flex-start;width:100%;max-width:1060px">
+      <!-- Mockup browser -->
+      <div style="flex:1.3;min-width:0">
+        <div style="background:#1e1e2e;border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(147,51,234,.35);border:1px solid #3f3f46">
+          <!-- Browser bar -->
+          <div style="background:#2a2a3e;padding:8px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #3f3f46">
+            <div style="display:flex;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:#ff5f57"></div><div style="width:10px;height:10px;border-radius:50%;background:#ffbd2e"></div><div style="width:10px;height:10px;border-radius:50%;background:#28c840"></div></div>
+            <div style="flex:1;background:#1a1a2e;border-radius:6px;padding:4px 12px;font-size:.7rem;color:#a78bfa;font-family:monospace">localhost:5000/iraucuba</div>
+          </div>
+          <!-- Page content mockup -->
+          <div style="background:#f0f4f8;padding:20px 24px;min-height:320px">
+            <!-- Header -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:48px;height:48px;border-radius:50%;background:#1a3a6b;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:800;color:#fff">🛡️</div>
+                <div><div style="font-size:.8rem;font-weight:800;color:#1a3a6b">PREFEITURA MUNICIPAL DE</div><div style="font-size:1.4rem;font-weight:900;color:#1a3a6b;line-height:1">Irauçuba</div></div>
+              </div>
+              <div style="background:#1e40af;color:#fff;padding:6px 14px;border-radius:8px;font-size:.7rem;font-weight:700">Área da Secretaria</div>
+            </div>
+            <!-- Body -->
+            <div style="display:flex;gap:20px;align-items:center">
+              <div style="flex:1">
+                <div style="font-size:1.6rem;font-weight:900;color:#1a3a6b;line-height:1.15;margin-bottom:8px">PREFEITURA DE<br>IRAUÇUBA</div>
+                <div style="background:#e2e8f0;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:700;color:#475569;display:inline-block;margin-bottom:14px">SERVIÇO DE AGENDAMENTO DE CIN</div>
+                <div style="background:#16a34a;color:#fff;padding:10px 16px;border-radius:10px;font-size:.78rem;font-weight:800;text-align:center;margin-bottom:8px">📅 REALIZAR AGENDAMENTO</div>
+                <div style="background:#1e40af;color:#fff;padding:10px 16px;border-radius:10px;font-size:.78rem;font-weight:800;text-align:center;margin-bottom:12px">🔍 CONSULTAR AGENDAMENTO</div>
+                <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:7px 12px;border-radius:8px;font-size:.7rem;color:#64748b;display:flex;align-items:center;gap:6px"><span>📞</span> Contato não informado</div>
+              </div>
+              <div style="flex:1;display:flex;justify-content:center">
+                <div style="font-size:5rem;opacity:.7">👥</div>
+              </div>
+            </div>
+            <!-- Ayla bubble -->
+            <div style="position:relative;margin-top:8px">
+              <div style="background:#7c3aed;color:#fff;padding:8px 12px;border-radius:10px;font-size:.68rem;font-weight:600;max-width:200px;margin-left:auto">Olá! Eu sou a Ayla 👋<br><span style="font-weight:400;opacity:.85">Como posso ajudar você?</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Descriptions -->
+      <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+        <div style="background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.3);border-radius:14px;padding:14px 16px">
+          <div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:4px">🏛️ Identidade Visual da Prefeitura</div>
+          <div style="font-size:.78rem;color:#c4b5fd;line-height:1.6">Logo, brasão e cores oficiais do município aparecem na tela. O cidadão reconhece como serviço público confiável.</div>
+        </div>
+        <div style="background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.3);border-radius:14px;padding:14px 16px">
+          <div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:4px">📅 Dois botões principais</div>
+          <div style="font-size:.78rem;color:#c4b5fd;line-height:1.6"><strong style="color:#e9d5ff">Realizar Agendamento</strong>: inicia o fluxo de 4 passos.<br><strong style="color:#e9d5ff">Consultar Agendamento</strong>: o cidadão vê seus agendamentos pelo CPF.</div>
+        </div>
+        <div style="background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.3);border-radius:14px;padding:14px 16px">
+          <div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:4px">🤖 Ayla sempre disponível</div>
+          <div style="font-size:.78rem;color:#c4b5fd;line-height:1.6">O botão da Ayla fica fixo no canto da tela. Um clique e o cidadão recebe ajuda instantânea, 24h por dia.</div>
+        </div>
+        <div style="background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.3);border-radius:14px;padding:14px 16px">
+          <div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:4px">🌐 URL exclusiva do município</div>
+          <div style="font-size:.78rem;color:#c4b5fd;line-height:1.6">Cada prefeitura tem seu próprio endereço web. Exemplo: <code style="color:#e9d5ff">sistema.com/iraucuba</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 8PUB — FLUXO DE AGENDAMENTO (4 PASSOS)
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="s8pub">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-p">Como o Cidadão Agenda</span>
+      <h2 class="t2 tc-white">4 passos simples — do celular ao protocolo confirmado</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="grid g4" style="max-width:1060px">
+      <!-- Passo 1 -->
+      <div style="background:#1a1a2e;border-radius:16px;overflow:hidden;border:2px solid rgba(192,132,252,.5);box-shadow:0 8px 30px rgba(147,51,234,.3)">
+        <div style="background:linear-gradient(135deg,#4c1d95,#6b21a8);padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:.7rem;font-weight:800;color:#e9d5ff;text-transform:uppercase;letter-spacing:.06em">Passo 1</span>
+          <span style="font-size:.7rem;color:#c4b5fd">1 / 4</span>
+        </div>
+        <div style="padding:14px">
+          <div style="font-size:.85rem;font-weight:800;color:#f4f4f5;margin-bottom:10px">🏢 Escolher Local</div>
+          <div style="background:#0f0f1a;border-radius:10px;padding:12px;border:2px solid #7c3aed">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:1rem">📍</span>
+              <div><div style="font-size:.75rem;font-weight:700;color:#f4f4f5">Secretaria Municipal</div><div style="font-size:.65rem;color:#a1a1aa">Rua Principal, 100</div></div>
+              <span style="margin-left:auto;color:#7c3aed;font-weight:900">✓</span>
+            </div>
+          </div>
+          <div style="margin-top:10px;background:#7c3aed;color:#fff;padding:8px;border-radius:8px;font-size:.72rem;font-weight:700;text-align:center">Continuar →</div>
+        </div>
+        <div style="padding:0 14px 14px">
+          <div style="font-size:.72rem;color:#a78bfa;line-height:1.5">O cidadão vê todos os locais de atendimento disponíveis e escolhe o mais próximo.</div>
+        </div>
+      </div>
+      <!-- Passo 2 -->
+      <div style="background:#1a1a2e;border-radius:16px;overflow:hidden;border:2px solid rgba(192,132,252,.5);box-shadow:0 8px 30px rgba(147,51,234,.3)">
+        <div style="background:linear-gradient(135deg,#4c1d95,#6b21a8);padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:.7rem;font-weight:800;color:#e9d5ff;text-transform:uppercase;letter-spacing:.06em">Passo 2</span>
+          <span style="font-size:.7rem;color:#c4b5fd">2 / 4</span>
+        </div>
+        <div style="padding:14px">
+          <div style="font-size:.85rem;font-weight:800;color:#f4f4f5;margin-bottom:10px">📅 Escolher Data</div>
+          <div style="background:#0f0f1a;border-radius:10px;padding:10px;text-align:center">
+            <div style="font-size:.72rem;font-weight:700;color:#c4b5fd;margin-bottom:6px">março 2026</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;font-size:.6rem;color:#71717a;text-align:center">
+              <span>dom</span><span>seg</span><span>ter</span><span>qua</span><span>qui</span><span>sex</span><span>sáb</span>
+              <span></span><span style="color:#a78bfa;font-weight:700">2</span><span style="background:#7c3aed;color:#fff;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;margin:auto">3</span><span style="color:#a78bfa">4</span><span style="color:#a78bfa">5</span><span style="color:#a78bfa">6</span><span></span>
+            </div>
+          </div>
+          <div style="margin-top:10px;font-size:.65rem;color:#a1a1aa;background:#0f0f1a;border-radius:8px;padding:8px">⚠️ Datas bloqueadas (feriados) não ficam disponíveis</div>
+        </div>
+        <div style="padding:0 14px 14px">
+          <div style="font-size:.72rem;color:#a78bfa;line-height:1.5">Exibe apenas os dias com vagas disponíveis. Datas bloqueadas ou esgotadas ficam cinzas.</div>
+        </div>
+      </div>
+      <!-- Passo 3 -->
+      <div style="background:#1a1a2e;border-radius:16px;overflow:hidden;border:2px solid rgba(192,132,252,.5);box-shadow:0 8px 30px rgba(147,51,234,.3)">
+        <div style="background:linear-gradient(135deg,#4c1d95,#6b21a8);padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:.7rem;font-weight:800;color:#e9d5ff;text-transform:uppercase;letter-spacing:.06em">Passo 3</span>
+          <span style="font-size:.7rem;color:#c4b5fd">3 / 4</span>
+        </div>
+        <div style="padding:14px">
+          <div style="font-size:.85rem;font-weight:800;color:#f4f4f5;margin-bottom:10px">⏰ Escolher Horário</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <div style="background:#7c3aed;color:#fff;padding:7px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center">08:00</div>
+            <div style="background:#0f0f1a;color:#a78bfa;padding:7px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center;border:1px solid #3f3f46">08:30</div>
+            <div style="background:#0f0f1a;color:#a78bfa;padding:7px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center;border:1px solid #3f3f46">09:00</div>
+            <div style="background:#0f0f1a;color:#a78bfa;padding:7px;border-radius:8px;font-size:.75rem;font-weight:700;text-align:center;border:1px solid #3f3f46">09:30</div>
+          </div>
+          <div style="margin-top:8px;font-size:.65rem;color:#a78bfa;background:rgba(124,58,237,.15);border-radius:8px;padding:8px;border:1px solid rgba(124,58,237,.3)">📋 4 horários disponíveis. Selecione o melhor.</div>
+        </div>
+        <div style="padding:0 14px 14px">
+          <div style="font-size:.72rem;color:#a78bfa;line-height:1.5">Apenas horários com vagas disponíveis aparecem. Horários lotados são ocultos automaticamente.</div>
+        </div>
+      </div>
+      <!-- Passo 4 -->
+      <div style="background:#1a1a2e;border-radius:16px;overflow:hidden;border:2px solid rgba(192,132,252,.5);box-shadow:0 8px 30px rgba(147,51,234,.3)">
+        <div style="background:linear-gradient(135deg,#4c1d95,#6b21a8);padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:.7rem;font-weight:800;color:#e9d5ff;text-transform:uppercase;letter-spacing:.06em">Passo 4</span>
+          <span style="font-size:.7rem;color:#c4b5fd">4 / 4</span>
+        </div>
+        <div style="padding:14px">
+          <div style="font-size:.85rem;font-weight:800;color:#f4f4f5;margin-bottom:10px">📋 Dados Pessoais</div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:6px;padding:5px 8px;font-size:.65rem;color:#71717a">👤 Nome Completo *</div>
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:6px;padding:5px 8px;font-size:.65rem;color:#71717a">🔢 CPF *</div>
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:6px;padding:5px 8px;font-size:.65rem;color:#71717a">🪪 Tipo de CIN (1ª ou 2ª via) *</div>
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:6px;padding:5px 8px;font-size:.65rem;color:#71717a">📱 Telefone * | 📧 Email *</div>
+          </div>
+          <div style="margin-top:8px;background:#7c3aed;color:#fff;padding:8px;border-radius:8px;font-size:.72rem;font-weight:700;text-align:center">✅ Confirmar Agendamento</div>
+        </div>
+        <div style="padding:0 14px 14px">
+          <div style="font-size:.72rem;color:#a78bfa;line-height:1.5">Validação em tempo real do CPF, telefone e e-mail. Protocolo gerado e confirmação enviada na hora.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 9PUB — AYLA: ASSISTENTE VIRTUAL (SCREENSHOT)
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="s9pub">
+  <div class="two-col" style="max-width:1080px;padding:44px 64px;gap:52px">
+    <div style="flex:1">
+      <span class="label lbl-p" style="margin-bottom:18px;display:inline-block">Assistente Virtual com IA</span>
+      <h2 class="t2 tc-white" style="text-align:left;margin-bottom:14px">Ayla — a assistente que nunca dorme</h2>
+      <p style="color:#a1a1aa;font-size:.93rem;line-height:1.7;margin-bottom:20px">Imagine um atendente disponível 24 horas por dia, 7 dias por semana, que responde instantaneamente qualquer dúvida do cidadão — sem custo adicional de pessoal.</p>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;align-items:flex-start;gap:12px;background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px">
+          <span style="color:#c084fc;font-size:1.1rem;flex-shrink:0">✦</span>
+          <div><div style="font-size:.88rem;font-weight:700;color:#f4f4f5">Agendar Atendimento</div><div style="font-size:.78rem;color:#a1a1aa">Guia o cidadão pelo processo de forma conversacional</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px">
+          <span style="color:#c084fc;font-size:1.1rem;flex-shrink:0">✦</span>
+          <div><div style="font-size:.88rem;font-weight:700;color:#f4f4f5">Consultar Status do CIN</div><div style="font-size:.78rem;color:#a1a1aa">Informa se o documento está em produção, pronto ou entregue</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px">
+          <span style="color:#c084fc;font-size:1.1rem;flex-shrink:0">✦</span>
+          <div><div style="font-size:.88rem;font-weight:700;color:#f4f4f5">Cancelar Agendamento</div><div style="font-size:.78rem;color:#a1a1aa">O cidadão cancela pelo chat sem precisar ligar</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px">
+          <span style="color:#c084fc;font-size:1.1rem;flex-shrink:0">✦</span>
+          <div><div style="font-size:.88rem;font-weight:700;color:#f4f4f5">Locais de Atendimento</div><div style="font-size:.78rem;color:#a1a1aa">Informa endereços, horários e como chegar a cada local</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:rgba(147,51,234,.12);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px">
+          <span style="color:#c084fc;font-size:1.1rem;flex-shrink:0">✦</span>
+          <div><div style="font-size:.88rem;font-weight:700;color:#f4f4f5">Documentos Necessários</div><div style="font-size:.78rem;color:#a1a1aa">Explica a lista exata para 1ª e 2ª via separadamente</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:0 0 300px">
+      <!-- Chat mockup fiel ao screenshot -->
+      <div style="background:#1a1a2e;border-radius:18px;overflow:hidden;box-shadow:0 24px 64px rgba(147,51,234,.5);border:1px solid rgba(192,132,252,.3)">
+        <!-- Chat header -->
+        <div style="background:linear-gradient(135deg,#5b21b6,#7c3aed);padding:12px 16px;display:flex;align-items:center;gap:10px">
+          <div style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:2px solid rgba(255,255,255,.3)">🤖</div>
+          <div>
+            <div style="color:#fff;font-size:.85rem;font-weight:700">Ayla</div>
+            <div style="color:#c4b5fd;font-size:.65rem">Assistente Virtual • Online</div>
+          </div>
+          <div style="margin-left:auto;width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e"></div>
+        </div>
+        <!-- Messages -->
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;background:#0f0f1a">
+          <div style="background:#1e1e2e;border-radius:4px 12px 12px 12px;padding:10px 13px;font-size:.75rem;line-height:1.55;color:#e2e8f0;max-width:90%;border:1px solid #3f3f46">
+            Olá, eu sou a Ayla! 👋<br>Assistente Virtual desenvolvida para lhe ajudar.<br><span style="color:#a1a1aa">Conte conosco para um atendimento rápido e eficiente!</span>
+          </div>
+          <div style="background:#1e1e2e;border-radius:4px 12px 12px 12px;padding:10px 13px;font-size:.77rem;color:#c4b5fd;font-weight:600;border:1px solid #3f3f46;max-width:90%">
+            Como posso ajudar você hoje?
+          </div>
+        </div>
+        <!-- Quick replies -->
+        <div style="padding:6px 12px 12px;display:flex;flex-direction:column;gap:5px;background:#0f0f1a">
+          <div style="background:#1e1e2e;border:1px solid rgba(124,58,237,.5);color:#c084fc;padding:8px 12px;border-radius:10px;font-size:.72rem;font-weight:600;display:flex;align-items:center;gap:6px"><span>📅</span>Agendar Atendimento</div>
+          <div style="background:#1e1e2e;border:1px solid rgba(124,58,237,.5);color:#c084fc;padding:8px 12px;border-radius:10px;font-size:.72rem;font-weight:600;display:flex;align-items:center;gap:6px"><span>🔍</span>Consultar Status do CIN</div>
+          <div style="background:#1e1e2e;border:1px solid rgba(124,58,237,.5);color:#c084fc;padding:8px 12px;border-radius:10px;font-size:.72rem;font-weight:600;display:flex;align-items:center;gap:6px"><span>✕</span>Cancelar Agendamento</div>
+          <div style="background:#1e1e2e;border:1px solid rgba(124,58,237,.5);color:#c084fc;padding:8px 12px;border-radius:10px;font-size:.72rem;font-weight:600;display:flex;align-items:center;gap:6px"><span>📍</span>Locais de Atendimento</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="slide bg-light" id="s7">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-b">Para a Gestão Municipal</span>
+      <h2 class="t2 tc-dark">O que sua prefeitura ganha</h2>
+      <div class="divider" style="background:#1e40af"></div>
+      <p class="sub sub-dark" style="margin:0 auto">Mais eficiência, mais controle, mais satisfação — com a mesma equipe que você já tem.</p>
+    </div>
+    <div class="two-col" style="max-width:1060px;align-items:flex-start;gap:36px">
+      <div style="flex:1">
+        <ul class="flist">
+          <li class="fitem">
+            <div class="fnum fnum-b">1</div>
+            <div>
+              <div class="ftitle">Fim das filas e das reclamações</div>
+              <div class="fdesc">A secretaria recebe apenas cidadãos com horário marcado. Organização total mesmo nos dias de maior movimento.</div>
+            </div>
+          </li>
+          <li class="fitem">
+            <div class="fnum fnum-b">2</div>
+            <div>
+              <div class="ftitle">Equipe produtiva, não sobrecarregada</div>
+              <div class="fdesc">Chega de atender telefone o dia todo para marcar horário. Funcionários focam no atendimento presencial com qualidade.</div>
+            </div>
+          </li>
+          <li class="fitem">
+            <div class="fnum fnum-b">3</div>
+            <div>
+              <div class="ftitle">Relatórios e dados em tempo real</div>
+              <div class="fdesc">Saiba quantos atendimentos foram realizados, qual local tem mais demanda e qual horário é mais procurado. Decisões com base em fatos.</div>
+            </div>
+          </li>
+          <li class="fitem">
+            <div class="fnum fnum-b">4</div>
+            <div>
+              <div class="ftitle">Gestão de múltiplos locais de uma vez</div>
+              <div class="fdesc">Um painel único controla todos os pontos de atendimento do município, com permissões distintas por usuário e função.</div>
+            </div>
+          </li>
+          <li class="fitem">
+            <div class="fnum fnum-b">5</div>
+            <div>
+              <div class="ftitle">Transparência e proteção jurídica</div>
+              <div class="fdesc">Auditoria completa de cada ação, atendimento à LGPD e histórico rastreável. Sua gestão documentada e protegida.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div style="flex:1">
+        <img src="https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&w=800&q=80" alt="Equipe em reunião" style="width:100%;border-radius:20px;height:360px;object-fit:cover;box-shadow:0 16px 50px rgba(0,0,0,.15)" />
+        <div style="background:#1c1c1f;border-radius:16px;padding:16px 20px;margin-top:14px;box-shadow:0 4px 20px rgba(147,51,234,.15);border:1px solid #3f3f46">
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;background:rgba(147,51,234,.15);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(192,132,252,.3)">
+              <div style="font-size:1.35rem;font-weight:900;color:#c084fc">↑60%</div>
+              <div style="font-size:.7rem;color:#a1a1aa;margin-top:2px">Satisfação do cidadão</div>
+            </div>
+            <div style="flex:1;background:rgba(168,85,247,.15);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(167,139,250,.3)">
+              <div style="font-size:1.35rem;font-weight:900;color:#a78bfa">↓70%</div>
+              <div style="font-size:.7rem;color:#a1a1aa;margin-top:2px">Chamadas ao telefone</div>
+            </div>
+            <div style="flex:1;background:rgba(192,38,211,.15);border-radius:10px;padding:10px;text-align:center;border:1px solid rgba(240,171,252,.3)">
+              <div style="font-size:1.35rem;font-weight:900;color:#e879f9">↓40%</div>
+              <div style="font-size:.7rem;color:#a1a1aa;margin-top:2px">Faltas e ausências</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  ADM-1 — PAINEL DA SECRETARIA
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="sA">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-p">Painel Administrativo</span>
+      <h2 class="t2 tc-white">A secretaria tem controle total — em tempo real</h2>
+      <div class="divider"></div>
+    </div>
+    <div style="display:flex;gap:28px;align-items:flex-start;width:100%;max-width:1060px">
+      <!-- Sidebar mockup -->
+      <div style="flex:0 0 148px;background:#111827;border-radius:14px;overflow:hidden;border:1px solid #3f3f46;padding:14px 0">
+        <div style="padding:0 12px 14px;border-bottom:1px solid #3f3f46;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:8px"><div style="width:32px;height:32px;border-radius:50%;background:#1a3a6b;display:flex;align-items:center;justify-content:center;font-size:.7rem">🛡️</div><div style="font-size:.7rem;font-weight:700;color:#f4f4f5">Irauçuba</div></div>
+          <div style="font-size:.62rem;color:#a1a1aa;margin-top:6px;padding-left:2px">ALEF MATHEUS<br><span style="color:#7c3aed;">Administrador</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1px;padding:0 6px">
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">🌐 Página Pública</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#fff;background:#7c3aed;display:flex;align-items:center;gap:6px">🏛 Secretaria</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">👥 Atendimento</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">📦 Entrega CIN <span style="background:#7c3aed;color:#fff;border-radius:9px;padding:1px 6px;font-size:.55rem;margin-left:auto">1</span></div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">📊 Analytics</div>
+          <div style="margin:6px 0;font-size:.55rem;color:#52525b;padding:0 8px;letter-spacing:.08em">RELATÓRIOS</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">↕ Importar/Exportar</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">📋 Templates</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">📅 Agendamentos</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">📜 Histórico</div>
+          <div style="margin:6px 0;font-size:.55rem;color:#52525b;padding:0 8px;letter-spacing:.08em">MONITORAMENTO</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">🔍 Logs de Auditoria</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">🔔 Hist. Lembretes</div>
+          <div style="margin:6px 0;font-size:.55rem;color:#52525b;padding:0 8px;letter-spacing:.08em">GERENCIAMENTO</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">📍 Localidades</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:.65rem;color:#a1a1aa;display:flex;align-items:center;gap:6px">🚫 Bloqueio Datas</div>
+        </div>
+        <div style="margin-top:12px;border-top:1px solid #3f3f46;padding:10px 6px 0">
+          <div style="background:#22c55e;color:#fff;border-radius:8px;padding:5px 8px;font-size:.6rem;font-weight:700;text-align:center;margin-bottom:6px">● Lembretes Ativos (2 canais)</div>
+          <div style="padding:5px 8px;font-size:.62rem;color:#ef4444;display:flex;align-items:center;gap:4px">↩ Sair do Sistema</div>
+        </div>
+      </div>
+      <!-- Dashboard content -->
+      <div style="flex:1;min-width:0">
+        <!-- Header -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:1.3rem;font-weight:800;color:#f4f4f5">Painel da Secretaria</div>
+          <div style="font-size:.75rem;color:#a1a1aa">Gerencie todos os agendamentos de CIN</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:8px;padding:5px 10px;font-size:.65rem;color:#a1a1aa">📋 Ocultar Estatísticas</div>
+            <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:8px;padding:5px 10px;font-size:.65rem;color:#a1a1aa">📊 Relatório de Auditoria</div>
+            <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:8px;padding:5px 10px;font-size:.65rem;color:#a1a1aa;position:relative">🔔 Notificações <span style="background:#ef4444;color:#fff;border-radius:50%;width:14px;height:14px;font-size:.55rem;display:inline-flex;align-items:center;justify-content:center">11</span></div>
+            <div style="background:#7c3aed;border-radius:8px;padding:5px 10px;font-size:.65rem;color:#fff">📥 Exportar</div>
+          </div>
+        </div>
+        <!-- Visão Geral -->
+        <div style="font-size:.7rem;font-weight:700;color:#f4f4f5;margin-bottom:8px">Visão Geral</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px">
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:10px 12px"><div style="font-size:.62rem;color:#a1a1aa">Total</div><div style="font-size:1.4rem;font-weight:800;color:#f4f4f5">5</div></div>
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:10px 12px"><div style="font-size:.62rem;color:#a1a1aa">Hoje</div><div style="font-size:1.4rem;font-weight:800;color:#f4f4f5">0</div></div>
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:10px 12px"><div style="font-size:.62rem;color:#a1a1aa">Esta Semana</div><div style="font-size:1.4rem;font-weight:800;color:#f4f4f5">2</div></div>
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:10px 12px"><div style="font-size:.62rem;color:#a1a1aa">Este Mês</div><div style="font-size:1.4rem;font-weight:800;color:#f4f4f5">2</div></div>
+        </div>
+        <!-- Status dos Agendamentos -->
+        <div style="font-size:.7rem;font-weight:700;color:#f4f4f5;margin-bottom:8px">Status dos Agendamentos</div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px">
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa;margin-bottom:3px">Pendentes</div><div style="font-size:1.2rem;font-weight:800;color:#eab308">1</div><div style="font-size:.55rem;color:#a1a1aa;margin-top:4px">20% do total</div><div style="height:3px;background:#eab308;border-radius:2px;margin-top:4px;width:20%"></div></div>
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa;margin-bottom:3px">Confirmados</div><div style="font-size:1.2rem;font-weight:800;color:#3b82f6">0</div><div style="font-size:.55rem;color:#a1a1aa;margin-top:4px">0% do total</div><div style="height:3px;background:#3b82f6;border-radius:2px;margin-top:4px;width:0%"></div></div>
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa;margin-bottom:3px">Ag. Emissão</div><div style="font-size:1.2rem;font-weight:800;color:#8b5cf6">0</div><div style="font-size:.55rem;color:#a1a1aa;margin-top:4px">0% do total</div><div style="height:3px;background:#8b5cf6;border-radius:2px;margin-top:4px;width:0%"></div></div>
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa;margin-bottom:3px">CIN Prontas</div><div style="font-size:1.2rem;font-weight:800;color:#a78bfa">1</div><div style="font-size:.55rem;color:#a1a1aa;margin-top:4px">20% do total</div><div style="height:3px;background:#a78bfa;border-radius:2px;margin-top:4px;width:20%"></div></div>
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa;margin-bottom:3px">CIN Entregues</div><div style="font-size:1.2rem;font-weight:800;color:#22c55e">1</div><div style="font-size:.55rem;color:#a1a1aa;margin-top:4px">20% do total</div><div style="height:3px;background:#22c55e;border-radius:2px;margin-top:4px;width:20%"></div></div>
+          <div style="background:#1e1e2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa;margin-bottom:3px">Cancelados</div><div style="font-size:1.2rem;font-weight:800;color:#ef4444">2</div><div style="font-size:.55rem;color:#a1a1aa;margin-top:4px">40% do total</div><div style="height:3px;background:#ef4444;border-radius:2px;margin-top:4px;width:40%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  ADM-2 — ENTREGA DE CIN
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="sB">
+  <div class="two-col" style="max-width:1080px;padding:44px 64px;gap:52px">
+    <!-- Mockup -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:0;background:#0f0f1a;border-radius:18px;overflow:hidden;border:1px solid #3f3f46;box-shadow:0 20px 60px rgba(124,58,237,.3)">
+      <div style="background:linear-gradient(135deg,#4c1d95,#6b21a8);padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:.85rem;font-weight:800;color:#fff">📦 Entrega de RG / CIN</div>
+          <div style="font-size:.65rem;color:#c4b5fd">Controle os CINs em emissão e os já liberados</div>
+        </div>
+        <div style="background:#fff;color:#6d28d9;border-radius:20px;padding:4px 12px;font-size:.65rem;font-weight:800">1 aguardando</div>
+      </div>
+      <!-- Tabs -->
+      <div style="display:flex;background:#1a1a2e;border-bottom:1px solid #3f3f46">
+        <div style="flex:1;padding:8px;text-align:center;font-size:.65rem;color:#a1a1aa;border-right:1px solid #3f3f46">Aguardando Emissão <span style="background:#3f3f46;border-radius:9px;padding:1px 5px;font-size:.55rem">0</span></div>
+        <div style="flex:1;padding:8px;text-align:center;font-size:.65rem;color:#fff;font-weight:700;background:#2d1b69;border-right:1px solid #3f3f46">CIN Prontas <span style="background:#7c3aed;color:#fff;border-radius:9px;padding:1px 5px;font-size:.55rem">1</span></div>
+        <div style="flex:1;padding:8px;text-align:center;font-size:.65rem;color:#a1a1aa">CINs Entregues <span style="background:#3f3f46;border-radius:9px;padding:1px 5px;font-size:.55rem">1</span></div>
+      </div>
+      <!-- Search -->
+      <div style="padding:10px 14px;background:#1a1a2e;border-bottom:1px solid #3f3f46">
+        <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:8px;padding:6px 10px;font-size:.65rem;color:#71717a">🔍 Buscar por nome, CPF ou protocolo...</div>
+      </div>
+      <!-- Info bar -->
+      <div style="padding:6px 14px;background:#1a1a2e;border-bottom:1px solid #3f3f46">
+        <div style="font-size:.6rem;color:#a78bfa">Após registrar a entrega, o status muda automaticamente para CIN Entregue</div>
+      </div>
+      <!-- Citizen card -->
+      <div style="padding:12px 14px;background:#1a1a2e">
+        <div style="background:#111827;border:1px solid #3f3f46;border-radius:12px;padding:14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:6px"><span style="color:#a78bfa">👤</span><span style="font-size:.78rem;font-weight:800;color:#f4f4f5">AILTON HARYSON FERNANDES TEIXEIRA</span></div>
+            <div style="background:#7c3aed;color:#fff;border-radius:8px;padding:3px 10px;font-size:.6rem;font-weight:700">Protocolo: RGMM2I3OHUIYQR</div>
+          </div>
+          <div style="display:flex;gap:14px;font-size:.62rem;color:#a1a1aa;margin-bottom:10px">
+            <span>📄 CPF: 062.448.283-99</span><span>📱 (85) 99678-5471</span>
+          </div>
+          <div style="display:flex;gap:14px;font-size:.62rem;color:#a1a1aa;margin-bottom:10px">
+            <span>📅 Concluído: 25/02/2026 às 17:46</span><span>📍 Secretaria 10</span>
+          </div>
+          <div style="font-size:.6rem;color:#71717a;margin-bottom:12px">Concluído por: ALEF MATHEUS TEIXEIRA DE SOUSA</div>
+          <div style="display:flex;gap:6px">
+            <div style="background:#7c3aed;color:#fff;border-radius:8px;padding:7px 14px;font-size:.68rem;font-weight:700">✓ Registrar Entrega</div>
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;color:#a78bfa;border-radius:8px;padding:7px 14px;font-size:.68rem">↩ Voltar para Emissão</div>
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;color:#a78bfa;border-radius:8px;padding:7px 14px;font-size:.68rem">📨 Reenviar Notif.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Descriptions -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+      <div><span class="label lbl-p" style="display:inline-block;margin-bottom:12px">Função: Entrega de CIN</span>
+      <h2 class="t2 tc-white" style="text-align:left;font-size:1.7rem;margin-bottom:10px">Controle do ciclo de vida do documento</h2>
+      <p style="color:#a1a1aa;font-size:.9rem;line-height:1.7">Do agendamento à entrega do CIN na mão do cidadão. A secretaria controla cada etapa com rastreabilidade total.</p></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">🔄 3 etapas rastreadas</div><div style="font-size:.78rem;color:#a1a1aa">Aguardando Emissão → CIN Pronta para Entrega → CIN Entregue. Status muda automaticamente.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">🔍 Busca em tempo real</div><div style="font-size:.78rem;color:#a1a1aa">Encontre qualquer cidadão por nome, CPF ou número de protocolo instantaneamente.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">↩ Correção de erros</div><div style="font-size:.78rem;color:#a1a1aa">Possível voltar uma etapa (ex: retornar CIN Pronta para Emissão) sem perder dados.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📨 Reenvio de notificação</div><div style="font-size:.78rem;color:#a1a1aa">Reenvie aviso ao cidadão com um clique quando o CIN estiver pronto para retirada.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📊 Contador no menu lateral</div><div style="font-size:.78rem;color:#a1a1aa">Badge vermelho no menu mostra quantos CINs aguardam entrega — sem deixar nada esquecido.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  ADM-3 — ANALYTICS E ESTATÍSTICAS
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="sC">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-p">Função: Analytics</span>
+      <h2 class="t2 tc-white">Dados em tempo real para decisões inteligentes</h2>
+      <div class="divider"></div>
+      <p class="sub sub-white" style="margin:0 auto">A secretaria enxerga padrões, picos de demanda e gargalos — antes que virem problemas.</p>
+    </div>
+    <div style="display:flex;gap:28px;max-width:1060px;width:100%;align-items:flex-start">
+      <!-- Left: mockup -->
+      <div style="flex:1.2;background:#0f0f1a;border-radius:16px;overflow:hidden;border:1px solid #3f3f46;box-shadow:0 16px 48px rgba(124,58,237,.25)">
+        <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);padding:12px 18px">
+          <div style="font-size:.85rem;font-weight:800;color:#fff">📊 Analytics e Estatísticas</div>
+        </div>
+        <!-- KPIs -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 14px;background:#111827;border-bottom:1px solid #3f3f46">
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa">Total</div><div style="font-size:1.1rem;font-weight:800;color:#f4f4f5">5</div><div style="font-size:.55rem;color:#a78bfa">Média 0,1/dia</div></div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa">Hoje</div><div style="font-size:1.1rem;font-weight:800;color:#f4f4f5">0</div><div style="font-size:.55rem;color:#a78bfa">2 esta semana</div></div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa">Este Mês</div><div style="font-size:1.1rem;font-weight:800;color:#f4f4f5">2</div><div style="font-size:.55rem;color:#a78bfa">40% do total</div></div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:8px 10px"><div style="font-size:.58rem;color:#a1a1aa">CINs Aguardando</div><div style="font-size:1.1rem;font-weight:800;color:#f4f4f5">1</div><div style="font-size:.55rem;color:#a78bfa">1 já entregue</div></div>
+        </div>
+        <!-- Tab bar -->
+        <div style="display:flex;flex-wrap:wrap;gap:4px;padding:10px 14px;background:#111827;border-bottom:1px solid #3f3f46">
+          <div style="background:#7c3aed;color:#fff;border-radius:5px;padding:3px 8px;font-size:.6rem;font-weight:700">Por Status</div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:5px;padding:3px 8px;font-size:.6rem">Tipo de CIN</div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:5px;padding:3px 8px;font-size:.6rem">Por Local</div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:5px;padding:3px 8px;font-size:.6rem">Por Região</div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:5px;padding:3px 8px;font-size:.6rem">Por Gênero</div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:5px;padding:3px 8px;font-size:.6rem">Por Bairro</div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:5px;padding:3px 8px;font-size:.6rem">Tendências</div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:5px;padding:3px 8px;font-size:.6rem">Entrega de CIN</div>
+        </div>
+        <!-- Charts row -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 14px;background:#111827">
+          <!-- Pie chart -->
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:12px;padding:12px">
+            <div style="font-size:.68rem;font-weight:700;color:#f4f4f5;margin-bottom:4px">Distribuição por Status</div>
+            <div style="font-size:.58rem;color:#a1a1aa;margin-bottom:8px">Agendamentos por status atual</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <!-- Visual pie placeholder -->
+              <div style="width:60px;height:60px;border-radius:50%;background:conic-gradient(#22c55e 0% 20%,#3b82f6 20% 40%,#ef4444 40% 80%,#eab308 80% 100%);flex-shrink:0"></div>
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;align-items:center;gap:5px;font-size:.58rem"><div style="width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0"></div><span style="color:#f4f4f5">CIN entregue</span><span style="color:#a1a1aa;margin-left:auto">1</span></div>
+                <div style="display:flex;align-items:center;gap:5px;font-size:.58rem"><div style="width:7px;height:7px;border-radius:50%;background:#3b82f6;flex-shrink:0"></div><span style="color:#f4f4f5">CIN pronta</span><span style="color:#a1a1aa;margin-left:auto">1</span></div>
+                <div style="display:flex;align-items:center;gap:5px;font-size:.58rem"><div style="width:7px;height:7px;border-radius:50%;background:#ef4444;flex-shrink:0"></div><span style="color:#f4f4f5">Cancelado</span><span style="color:#a1a1aa;margin-left:auto">2</span></div>
+                <div style="display:flex;align-items:center;gap:5px;font-size:.58rem"><div style="width:7px;height:7px;border-radius:50%;background:#eab308;flex-shrink:0"></div><span style="color:#f4f4f5">Pendente</span><span style="color:#a1a1aa;margin-left:auto">1</span></div>
+              </div>
+            </div>
+          </div>
+          <!-- Summary -->
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:12px;padding:12px">
+            <div style="font-size:.68rem;font-weight:700;color:#f4f4f5;margin-bottom:4px">Resumo de Status</div>
+            <div style="font-size:.58rem;color:#a1a1aa;margin-bottom:8px">Quantidade por categoria</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:#3b82f6"></div><span style="font-size:.62rem;color:#f4f4f5">CIN pronta</span></div><span style="background:#3b82f6;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.58rem;display:flex;align-items:center;justify-content:center">1</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:#22c55e"></div><span style="font-size:.62rem;color:#f4f4f5">CIN entregue</span></div><span style="background:#22c55e;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.58rem;display:flex;align-items:center;justify-content:center">1</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:#ef4444"></div><span style="font-size:.62rem;color:#f4f4f5">Cancelado</span></div><span style="background:#ef4444;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.58rem;display:flex;align-items:center;justify-content:center">2</span></div>
+              <div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:5px"><div style="width:7px;height:7px;border-radius:50%;background:#eab308"></div><span style="font-size:.62rem;color:#f4f4f5">Pendente</span></div><span style="background:#eab308;color:#fff;border-radius:50%;width:16px;height:16px;font-size:.58rem;display:flex;align-items:center;justify-content:center">1</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right: feature list -->
+      <div style="flex:1;display:flex;flex-direction:column;gap:11px">
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📊 8 dimensões de análise</div><div style="font-size:.78rem;color:#a1a1aa">Por Status, Tipo de CIN (1ª/2ª via), Local de Atendimento, Região, Gênero, Bairro/Comunidade, Tendências e Entrega.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📈 KPIs em destaque</div><div style="font-size:.78rem;color:#a1a1aa">Total de agendamentos, média diária, desempenho do mês e CINs aguardando entrega — sempre visíveis no topo.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">🥧 Gráficos interativos</div><div style="font-size:.78rem;color:#a1a1aa">Gráfico de pizza com distribuição de status, barras por local e linhas de tendência ao longo do tempo.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📥 Exportação de Relatórios</div><div style="font-size:.78rem;color:#a1a1aa">Exporte qualquer análise em PDF, CSV ou JSON. Leve os dados para reuniões ou sistemas externos.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">⚡ Tempo real</div><div style="font-size:.78rem;color:#a1a1aa">Os números se atualizam automaticamente. Cada novo agendamento, cancelamento ou entrega reflete imediatamente.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  ADM-4 — HISTÓRICO DE LEMBRETES / NOTIFICAÇÕES
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="sD">
+  <div class="two-col" style="max-width:1080px;padding:44px 64px;gap:52px">
+    <!-- Mockup -->
+    <div style="flex:1;background:#0f0f1a;border-radius:18px;overflow:hidden;border:1px solid #3f3f46;box-shadow:0 20px 60px rgba(124,58,237,.3)">
+      <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:12px 18px">
+        <div style="font-size:.85rem;font-weight:800;color:#fff">🔔 Histórico de Lembretes</div>
+      </div>
+      <!-- Stats -->
+      <div style="display:flex;gap:10px;padding:12px 14px;background:#111827;border-bottom:1px solid #3f3f46">
+        <div style="flex:1;background:#dcfce7;border:1px solid #22c55e;border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:#22c55e;display:flex;align-items:center;justify-content:center">✓</div><div><div style="font-size:.6rem;color:#16a34a;font-weight:700">Lembretes Enviados</div><div style="font-size:1.3rem;font-weight:900;color:#16a34a">0</div></div></div>
+        <div style="flex:1;background:#dbeafe;border:1px solid #3b82f6;border-radius:10px;padding:10px;display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:#3b82f6;display:flex;align-items:center;justify-content:center">🔔</div><div><div style="font-size:.6rem;color:#1d4ed8;font-weight:700">Aguardando Envio</div><div style="font-size:1.3rem;font-weight:900;color:#1d4ed8">1</div></div></div>
+      </div>
+      <!-- Channels section -->
+      <div style="padding:12px 14px;background:#111827;border-bottom:1px solid #3f3f46">
+        <div style="font-size:.7rem;font-weight:700;color:#c4b5fd;margin-bottom:6px">🔔 Canais de Notificação</div>
+        <div style="font-size:.62rem;color:#a1a1aa;margin-bottom:10px">Os lembretes são enviados através de Email e WhatsApp</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <div style="flex:1;background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:10px;display:flex;gap:8px;align-items:flex-start"><span style="font-size:1.1rem">📧</span><div><div style="font-size:.68rem;font-weight:700;color:#f4f4f5">Email</div><div style="font-size:.6rem;color:#a1a1aa">Mensagens detalhadas com informações completas e links úteis</div></div></div>
+          <div style="flex:1;background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:10px;display:flex;gap:8px;align-items:flex-start"><span style="font-size:1.1rem">💬</span><div><div style="font-size:.68rem;font-weight:700;color:#f4f4f5">WhatsApp</div><div style="font-size:.6rem;color:#a1a1aa">Mensagens ricas com formatação, emojis e confirmação de leitura</div></div></div>
+        </div>
+        <div style="background:rgba(234,179,8,.1);border:1px solid rgba(234,179,8,.3);border-radius:8px;padding:8px 10px;display:flex;align-items:flex-start;gap:6px">
+          <span style="font-size:.85rem">⚡</span>
+          <div style="font-size:.62rem;color:#fbbf24;line-height:1.6"><strong>Envio Simultâneo em Todos os Canais</strong><br><span style="color:#fde68a">Quando um lembrete é enviado, o cidadão recebe por Email e WhatsApp, garantindo que a mensagem chegue independente do canal preferido.</span></div>
+        </div>
+      </div>
+      <!-- History table header -->
+      <div style="padding:10px 14px;background:#111827">
+        <div style="font-size:.7rem;font-weight:700;color:#f4f4f5;margin-bottom:4px">🔔 Histórico de Lembretes Enviados</div>
+        <div style="font-size:.6rem;color:#a1a1aa;margin-bottom:8px">Lista de todos os lembretes automáticos enviados aos cidadãos</div>
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:8px;padding:6px 10px;font-size:.62rem;color:#71717a">🔍 Buscar por nome, CPF, protocolo, telefone ou email...</div>
+      </div>
+    </div>
+    <!-- Descriptions -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+      <div><span class="label lbl-p" style="display:inline-block;margin-bottom:12px">Função: Lembretes e Notificações</span>
+      <h2 class="t2 tc-white" style="text-align:left;font-size:1.7rem;margin-bottom:10px">O cidadão nunca esquece o agendamento</h2>
+      <p style="color:#a1a1aa;font-size:.9rem;line-height:1.7">Lembretes automáticos vão direto ao celular do cidadão por dois canais ao mesmo tempo. Zero faltas por esquecimento.</p></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📧 Email com detalhes completos</div><div style="font-size:.78rem;color:#a1a1aa">Data, hora, local, protocolo, lista de documentos necessários e link para cancelamento — tudo em um e-mail.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">💬 WhatsApp com confirmação de leitura</div><div style="font-size:.78rem;color:#a1a1aa">Mensagem formatada com emojis. A secretaria sabe se o cidadão leu o aviso.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">⚡ Envio simultâneo nos dois canais</div><div style="font-size:.78rem;color:#a1a1aa">Um disparo único envia para Email e WhatsApp ao mesmo tempo. Não há riscos de o recado não chegar.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📜 Histórico rastreável</div><div style="font-size:.78rem;color:#a1a1aa">Cada lembrete enviado fica registrado. Pesquise por nome, CPF, protocolo ou telefone.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">● Status de canais no rodapé</div><div style="font-size:.78rem;color:#a1a1aa">O menu inferior do admin exibe "Lembretes Ativos (2 canais)" em verde — confirmando que tudo está funcionando.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  ADM-5 — GERENCIAR LOCALIDADES
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="sE">
+  <div class="two-col" style="max-width:1080px;padding:44px 64px;gap:52px">
+    <!-- Mockup -->
+    <div style="flex:1;background:#0f0f1a;border-radius:18px;overflow:hidden;border:1px solid #3f3f46;box-shadow:0 20px 60px rgba(34,197,94,.2)">
+      <div style="background:linear-gradient(135deg,#064e3b,#065f46);padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:.85rem;font-weight:800;color:#fff">📍 Gerenciar Localidades</div>
+          <div style="font-size:.65rem;color:#a7f3d0">Mantenha sedes, distritos e bairros alinhados ao fluxo público</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div style="background:#0f0f1a;border:1px solid #3f3f46;color:#a7f3d0;border-radius:8px;padding:4px 10px;font-size:.63rem">3 registros monitorados</div>
+          <div style="background:#22c55e;color:#fff;border-radius:8px;padding:4px 10px;font-size:.63rem;font-weight:700">+ Nova localidade</div>
+        </div>
+      </div>
+      <!-- Region cards -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:12px 14px;background:#111827;border-bottom:1px solid #3f3f46">
+        <div style="background:#dbeafe;border:1px solid #93c5fd;border-radius:10px;padding:10px"><div style="font-size:.58rem;color:#1e40af;font-weight:700;text-transform:uppercase;margin-bottom:4px">Região Sede</div><div style="font-size:.9rem;font-weight:800;color:#1e40af">Sede</div><div style="font-size:.58rem;color:#3b82f6;margin-top:3px">Nome exibido no formulário público</div></div>
+        <div style="background:#fef9c3;border:1px solid #fbbf24;border-radius:10px;padding:10px"><div style="font-size:.58rem;color:#b45309;font-weight:700;text-transform:uppercase;margin-bottom:4px">Distritos</div><div style="font-size:.9rem;font-weight:800;color:#b45309">1</div><div style="font-size:.58rem;color:#d97706;margin-top:3px">Regiões vinculadas ao cadastro</div></div>
+        <div style="background:#f3e8ff;border:1px solid #a855f7;border-radius:10px;padding:10px"><div style="font-size:.58rem;color:#7c3aed;font-weight:700;text-transform:uppercase;margin-bottom:4px">Bairros/Comunidades</div><div style="font-size:.9rem;font-weight:800;color:#7c3aed">1</div><div style="font-size:.58rem;color:#9333ea;margin-top:3px">Detalhes adicionais por localidade</div></div>
+      </div>
+      <!-- Districts list -->
+      <div style="padding:12px 14px;background:#111827;border-bottom:1px solid #3f3f46">
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px">
+          <span style="font-size:.9rem">🏛</span>
+          <div><div style="font-size:.72rem;font-weight:700;color:#f4f4f5">Missi</div><div style="font-size:.62rem;color:#a1a1aa">Distrito · 1 bairro vinculado</div></div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:6px;padding:4px 8px;font-size:.6rem;color:#a1a1aa">▾ Expandir</div>
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:6px;padding:4px 8px;font-size:.6rem;color:#a78bfa">✏ Editar</div>
+            <div style="background:#0f0f1a;border:1px solid #ef4444;border-radius:6px;padding:4px 8px;font-size:.6rem;color:#ef4444">🗑</div>
+          </div>
+        </div>
+      </div>
+      <!-- Local de Atendimento -->
+      <div style="padding:12px 14px;background:#111827">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div><div style="font-size:.72rem;font-weight:700;color:#f4f4f5">📍 Locais de Atendimento</div><div style="font-size:.6rem;color:#a1a1aa">Pontos presenciais onde os cidadãos comparecem</div></div>
+          <div style="display:flex;gap:6px"><div style="background:#0f0f1a;border:1px solid #3f3f46;color:#a1a1aa;border-radius:8px;padding:4px 8px;font-size:.6rem">1 local</div><div style="background:#22c55e;color:#fff;border-radius:8px;padding:4px 10px;font-size:.62rem;font-weight:700">+ Novo local</div></div>
+        </div>
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px"><span>📍</span><div><div style="font-size:.72rem;font-weight:700;color:#f4f4f5">Secretaria 10</div><div style="font-size:.62rem;color:#a1a1aa">Rua Principal, 100</div><div style="font-size:.58rem;color:#22c55e;margin-top:2px">Ver no mapa</div></div></div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <div style="background:#dcfce7;color:#16a34a;border-radius:6px;padding:3px 8px;font-size:.6rem;font-weight:700">ATIVO</div>
+            <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:6px;padding:4px 7px;font-size:.6rem;color:#a78bfa">✏</div>
+            <div style="background:#0f0f1a;border:1px solid #ef4444;border-radius:6px;padding:4px 7px;font-size:.6rem;color:#ef4444">🗑</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Descriptions -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+      <div><span class="label lbl-p" style="display:inline-block;margin-bottom:12px">Função: Localidades</span>
+      <h2 class="t2 tc-white" style="text-align:left;font-size:1.7rem;margin-bottom:10px">A geografia do município dentro do sistema</h2>
+      <p style="color:#a1a1aa;font-size:.9rem;line-height:1.7">Cadastre e gerencie todos os pontos de atendimento, distritos e bairros. O que o administrador criar aqui, o cidadão vê na hora de agendar.</p></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">🏛 Sede + Distritos + Bairros</div><div style="font-size:.78rem;color:#a1a1aa">Estrutura hierárquica completa do município. Cada camada é vinculada à anterior e reflete no formulário público.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📍 Locais de Atendimento</div><div style="font-size:.78rem;color:#a1a1aa">Cadastre cada secretaria ou posto com nome, endereço e link para o mapa. Os cidadãos escolhem o ponto mais próximo.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">🟢 Ativar / Desativar locais</div><div style="font-size:.78rem;color:#a1a1aa">Precisa fechar um ponto temporariamente? Desative com um clique. Ele some do formulário público automaticamente.</div></div>
+        <div style="background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#e9d5ff;margin-bottom:3px">📊 Dados por local no Analytics</div><div style="font-size:.78rem;color:#a1a1aa">Na aba Analytics, é possível ver quantos agendamentos cada local recebeu — útil para redistribuir demanda.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  ADM-6 — BLOQUEIO DE DATAS
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="sF">
+  <div class="two-col" style="max-width:1080px;padding:44px 64px;gap:52px">
+    <!-- Mockup -->
+    <div style="flex:1;background:#0f0f1a;border-radius:18px;overflow:hidden;border:1px solid #3f3f46;box-shadow:0 20px 60px rgba(239,68,68,.2)">
+      <div style="background:linear-gradient(135deg,#7f1d1d,#991b1b);padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:.85rem;font-weight:800;color:#fff">🚫 Bloqueio de Datas</div>
+          <div style="font-size:.65rem;color:#fca5a5">Bloqueie datas específicas para evitar agendamentos do público</div>
+        </div>
+        <div style="display:flex;gap:7px">
+          <div style="background:#7f1d1d;border:1px solid #ef4444;color:#fca5a5;border-radius:8px;padding:4px 10px;font-size:.62rem">⊙ Bloquear Finais de Semana</div>
+          <div style="background:#ef4444;color:#fff;border-radius:8px;padding:4px 10px;font-size:.62rem;font-weight:700">+ Bloquear Data Específica</div>
+        </div>
+      </div>
+      <!-- Summary bar -->
+      <div style="padding:10px 14px;background:#1a0000;border-bottom:1px solid #3f3f46;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:6px;font-size:.65rem;color:#fca5a5"><span>🗑</span> Remover todos os bloqueios &nbsp;<span style="color:#ef4444;font-weight:700">18 bloqueio(s) cadastrados no total</span></div>
+        <div style="background:#ef4444;color:#fff;border-radius:7px;padding:4px 10px;font-size:.62rem;font-weight:700">🗑 Remover Todos</div>
+      </div>
+      <!-- Month section -->
+      <div style="padding:10px 14px;background:#111827;border-bottom:1px solid #3f3f46;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:6px"><span style="font-size:.65rem;color:#a1a1aa">📅 Próximos Bloqueios</span></div>
+      </div>
+      <div style="padding:10px 14px;background:#111827;border-bottom:1px solid #3f3f46;display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:.72rem;font-weight:700;color:#7c3aed">MARÇO de 2026</span><span style="background:#ef4444;color:#fff;border-radius:9px;padding:2px 8px;font-size:.58rem;font-weight:700">9 bloqueios</span></div>
+        <div style="background:#7f1d1d;border:1px solid #ef4444;color:#fca5a5;border-radius:6px;padding:3px 8px;font-size:.58rem">🗑 Remover Mês</div>
+      </div>
+      <!-- Date rows -->
+      <div style="padding:8px 14px;background:#111827;display:flex;flex-direction:column;gap:5px">
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:9px;padding:8px 12px;display:flex;align-items:center;gap:10px"><span style="font-size:.75rem;font-weight:700;color:#a78bfa;width:20px">01</span><span style="font-size:.7rem;color:#f4f4f5">domingo</span><span style="background:#ef4444;color:#fff;border-radius:5px;padding:2px 7px;font-size:.6rem;font-weight:700">📅 Dia Inteiro</span><span style="font-size:.62rem;color:#a1a1aa;margin-left:auto">Final de semana - sem atendimento</span><span style="color:#ef4444;margin-left:8px">🗑</span></div>
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:9px;padding:8px 12px;display:flex;align-items:center;gap:10px"><span style="font-size:.75rem;font-weight:700;color:#a78bfa;width:20px">07</span><span style="font-size:.7rem;color:#f4f4f5">sábado</span><span style="background:#ef4444;color:#fff;border-radius:5px;padding:2px 7px;font-size:.6rem;font-weight:700">📅 Dia Inteiro</span><span style="font-size:.62rem;color:#a1a1aa;margin-left:auto">Final de semana - sem atendimento</span><span style="color:#ef4444;margin-left:8px">🗑</span></div>
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:9px;padding:8px 12px;display:flex;align-items:center;gap:10px"><span style="font-size:.75rem;font-weight:700;color:#a78bfa;width:20px">08</span><span style="font-size:.7rem;color:#f4f4f5">domingo</span><span style="background:#ef4444;color:#fff;border-radius:5px;padding:2px 7px;font-size:.6rem;font-weight:700">📅 Dia Inteiro</span><span style="font-size:.62rem;color:#a1a1aa;margin-left:auto">Final de semana - sem atendimento</span><span style="color:#ef4444;margin-left:8px">🗑</span></div>
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:9px;padding:8px 12px;display:flex;align-items:center;gap:10px"><span style="font-size:.75rem;font-weight:700;color:#a78bfa;width:20px">14</span><span style="font-size:.7rem;color:#f4f4f5">sábado</span><span style="background:#ef4444;color:#fff;border-radius:5px;padding:2px 7px;font-size:.6rem;font-weight:700">📅 Dia Inteiro</span><span style="font-size:.62rem;color:#a1a1aa;margin-left:auto">Final de semana - sem atendimento</span><span style="color:#ef4444;margin-left:8px">🗑</span></div>
+      </div>
+    </div>
+    <!-- Descriptions -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+      <div><span class="label lbl-p" style="display:inline-block;margin-bottom:12px">Função: Bloqueio de Datas</span>
+      <h2 class="t2 tc-white" style="text-align:left;font-size:1.7rem;margin-bottom:10px">A secretaria controla o calendário de atendimento</h2>
+      <p style="color:#a1a1aa;font-size:.9rem;line-height:1.7">Nenhum cidadão agendará em feriado, recesso ou dia sem expediente. O sistema bloqueia e esconde essas datas automaticamente.</p></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:rgba(239,68,68,.1);border:1px solid rgba(252,165,165,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#fecaca;margin-bottom:3px">⊙ Bloquear finais de semana</div><div style="font-size:.78rem;color:#a1a1aa">Um botão bloqueia todos os sábados e domingos do mês inteiro. 9 bloqueios criados em 1 clique.</div></div>
+        <div style="background:rgba(239,68,68,.1);border:1px solid rgba(252,165,165,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#fecaca;margin-bottom:3px">📅 Bloquear data específica</div><div style="font-size:.78rem;color:#a1a1aa">Escale um feriado municipal, estadual ou ponto facultativo com data e justificativa.</div></div>
+        <div style="background:rgba(239,68,68,.1);border:1px solid rgba(252,165,165,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#fecaca;margin-bottom:3px">🗑 Remover por mês ou tudo</div><div style="font-size:.78rem;color:#a1a1aa">Limpe todos os bloqueios de um mês de uma vez, ou remova todos de uma só vez ao reabrir o atendimento.</div></div>
+        <div style="background:rgba(239,68,68,.1);border:1px solid rgba(252,165,165,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#fecaca;margin-bottom:3px">📆 Reflete no calendário público</div><div style="font-size:.78rem;color:#a1a1aa">As datas bloqueadas ficam cinzas e indisponíveis no calendário que o cidadão vê. Sem confusão, sem agendamentos errados.</div></div>
+        <div style="background:rgba(239,68,68,.1);border:1px solid rgba(252,165,165,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#fecaca;margin-bottom:3px">👤 Rastreabilidade de quem bloqueou</div><div style="font-size:.78rem;color:#a1a1aa">Cada bloqueio registra quem o criou: "Bloqueado por ALEF MATHEUS TEIXEIRA DE SOUSA".</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  ADM-7 — LOGS DE AUDITORIA
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="sG">
+  <div class="two-col" style="max-width:1080px;padding:44px 64px;gap:52px">
+    <!-- Mockup -->
+    <div style="flex:1;background:#0f0f1a;border-radius:18px;overflow:hidden;border:1px solid #3f3f46;box-shadow:0 20px 60px rgba(59,130,246,.2)">
+      <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:.85rem;font-weight:800;color:#fff">🔍 Logs de Auditoria</div>
+          <div style="font-size:.65rem;color:#bfdbfe">Histórico completo de todas as ações no sistema</div>
+        </div>
+        <div style="display:flex;gap:5px">
+          <div style="background:#1d4ed8;color:#fff;border-radius:6px;padding:3px 8px;font-size:.6rem">Atualizar</div>
+          <div style="background:#1d4ed8;color:#fff;border-radius:6px;padding:3px 8px;font-size:.6rem">CSV</div>
+          <div style="background:#1d4ed8;color:#fff;border-radius:6px;padding:3px 8px;font-size:.6rem">JSON</div>
+          <div style="background:#1d4ed8;color:#fff;border-radius:6px;padding:3px 8px;font-size:.6rem">PDF</div>
+          <div style="background:#ef4444;color:#fff;border-radius:6px;padding:3px 8px;font-size:.6rem;font-weight:700">Limpar Logs</div>
+        </div>
+      </div>
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 14px;background:#111827;border-bottom:1px solid #3f3f46">
+        <div style="background:#1a1a2e;border:1px solid #3b82f6;border-radius:10px;padding:8px 10px;text-align:center"><div style="font-size:.58rem;color:#93c5fd">Total de Logs</div><div style="font-size:1.3rem;font-weight:800;color:#3b82f6">293</div></div>
+        <div style="background:#1a1a2e;border:1px solid #fbbf24;border-radius:10px;padding:8px 10px;text-align:center"><div style="font-size:.58rem;color:#fde68a">Severidade Média</div><div style="font-size:1.3rem;font-weight:800;color:#fbbf24">119</div></div>
+        <div style="background:#1a1a2e;border:1px solid #f97316;border-radius:10px;padding:8px 10px;text-align:center"><div style="font-size:.58rem;color:#fed7aa">Severidade Alta</div><div style="font-size:1.3rem;font-weight:800;color:#f97316">49</div></div>
+        <div style="background:#1a1a2e;border:1px solid #ef4444;border-radius:10px;padding:8px 10px;text-align:center"><div style="font-size:.58rem;color:#fca5a5">Críticos</div><div style="font-size:1.3rem;font-weight:800;color:#ef4444">59</div></div>
+      </div>
+      <!-- Search + filters -->
+      <div style="padding:8px 14px;background:#111827;border-bottom:1px solid #3f3f46;display:flex;gap:8px;align-items:center">
+        <div style="flex:1;background:#1a1a2e;border:1px solid #3f3f46;border-radius:8px;padding:5px 10px;font-size:.62rem;color:#71717a">🔍 Buscar por descrição, usuário, alvo...</div>
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:7px;padding:4px 10px;font-size:.62rem;color:#a1a1aa">⊟ Filtros</div>
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:7px;padding:4px 10px;font-size:.62rem;color:#a1a1aa">↓ Mais Recentes</div>
+      </div>
+      <!-- Filter tabs -->
+      <div style="padding:6px 14px;background:#111827;border-bottom:1px solid #3f3f46;display:flex;gap:6px">
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:6px;padding:3px 10px;font-size:.62rem;color:#a1a1aa">Hoje</div>
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:6px;padding:3px 10px;font-size:.62rem;color:#a1a1aa">7 dias</div>
+        <div style="background:#7c3aed;border-radius:6px;padding:3px 10px;font-size:.62rem;color:#fff;font-weight:700">Todos</div>
+      </div>
+      <!-- Log entries -->
+      <div style="padding:8px 14px;background:#111827;display:flex;flex-direction:column;gap:6px">
+        <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:10px;padding:9px 12px">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px"><span style="font-size:.7rem">ℹ️</span><span style="font-size:.68rem;font-weight:700;color:#22c55e">Login Realizado</span><span style="background:#dcfce7;color:#16a34a;border-radius:4px;padding:1px 6px;font-size:.55rem;font-weight:600">Baixo</span></div>
+          <div style="font-size:.6rem;color:#a1a1aa;line-height:1.5">Usuário "ALEF MATHEUS TEIXEIRA DE SOUSA" na aba Administração, por ALEF MATHEUS, 28/02/2026 às 13:26:10 (IP 179.42.154.145)</div>
+          <div style="font-size:.58rem;color:#71717a;margin-top:3px">👤 ALEF MATHEUS · 📅 28/02/2026 13:26 · 💻 IP 179.42.154.145</div>
+        </div>
+        <div style="background:#1a1a2e;border:1px solid #ef4444;border-radius:10px;padding:9px 12px">
+          <div style="display:flex;align-items:center;gap:5px;margin-bottom:4px"><span style="font-size:.7rem">⚠️</span><span style="font-size:.68rem;font-weight:700;color:#ef4444">LOGIN_FAILED</span><span style="background:#fee2e2;color:#991b1b;border-radius:4px;padding:1px 6px;font-size:.55rem;font-weight:600">Crítica</span><span style="background:#fee2e2;color:#991b1b;border-radius:4px;padding:1px 6px;font-size:.55rem;font-weight:600">Falhou</span></div>
+          <div style="font-size:.6rem;color:#a1a1aa;line-height:1.5">Tentativa de acesso inválida para admin@admin.com: Senha incorreta (IP 179.42.154.145)</div>
+          <div style="font-size:.58rem;color:#71717a;margin-top:3px">👤 admin@admin.com · 📅 28/02/2026 09:04 · 💻 IP 179.42.154.145</div>
+        </div>
+      </div>
+    </div>
+    <!-- Descriptions -->
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+      <div><span class="label lbl-p" style="display:inline-block;margin-bottom:12px">Função: Logs de Auditoria</span>
+      <h2 class="t2 tc-white" style="text-align:left;font-size:1.7rem;margin-bottom:10px">Tudo que acontece no sistema fica registrado</h2>
+      <p style="color:#a1a1aa;font-size:.9rem;line-height:1.7">Quem fez o quê, quando e de onde. A prefeitura tem rastreabilidade total para fins de segurança, compliance e LGPD.</p></div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:rgba(59,130,246,.1);border:1px solid rgba(147,197,253,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#bfdbfe;margin-bottom:3px">📊 293 logs · 4 níveis de severidade</div><div style="font-size:.78rem;color:#a1a1aa">Informativo, Médio, Alto e Crítico. Cada ação recebe uma classificação automática de risco.</div></div>
+        <div style="background:rgba(59,130,246,.1);border:1px solid rgba(147,197,253,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#bfdbfe;margin-bottom:3px">🔍 Busca e filtros avançados</div><div style="font-size:.78rem;color:#a1a1aa">Filtre por usuário, ação, data (hoje / 7 dias / todos) ou faça busca livre por qualquer campo.</div></div>
+        <div style="background:rgba(59,130,246,.1);border:1px solid rgba(147,197,253,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#bfdbfe;margin-bottom:3px">📥 Exportação CSV, JSON e PDF</div><div style="font-size:.78rem;color:#a1a1aa">Gere relatório de auditoria para TCE, CGU ou auditoria interna no formato exigido.</div></div>
+        <div style="background:rgba(59,130,246,.1);border:1px solid rgba(147,197,253,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#bfdbfe;margin-bottom:3px">🌐 IP e geolocalização</div><div style="font-size:.78rem;color:#a1a1aa">Cada log registra o IP de origem e a cidade (ex: Irauçuba, Ceará, Brasil) — detectando acessos suspeitos.</div></div>
+        <div style="background:rgba(59,130,246,.1);border:1px solid rgba(147,197,253,.25);border-radius:12px;padding:12px 14px"><div style="font-size:.88rem;font-weight:700;color:#bfdbfe;margin-bottom:3px">🛡 Conformidade LGPD</div><div style="font-size:.78rem;color:#a1a1aa">Com auditoria completa, a prefeitura demonstra conformidade com a Lei Geral de Proteção de Dados em qualquer fiscalização.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  ADM-8 — ADMINISTRAÇÃO DO SISTEMA
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="sH">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-p">Função: Administração do Sistema</span>
+      <h2 class="t2 tc-white">Backup automático, usuários e configurações completas</h2>
+      <div class="divider"></div>
+      <p class="sub sub-white" style="margin:0 auto">Tudo o que o administrador precisa para manter o sistema seguro e personalizado.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:1060px;width:100%">
+
+      <!-- Backup card -->
+      <div style="background:#111827;border-radius:16px;overflow:hidden;border:1px solid #3f3f46">
+        <div style="background:linear-gradient(135deg,#1e3a5f,#1e40af);padding:10px 14px">
+          <div style="font-size:.78rem;font-weight:800;color:#fff">💾 Backup Completo do Sistema</div>
+          <div style="font-size:.62rem;color:#bfdbfe;margin-top:2px">Banco, uploads e arquivos de configuração</div>
+        </div>
+        <div style="padding:12px">
+          <div style="background:#16a34a;color:#fff;border-radius:8px;padding:6px;text-align:center;font-size:.65rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;justify-content:center;gap:5px">✓ Backup automático ativado</div>
+          <div style="display:flex;flex-direction:column;gap:5px;background:#1a1a2e;border-radius:10px;padding:9px;border:1px solid #3f3f46;margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;font-size:.63rem"><span style="color:#a1a1aa">Periodicidade</span><span style="color:#f4f4f5;font-weight:600">Diário</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:.63rem"><span style="color:#a1a1aa">Horário</span><span style="color:#f4f4f5;font-weight:600">02:00</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:.63rem"><span style="color:#a1a1aa">Retenção</span><span style="color:#f4f4f5;font-weight:600">30 dias</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:.63rem"><span style="color:#a1a1aa">Último backup</span><span style="color:#22c55e;font-weight:600">27/02 07:41</span></div>
+          </div>
+          <div style="display:flex;gap:5px;margin-bottom:6px">
+            <div style="flex:1;background:#1d4ed8;color:#fff;border-radius:7px;padding:6px;font-size:.62rem;font-weight:700;text-align:center">📁 Gerar</div>
+            <div style="flex:1;background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:7px;padding:6px;font-size:.62rem;text-align:center">↑ Importar</div>
+            <div style="flex:1;background:#1a1a2e;border:1px solid #3f3f46;color:#a1a1aa;border-radius:7px;padding:6px;font-size:.62rem;text-align:center">↻ Restaurar</div>
+          </div>
+          <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:8px;padding:6px 9px;font-size:.6rem;color:#a1a1aa;text-align:center">23 backups · último 27/02 07:41 · 104 MB</div>
+        </div>
+        <div style="padding:0 12px 12px;font-size:.7rem;color:#93c5fd;line-height:1.5;background:rgba(59,130,246,.07);border-top:1px solid #1e3a5f;padding-top:8px;margin-top:2px">🔒 Dados nunca são perdidos. Restauração com 1 clique para qualquer ponto.</div>
+      </div>
+
+      <!-- Usuários card -->
+      <div style="background:#111827;border-radius:16px;overflow:hidden;border:1px solid #3f3f46">
+        <div style="background:linear-gradient(135deg,#3b0764,#5b21b6);padding:10px 14px">
+          <div style="font-size:.78rem;font-weight:800;color:#fff">👤 Gerenciamento de Usuários</div>
+          <div style="font-size:.62rem;color:#ddd6fe;margin-top:2px">Crie usuários e defina permissões por função</div>
+        </div>
+        <div style="padding:12px">
+          <!-- Modal preview -->
+          <div style="background:#1a1a2e;border:1px solid #a78bfa;border-radius:12px;padding:10px;margin-bottom:8px">
+            <div style="font-size:.68rem;font-weight:700;color:#e9d5ff;margin-bottom:7px">Adicionar Novo Usuário</div>
+            <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px">
+              <div style="display:flex;gap:4px">
+                <div style="flex:1;background:#0f0f1a;border:1px solid #3f3f46;border-radius:5px;padding:4px 6px;font-size:.58rem;color:#71717a">Nome de Usuário *</div>
+                <div style="flex:1;background:#0f0f1a;border:1px solid #3f3f46;border-radius:5px;padding:4px 6px;font-size:.58rem;color:#71717a">Senha *</div>
+              </div>
+              <div style="display:flex;gap:4px">
+                <div style="flex:1;background:#0f0f1a;border:1px solid #3f3f46;border-radius:5px;padding:4px 6px;font-size:.58rem;color:#71717a">Nome Completo *</div>
+                <div style="flex:1;background:#0f0f1a;border:1px solid #3f3f46;border-radius:5px;padding:4px 6px;font-size:.58rem;color:#71717a">E-mail *</div>
+              </div>
+              <div style="background:#0f0f1a;border:1px solid #3f3f46;border-radius:5px;padding:4px 6px;font-size:.58rem;color:#71717a">Tipo de Acesso: Usuário Local ▾</div>
+            </div>
+          </div>
+          <!-- Permissions list -->
+          <div style="font-size:.65rem;font-weight:700;color:#c4b5fd;margin-bottom:6px">Permissões Granulares</div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:.62rem;color:#f4f4f5;background:#1a1a2e;border-radius:6px;padding:5px 9px"><span>Confirmar agendamentos</span><span style="background:#22c55e;border-radius:10px;width:22px;height:12px;display:inline-block"></span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:.62rem;color:#f4f4f5;background:#1a1a2e;border-radius:6px;padding:5px 9px"><span>Concluir atendimentos</span><span style="background:#22c55e;border-radius:10px;width:22px;height:12px;display:inline-block"></span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:.62rem;color:#f4f4f5;background:#1a1a2e;border-radius:6px;padding:5px 9px"><span>Cancelar agendamentos</span><span style="background:#3f3f46;border-radius:10px;width:22px;height:12px;display:inline-block"></span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:.62rem;color:#f4f4f5;background:#1a1a2e;border-radius:6px;padding:5px 9px"><span>Administrador do Sistema</span><span style="background:#3f3f46;border-radius:10px;width:22px;height:12px;display:inline-block"></span></div>
+          </div>
+        </div>
+        <div style="padding:0 12px 12px;font-size:.7rem;color:#c4b5fd;line-height:1.5;background:rgba(124,58,237,.07);border-top:1px solid #3b0764;padding-top:8px;margin-top:2px">🔑 Cada funcionário acessa apenas o que precisa. Segurança por função.</div>
+      </div>
+
+      <!-- Configurações card -->
+      <div style="background:#111827;border-radius:16px;overflow:hidden;border:1px solid #3f3f46">
+        <div style="background:linear-gradient(135deg,#1c1917,#292524);padding:10px 14px">
+          <div style="font-size:.78rem;font-weight:800;color:#fff">⚙️ Configurações do Sistema</div>
+          <div style="font-size:.62rem;color:#d6d3d1;margin-top:2px">Personalize cada detalhe do sistema</div>
+        </div>
+        <div style="padding:12px">
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px">
+            <div style="background:#1a1a2e;border:2px solid #7c3aed;border-radius:7px;padding:4px 10px;font-size:.62rem;color:#a78bfa;font-weight:700">Institucional</div>
+            <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:7px;padding:4px 10px;font-size:.62rem;color:#71717a">Campos</div>
+            <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:7px;padding:4px 10px;font-size:.62rem;color:#71717a">Horários</div>
+            <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:7px;padding:4px 10px;font-size:.62rem;color:#71717a">Notificações</div>
+            <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:7px;padding:4px 10px;font-size:.62rem;color:#71717a">Chamadas</div>
+            <div style="background:#1a1a2e;border:1px solid #3f3f46;border-radius:7px;padding:4px 10px;font-size:.62rem;color:#71717a">Geral</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="background:#1a1a2e;border-left:3px solid #a78bfa;border-radius:0 8px 8px 0;padding:8px 10px"><div style="font-size:.67rem;font-weight:700;color:#e9d5ff">🏛 Institucional</div><div style="font-size:.6rem;color:#a1a1aa;margin-top:2px">Nome da prefeitura, logo, brasão, mascote, contato e cor do tema</div></div>
+            <div style="background:#1a1a2e;border-left:3px solid #71717a;border-radius:0 8px 8px 0;padding:8px 10px"><div style="font-size:.67rem;font-weight:700;color:#d4d4d8">📋 Campos</div><div style="font-size:.6rem;color:#a1a1aa;margin-top:2px">Habilite ou oculte campos do formulário público (gênero, endereço, tipo de CIN...)</div></div>
+            <div style="background:#1a1a2e;border-left:3px solid #71717a;border-radius:0 8px 8px 0;padding:8px 10px"><div style="font-size:.67rem;font-weight:700;color:#d4d4d8">⏰ Horários</div><div style="font-size:.6rem;color:#a1a1aa;margin-top:2px">Defina o horário de início e fim do atendimento e o intervalo entre agendamentos</div></div>
+            <div style="background:#1a1a2e;border-left:3px solid #71717a;border-radius:0 8px 8px 0;padding:8px 10px"><div style="font-size:.67rem;font-weight:700;color:#d4d4d8">🔔 Notificações</div><div style="font-size:.6rem;color:#a1a1aa;margin-top:2px">Configure chave de API do WhatsApp (Z-API), template dos lembretes e horário de envio</div></div>
+          </div>
+        </div>
+        <div style="padding:0 12px 12px;font-size:.7rem;color:#d6d3d1;line-height:1.5;background:rgba(255,255,255,.03);border-top:1px solid #3f3f46;padding-top:8px;margin-top:2px">🎨 O sistema se adapta ao município — não o contrário.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 8 — TUDO QUE ESTÁ INCLUÍDO
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="s8">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-w">Funcionalidades Completas</span>
+      <h2 class="t2 tc-white">Tudo que o sistema faz — em detalhe</h2>
+      <div class="divider"></div>
+      <p class="sub sub-white" style="margin:0 auto">Uma plataforma completa para sua prefeitura, sem módulos separados ou contratos adicionais.</p>
+    </div>
+    <!-- Para o Cidadão -->
+    <div style="width:100%;max-width:1040px;margin-bottom:8px">
+      <div style="font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#c084fc;margin-bottom:10px;padding-left:4px">👤 PARA O CIDADÃO</div>
+      <div class="grid g3" style="gap:10px">
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">📅</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Agendamento Online 24 horas</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Acessa o site da prefeitura e agenda em menos de 2 minutos, sem precisar ir presencialmente nem ligar.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">🔔</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Confirmação por WhatsApp e E-mail</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Recebe protocolo, data, horário, endereço e lista exata de documentos necessários em segundos.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">⏰</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Lembrete Automático 24h Antes</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Notificação automática um dia antes para o cidadão não esquecer, reduzindo faltas em até 40%.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">🔍</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Consulta e Cancelamento pelo CPF</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Digita o CPF e vê data, horário e status. Pode cancelar online, liberando a vaga automaticamente.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">📍</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Link do Google Maps na Confirmação</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">A confirmação já inclui o mapa do local de atendimento. Ninguém chega no endereço errado.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">🤖</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Assistente Virtual Ayla — 24h/dia</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Responde dúvidas sobre documentos, horários e procedimentos a qualquer hora, sábados e feriados.</div>
+        </div>
+      </div>
+    </div>
+    <!-- Para a Gestão -->
+    <div style="width:100%;max-width:1040px">
+      <div style="font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#a78bfa;margin-bottom:10px;padding-left:4px">🏛️ PARA A GESTÃO DA SECRETARIA</div>
+      <div class="grid g3" style="gap:10px">
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">📋</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Painel Completo de Agendamentos</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Todos os agendamentos em uma tela, com filtros por data, local, status e busca por CPF, nome ou protocolo.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">✅</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Gestão de Status com Um Clique</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Confirmar, atender, concluir ou cancelar — cada ação registrada com data, hora e funcionário responsável.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">📦</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Controle de Entrega de Documentos</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Registra quando o documento ficou pronto e quando foi entregue ao cidadão. Rastreabilidade total.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">📊</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Relatórios e Gráficos Automáticos</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Atendimentos por período, local e status, com exportação para planilha ou PDF com filtros personalizados.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">🌙</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Bloqueio de Datas e Feriados</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Bloqueia datas específicas para que cidadãos não consigam agendar em feriados, recessos ou manutenções.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">👥</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Usuários com Níveis de Acesso</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Perfis distintos para recepcionista, secretário e gestor. Cada um acessa só o que precisa, com segurança total.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">🗒️</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Notas Internas por Agendamento</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Funcionários registram observações privadas em cada agendamento, visíveis apenas para a equipe da secretaria.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">🚫</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Bloqueio de CPF por Mau Uso</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Bloqueia CPFs de cidadãos que faltem sem justificativa, protegendo as vagas e a organização do sistema.</div>
+        </div>
+        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px 16px">
+          <div style="font-size:1.2rem;margin-bottom:6px">🗂️</div>
+          <div style="font-size:.86rem;font-weight:700;color:#f1f5f9;margin-bottom:4px">Auditoria e Histórico Completo</div>
+          <div style="font-size:.76rem;color:#94a3b8;line-height:1.55">Cada ação no sistema é registrada: quem fez, o quê, quando e de onde. Proteção total para auditorias.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 9 — PAINEL DE GESTÃO
+══════════════════════════════════════════════ -->
+<div class="slide bg-white" id="s9">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-b">Painel Administrativo</span>
+      <h2 class="t2 tc-dark">O gestor tem visão total, em tempo real</h2>
+      <div class="divider" style="background:#1e40af"></div>
+      <p class="sub sub-dark" style="margin:0 auto">Do computador ou do celular, acompanhe agendamentos, equipe e métricas com um clique.</p>
+    </div>
+    <div class="grid g3" style="max-width:1020px">
+      <div class="card card-bl">
+        <div class="card-icon">📋</div>
+        <div class="card-title">Lista Completa de Agendamentos</div>
+        <div class="card-text">Todos os agendamentos em uma tela, com filtros por data, local, status e busca rápida pelo nome ou CPF do cidadão.</div>
+      </div>
+      <div class="card card-gl">
+        <div class="card-icon">✅</div>
+        <div class="card-title">Atualização de Status com Um Clique</div>
+        <div class="card-text">Confirmar, atender, concluir ou cancelar — tudo registrado automaticamente com data, hora e o funcionário responsável.</div>
+      </div>
+      <div class="card card-yl">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Gráficos e Relatórios Automáticos</div>
+        <div class="card-text">Atendimentos por período, por local e por status. Dados para comprovar resultados e planejar melhor a equipe.</div>
+      </div>
+      <div class="card card-pl">
+        <div class="card-icon">📦</div>
+        <div class="card-title">Controle Completo de Entrega</div>
+        <div class="card-text">Registre quando o documento ficou pronto e quando foi entregue ao cidadão. Rastreabilidade do início ao fim.</div>
+      </div>
+      <div class="card card-gl">
+        <div class="card-icon">👥</div>
+        <div class="card-title">Gestão de Usuários por Cargo</div>
+        <div class="card-text">Crie perfis para cada funcionário com níveis distintos: recepcionista, secretário, gestor. Controle total de quem acessa o quê.</div>
+      </div>
+      <div class="card card-bl">
+        <div class="card-icon">📤</div>
+        <div class="card-title">Exportação para Planilha e PDF</div>
+        <div class="card-text">Exporte qualquer relatório com filtros por período. Prestação de contas para auditorias facilitada e rastreável.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 10 — AYLA: ASSISTENTE VIRTUAL
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="s10">
+  <div class="two-col" style="max-width:1080px;padding:44px 64px;gap:52px">
+    <div style="flex:1">
+      <span class="label lbl-p" style="margin-bottom:18px;display:inline-block">Inovação</span>
+      <h2 class="t2 tc-white" style="text-align:left;margin-bottom:14px">Ayla — a assistente que nunca dorme</h2>
+      <p style="color:#94a3b8;font-size:.93rem;line-height:1.7;margin-bottom:24px">
+        Imagine um atendente disponível 24 horas por dia, 7 dias por semana, que responde instantaneamente qualquer dúvida do cidadão — sem custo adicional de pessoal.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <span style="color:#a78bfa;font-size:1.2rem;flex-shrink:0;margin-top:1px">✦</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#f1f5f9">Responde dúvidas instantaneamente</div>
+            <div style="font-size:.8rem;color:#94a3b8">Horários, documentos, localização e status do agendamento — em segundos</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <span style="color:#a78bfa;font-size:1.2rem;flex-shrink:0;margin-top:1px">✦</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#f1f5f9">Disponível sábados, domingos e feriados</div>
+            <div style="font-size:.8rem;color:#94a3b8">Quando a secretaria está fechada, a Ayla continua atendendo</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <span style="color:#a78bfa;font-size:1.2rem;flex-shrink:0;margin-top:1px">✦</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#f1f5f9">Linguagem simples e acessível</div>
+            <div style="font-size:.8rem;color:#94a3b8">Qualquer cidadão consegue usar — sem precisar de experiência com tecnologia</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <span style="color:#a78bfa;font-size:1.2rem;flex-shrink:0;margin-top:1px">✦</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#f1f5f9">Zero ligações perdidas fora do horário</div>
+            <div style="font-size:.8rem;color:#94a3b8">A Ayla resolve as dúvidas e o cidadão agenda sozinho, sem depender de atendente humano</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="flex:0 0 320px">
+      <!-- Chat mockup -->
+      <div style="background:#e5ddd5;border-radius:18px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.5)">
+        <div style="background:#075e54;padding:12px 16px;display:flex;align-items:center;gap:10px">
+          <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#9333ea);display:flex;align-items:center;justify-content:center;font-size:1.3rem">🤖</div>
+          <div>
+            <div style="color:#fff;font-size:.85rem;font-weight:700">Ayla — Prefeitura Municipal</div>
+            <div style="color:#b2dfdb;font-size:.63rem">Online agora · Responde em segundos</div>
+          </div>
+        </div>
+        <div style="padding:14px 12px;display:flex;flex-direction:column;gap:8px">
+          <div style="background:#fff;border-radius:2px 12px 12px 12px;padding:10px 14px;font-size:.77rem;line-height:1.55;color:#111;box-shadow:0 1px 2px rgba(0,0,0,.1);max-width:88%">
+            Olá! 👋 Sou a <strong>Ayla</strong>, assistente da prefeitura. Como posso ajudar você hoje?
+          </div>
+          <div style="background:#dcf8c6;border-radius:12px 2px 12px 12px;padding:10px 14px;font-size:.77rem;line-height:1.55;color:#111;box-shadow:0 1px 2px rgba(0,0,0,.1);max-width:88%;align-self:flex-end">
+            Quais documentos preciso levar para tirar o CIN?
+          </div>
+          <div style="background:#fff;border-radius:2px 12px 12px 12px;padding:10px 14px;font-size:.77rem;line-height:1.55;color:#111;box-shadow:0 1px 2px rgba(0,0,0,.1);max-width:94%">
+            Para a <strong>1ª via</strong> você precisará de:<br>📄 Certidão de Nascimento ou Casamento<br>🔢 Número do CPF<br>🏠 Comprovante de residência<br>📸 Foto 3x4 recente<br><br>Quer que eu te ajude a fazer o agendamento agora? 😊
+          </div>
+          <div style="background:#dcf8c6;border-radius:12px 2px 12px 12px;padding:10px 14px;font-size:.77rem;color:#111;box-shadow:0 1px 2px rgba(0,0,0,.1);max-width:80%;align-self:flex-end">
+            Sim, quero agendar!
+          </div>
+        </div>
+        <div style="padding:6px 12px 14px;display:flex;flex-direction:column;gap:5px">
+          <div style="background:#fff;border:1px solid #25d366;color:#075e54;padding:8px 12px;border-radius:10px;font-size:.72rem;font-weight:600;text-align:center">📅 Fazer meu agendamento agora</div>
+          <div style="background:#fff;border:1px solid #25d366;color:#075e54;padding:8px 12px;border-radius:10px;font-size:.72rem;font-weight:600;text-align:center">🔍 Consultar agendamento existente</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 11 — SEGURANÇA E LGPD
+══════════════════════════════════════════════ -->
+<div class="slide bg-light" id="s11">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-b">Segurança e Privacidade</span>
+      <h2 class="t2 tc-dark">Gestão segura, conforme a lei</h2>
+      <div class="divider" style="background:#1e40af"></div>
+      <p class="sub sub-dark" style="margin:0 auto">A prefeitura protegida juridicamente. Os dados dos cidadãos tratados com total conformidade à Lei Geral de Proteção de Dados.</p>
+    </div>
+    <div class="grid g2" style="max-width:880px">
+      <div class="card card-bl">
+        <div class="card-icon">🔒</div>
+        <div class="card-title">Conformidade com a LGPD</div>
+        <div class="card-text">A Lei Geral de Proteção de Dados é cumprida integralmente. Os dados dos cidadãos são coletados apenas com finalidade pública definida e com total transparência.</div>
+      </div>
+      <div class="card card-gl">
+        <div class="card-icon">🗂️</div>
+        <div class="card-title">Auditoria Completa de Todas as Ações</div>
+        <div class="card-text">Cada ação no sistema é registrada: quem fez, o quê, quando e de onde. Histórico completo para prestação de contas e auditorias externas.</div>
+      </div>
+      <div class="card card-yl">
+        <div class="card-icon">👁️</div>
+        <div class="card-title">Controle de Acesso por Nível</div>
+        <div class="card-text">Cada funcionário acessa apenas o que precisa. Recepcionista, secretário e gestor têm permissões distintas. Sem acesso indevido a dados sensíveis.</div>
+      </div>
+      <div class="card card-pl">
+        <div class="card-icon">☁️</div>
+        <div class="card-title">Infraestrutura em Nuvem com Backup</div>
+        <div class="card-text">O sistema roda em servidores com backup automático e monitoramento 24 horas. Nenhum dado fica em servidor local desprotegido da prefeitura.</div>
+      </div>
+    </div>
+    <div class="hl-box" style="background:linear-gradient(135deg,#1e3a8a,#1e40af)">
+      <p style="color:#dbeafe"><strong style="color:#fff">Responsabilidade jurídica protegida:</strong> Com o jAgendamento, sua gestão tem evidências documentadas de cada decisão e atendimento realizado — proteção total em qualquer situação de questionamento.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 12 — ANTES E DEPOIS
+══════════════════════════════════════════════ -->
+<div class="slide bg-white" id="s12">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-g">Comparativo</span>
+      <h2 class="t2 tc-dark">Antes e depois do jAgendamento</h2>
+      <div class="divider"></div>
+      <p class="sub sub-dark" style="margin:0 auto">A diferença entre uma prefeitura presa no passado e uma prefeitura moderna.</p>
+    </div>
+    <table class="compare" style="max-width:920px;width:100%">
+      <thead>
+        <tr>
+          <th>Aspecto</th>
+          <th style="background:#b91c1c">⚠️ Sem Sistema</th>
+          <th>✅ Com jAgendamento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Agendamento</strong></td>
+          <td style="background:#fef2f2;color:#991b1b">Pessoalmente ou por telefone, horário comercial</td>
+          <td style="color:#065f46;font-weight:600">Online, 24h, de qualquer celular, sem senha</td>
+        </tr>
+        <tr>
+          <td><strong>Confirmação</strong></td>
+          <td style="background:#fef2f2;color:#991b1b">Nenhuma — o cidadão não sabe se foi confirmado</td>
+          <td style="color:#065f46;font-weight:600">WhatsApp + e-mail com protocolo em segundos</td>
+        </tr>
+        <tr>
+          <td><strong>Lembrete</strong></td>
+          <td style="background:#fef2f2;color:#991b1b">Não existe — alto índice de faltas</td>
+          <td style="color:#065f46;font-weight:600">Automático, 24h antes, reduz faltas em 40%</td>
+        </tr>
+        <tr>
+          <td><strong>Filas na porta</strong></td>
+          <td style="background:#fef2f2;color:#991b1b">Sempre — cidadãos madrugam sem garantia</td>
+          <td style="color:#065f46;font-weight:600">Zero — todos chegam com horário marcado</td>
+        </tr>
+        <tr>
+          <td><strong>Relatórios</strong></td>
+          <td style="background:#fef2f2;color:#991b1b">Inexistentes ou feitos manualmente</td>
+          <td style="color:#065f46;font-weight:600">Automáticos, em tempo real, exportáveis</td>
+        </tr>
+        <tr>
+          <td><strong>Rastreabilidade</strong></td>
+          <td style="background:#fef2f2;color:#991b1b">Nenhuma — sem histórico, sem auditoria</td>
+          <td style="color:#065f46;font-weight:600">100% rastreável com protocolo único por cidadão</td>
+        </tr>
+        <tr>
+          <td><strong>Atendimento fora do horário</strong></td>
+          <td style="background:#fef2f2;color:#991b1b">Impossível — secretaria fechada</td>
+          <td style="color:#065f46;font-weight:600">Ayla disponível 24h, 7 dias por semana</td>
+        </tr>
+        <tr>
+          <td><strong>Custo operacional</strong></td>
+          <td style="background:#fef2f2;color:#991b1b">Alto — papel, ligações, retrabalho constante</td>
+          <td style="color:#065f46;font-weight:600">Reduzido — processos automáticos e eficientes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 13 — IMPLANTAÇÃO EM 48H
+══════════════════════════════════════════════ -->
+<div class="slide bg-dark" id="s13">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-g">Implantação Simples</span>
+      <h2 class="t2 tc-white">Do contrato ao sistema funcionando em 48 horas</h2>
+      <div class="divider"></div>
+      <p class="sub sub-white" style="margin:0 auto">Sem obras. Sem contratar equipe de TI. Sem servidor na prefeitura. Feito remotamente, de forma rápida.</p>
+    </div>
+    <div style="width:100%;max-width:820px;display:flex;flex-direction:column;gap:0">
+      <div style="display:flex;align-items:flex-start;gap:20px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.12)">
+        <div style="width:44px;height:44px;min-width:44px;border-radius:50%;background:#22c55e;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800">DIA 1</div>
+        <div>
+          <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:4px">Coleta de informações (1–2 horas)</div>
+          <div style="font-size:.83rem;color:#94a3b8">Você nos envia: logo do município, cores institucionais, nome da secretaria, endereços dos locais e horários de funcionamento.</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:20px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.12)">
+        <div style="width:44px;height:44px;min-width:44px;border-radius:50%;background:#3b82f6;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800">DIA 1</div>
+        <div>
+          <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:4px">Configuração do sistema (2–3 horas)</div>
+          <div style="font-size:.83rem;color:#94a3b8">Personalizamos com a identidade do município, criamos os usuários e configuramos locais e horários. Você recebe a URL exclusiva da sua prefeitura.</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:20px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.12)">
+        <div style="width:44px;height:44px;min-width:44px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800">DIA 2</div>
+        <div>
+          <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:4px">Treinamento da equipe (2 horas por videoconferência)</div>
+          <div style="font-size:.83rem;color:#94a3b8">Treinamento online e prático para recepcionistas e gestores. Manual digital entregue. Todos estarão prontos para operar no mesmo dia.</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:20px;padding:16px 0">
+        <div style="width:44px;height:44px;min-width:44px;border-radius:50%;background:#f59e0b;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800">DIA 2</div>
+        <div>
+          <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:4px">🚀 Sistema no ar — cidadãos já podem agendar</div>
+          <div style="font-size:.83rem;color:#94a3b8">Link divulgado no site da prefeitura e redes sociais. Suporte técnico dedicado nas primeiras 72 horas e ao longo de todo o contrato.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 14 — PARA PREFEITOS E SECRETÁRIOS
+══════════════════════════════════════════════ -->
+<div class="slide slide-photo" id="s14">
+  <div class="photo-bg" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="photo-overlay" style="background:linear-gradient(to right,rgba(6,78,59,.97) 40%,rgba(6,78,59,.65) 100%)"></div>
+  <div class="slide-content" style="align-items:flex-start;padding:50px 64px">
+    <div style="max-width:600px">
+      <span class="label lbl-w" style="margin-bottom:18px;display:inline-block">Para Líderes Municipais</span>
+      <h2 class="t2 tc-white" style="text-align:left;margin-bottom:18px">O que este sistema representa para a sua gestão</h2>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.11);border-radius:14px;padding:15px 18px;border:1px solid rgba(255,255,255,.15)">
+          <span style="font-size:1.3rem;flex-shrink:0">🏆</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#fff;margin-bottom:3px">Município moderno e reconhecido</div>
+            <div style="font-size:.8rem;color:#a7f3d0">Seja referência em inovação pública. Uma iniciativa que toda a população verá e valorizará.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.11);border-radius:14px;padding:15px 18px;border:1px solid rgba(255,255,255,.15)">
+          <span style="font-size:1.3rem;flex-shrink:0">💰</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#fff;margin-bottom:3px">Redução real de custos operacionais</div>
+            <div style="font-size:.8rem;color:#a7f3d0">Menos retrabalho, menos papel, menos horas desperdiçadas com tarefas que o sistema faz automaticamente.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.11);border-radius:14px;padding:15px 18px;border:1px solid rgba(255,255,255,.15)">
+          <span style="font-size:1.3rem;flex-shrink:0">📊</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#fff;margin-bottom:3px">Decisões com base em dados concretos</div>
+            <div style="font-size:.8rem;color:#a7f3d0">Saiba quais locais precisam de mais pessoal, quais períodos são críticos e como está a satisfação da população.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.11);border-radius:14px;padding:15px 18px;border:1px solid rgba(255,255,255,.15)">
+          <span style="font-size:1.3rem;flex-shrink:0">📜</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#fff;margin-bottom:3px">Transparência que protege sua gestão</div>
+            <div style="font-size:.8rem;color:#a7f3d0">Auditoria completa, LGPD cumprida, rastreabilidade total. Sua gestão documentada e blindada juridicamente.</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,.11);border-radius:14px;padding:15px 18px;border:1px solid rgba(255,255,255,.15)">
+          <span style="font-size:1.3rem;flex-shrink:0">😊</span>
+          <div>
+            <div style="font-size:.9rem;font-weight:700;color:#fff;margin-bottom:3px">Cidadão satisfeito é eleitor satisfeito</div>
+            <div style="font-size:.8rem;color:#a7f3d0">O cidadão que agenda em 2 minutos do celular vai lembrar quem tornou isso possível.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 15 — IMPACTO REAL (FOTOS)
+══════════════════════════════════════════════ -->
+<div class="slide bg-light" id="s15">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-g">Impacto Real</span>
+      <h2 class="t2 tc-dark">O que muda na prática, desde o primeiro dia</h2>
+      <div class="divider"></div>
+    </div>
+    <div class="grid g3" style="max-width:1020px">
+      <div style="background:#1c1c1f;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(147,51,234,.15);border:1px solid #3f3f46">
+        <img src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=600&q=80" alt="Fila de espera na prefeitura" style="width:100%;height:160px;object-fit:cover;display:block" />
+        <div style="padding:16px 18px">
+          <div style="font-size:.68rem;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Antes</div>
+          <div style="font-size:.92rem;font-weight:700;color:#f4f4f5;margin-bottom:6px">Fila desde as 6h da manhã</div>
+          <div style="font-size:.81rem;color:#a1a1aa;line-height:1.6">Cidadãos chegam sem saber se serão atendidos. Confusão, reclamações e insatisfação constante.</div>
+        </div>
+      </div>
+      <div style="background:#1c1c1f;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(147,51,234,.15);border:1px solid #3f3f46">
+        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=600&q=80" alt="Cidadão agendando pelo celular" style="width:100%;height:160px;object-fit:cover;display:block" />
+        <div style="padding:16px 18px">
+          <div style="font-size:.68rem;font-weight:700;color:#c084fc;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Depois</div>
+          <div style="font-size:.92rem;font-weight:700;color:#f4f4f5;margin-bottom:6px">Agendado pelo celular em 2 minutos</div>
+          <div style="font-size:.81rem;color:#a1a1aa;line-height:1.6">O cidadão chega no horário certo, com os documentos corretos, sem esperar. Atendimento fluido.</div>
+        </div>
+      </div>
+      <div style="background:#1c1c1f;border-radius:18px;overflow:hidden;box-shadow:0 4px 24px rgba(147,51,234,.15);border:1px solid #3f3f46">
+        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=600&q=80" alt="Documentos e papéis na secretaria" style="width:100%;height:160px;object-fit:cover;display:block" />
+        <div style="padding:16px 18px">
+          <div style="font-size:.68rem;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Antes</div>
+          <div style="font-size:.92rem;font-weight:700;color:#f4f4f5;margin-bottom:6px">Papéis, planilhas e desordem</div>
+          <div style="font-size:.81rem;color:#a1a1aa;line-height:1.6">Agendas de papel, planilhas desatualizadas e documentos extraviados, sem histórico confiável.</div>
+        </div>
+      </div>
+    </div>
+    <div class="stats" style="max-width:940px;margin-top:8px">
+      <div class="stat" style="border:2px solid rgba(192,132,252,.4)">
+        <div class="stat-num">-70%</div>
+        <div class="stat-lbl">Menos ligações para a secretaria</div>
+      </div>
+      <div class="stat" style="border:2px solid rgba(167,139,250,.4)">
+        <div class="stat-num">-40%</div>
+        <div class="stat-lbl">Redução no índice de faltas</div>
+      </div>
+      <div class="stat" style="border:2px solid rgba(232,121,249,.4)">
+        <div class="stat-num">2 min</div>
+        <div class="stat-lbl">Para o cidadão agendar</div>
+      </div>
+      <div class="stat" style="border:2px solid rgba(245,158,11,.4)">
+        <div class="stat-num">48h</div>
+        <div class="stat-lbl">Para o sistema estar no ar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 16 — IDENTIDADE PERSONALIZADA
+══════════════════════════════════════════════ -->
+<div class="slide bg-green" id="s16">
+  <div class="scroll-w">
+    <div class="sec-hdr">
+      <span class="label lbl-g">100% Personalizado</span>
+      <h2 class="t2 tc-dark">O sistema com a cara da sua prefeitura</h2>
+      <div class="divider"></div>
+      <p class="sub sub-dark" style="margin:0 auto">Não é um sistema genérico. Cada município tem sua página exclusiva com identidade visual própria.</p>
+    </div>
+    <div class="grid g2" style="max-width:880px">
+      <div class="card card-gl">
+        <div class="card-icon">🎨</div>
+        <div class="card-title">Logo e Cores Institucionais</div>
+        <div class="card-text">A página de agendamento exibe o brasão, o nome e as cores do município. O cidadão reconhece como serviço oficial da sua prefeitura.</div>
+      </div>
+      <div class="card card-gl">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">Endereço Web Exclusivo do Município</div>
+        <div class="card-text">Cada prefeitura recebe seu próprio link. Simples de divulgar no site oficial, WhatsApp e redes sociais da cidade.</div>
+      </div>
+      <div class="card card-gl">
+        <div class="card-icon">📍</div>
+        <div class="card-title">Múltiplos Locais e Horários</div>
+        <div class="card-text">Configure qualquer número de locais de atendimento, cada um com seus próprios horários, vagas por turno e dias de funcionamento.</div>
+      </div>
+      <div class="card card-gl">
+        <div class="card-icon">📱</div>
+        <div class="card-title">Funciona em Qualquer Celular</div>
+        <div class="card-text">A interface se adapta a qualquer tela — do celular mais simples ao computador. Acessível para toda a população, sem exceção.</div>
+      </div>
+    </div>
+    <div class="quote" style="margin-top:6px">
+      <p>Da primeira visita à entrega do documento, tudo leva a assinatura e a confiança do seu município. <strong>O cidadão confia porque reconhece.</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  SLIDE 17 — ENCERRAMENTO / CTA
+══════════════════════════════════════════════ -->
+<div class="slide slide-photo bg-end" id="s17">
+  <div class="photo-bg" style="background-image:url('https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1600&q=80')"></div>
+  <div class="photo-overlay" style="background:linear-gradient(135deg,rgba(6,78,59,.97),rgba(6,46,37,.98))"></div>
+  <div class="slide-content">
+    <div class="badge-hero">Próximos Passos</div>
+    <h1 class="t1 tc-white" style="margin-bottom:12px">
+      Sua prefeitura merece ser<br><span class="tc-green">moderna e eficiente.</span>
+    </h1>
+    <p class="sub sub-white" style="max-width:640px;margin-bottom:34px">
+      O jAgendamento está pronto para transformar o atendimento do seu município. Em 48 horas, seu cidadão já pode agendar pelo celular — sem fila, sem burocracia.
+    </p>
+    <div class="grid g3" style="max-width:840px;margin-bottom:26px">
+      <div style="text-align:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:22px 18px">
+        <div style="font-size:2.2rem;margin-bottom:8px">📋</div>
+        <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:6px">1. Demonstração Gratuita</div>
+        <div style="font-size:.8rem;color:#a7f3d0;line-height:1.6">Apresentamos o sistema ao vivo para você e sua equipe, respondendo todas as dúvidas.</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:22px 18px">
+        <div style="font-size:2.2rem;margin-bottom:8px">⚙️</div>
+        <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:6px">2. Personalização</div>
+        <div style="font-size:.8rem;color:#a7f3d0;line-height:1.6">Configuramos com a identidade do seu município em até 24 horas após a aprovação.</div>
+      </div>
+      <div style="text-align:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:18px;padding:22px 18px">
+        <div style="font-size:2.2rem;margin-bottom:8px">🚀</div>
+        <div style="font-size:.95rem;font-weight:700;color:#fff;margin-bottom:6px">3. Lançamento</div>
+        <div style="font-size:.8rem;color:#a7f3d0;line-height:1.6">Treinamos a equipe, lançamos o sistema e oferecemos suporte dedicado desde o primeiro dia.</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.1);border:1px solid rgba(52,211,153,.35);border-radius:16px;padding:18px 30px;max-width:560px;text-align:center">
+      <div style="font-size:.8rem;font-weight:700;color:#6ee7b7;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Entre em contato agora</div>
+      <div style="font-size:1rem;color:#fff;font-weight:600">Solicite uma demonstração gratuita e sem compromisso</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+  NAVEGAÇÃO
+══════════════════════════════════════════════ -->
+<!-- OVERLAY DE PROGRESSO -->
+<div id="export-progress">
+  <div id="exp-label">Exportando apresentação…</div>
+  <div id="exp-bar-wrap"><div id="exp-bar"></div></div>
+  <div id="exp-sub">Slide 0 de 0</div>
+</div>
+
+<div id="nav">
+  <button id="btn-prev" title="Anterior">‹</button>
+  <div class="dot-row" id="dot-row"></div>
+  <span id="slide-counter">1 / 17</span>
+  <button id="btn-next" title="Próximo">›</button>
+  <div style="width:1px;height:22px;background:rgba(255,255,255,.15);margin:0 4px"></div>
+  <div id="export-wrap">
+    <button id="export-btn" title="Exportar apresentação">⬇ Exportar</button>
+    <div id="export-dropdown">
+      <button class="exp-opt" id="opt-pdf">
+        <span class="exp-icon">�️</span>
+        <span>Exportar PDF<small>Abre o diálogo de impressão → Salvar como PDF</small></span>
+      </button>
+      <button class="exp-opt" id="opt-png">
+        <span class="exp-icon">🖼️</span>
+        <span>Exportar PNG (ZIP)<small>Um arquivo .png por slide · pode demorar</small></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  let current  = 0;
+  document.getElementById('slide-counter').textContent = `1 / ${total}`;
+
+  const dotRow = document.getElementById('dot-row');
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotRow.appendChild(d);
+  });
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dotRow.children[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    dotRow.children[current].classList.add('active');
+    document.getElementById('slide-counter').textContent = `${current + 1} / ${total}`;
+  }
+
+  document.getElementById('btn-next').addEventListener('click', () => goTo(current + 1));
+  document.getElementById('btn-prev').addEventListener('click', () => goTo(current - 1));
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight','ArrowDown'].includes(e.key)) goTo(current + 1);
+    if (['ArrowLeft','ArrowUp'].includes(e.key))   goTo(current - 1);
+  });
+  let ts = 0;
+  document.addEventListener('touchstart', e => ts = e.changedTouches[0].clientX);
+  document.addEventListener('touchend',   e => {
+    const diff = ts - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? goTo(current + 1) : goTo(current - 1);
+  });
+
+  /* ══════════════════════════════════════════
+     EXPORTAÇÃO
+  ══════════════════════════════════════════ */
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) return resolve();
+      const s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  function setProgress(i, n, label) {
+    document.getElementById('exp-sub').textContent = `Slide ${i} de ${n}`;
+    document.getElementById('exp-bar').style.width = `${Math.round((i / n) * 100)}%`;
+    document.getElementById('exp-label').textContent = label;
+  }
+
+  /* PDF: usa window.print() com @media print CSS — renderiza corretamente */
+  function exportPDF() {
+    window.print();
+  }
+
+  /* PNG ZIP: captura cada slide com html2canvas */
+  async function exportPNG() {
+    const overlay = document.getElementById('export-progress');
+    overlay.classList.add('show');
+    setProgress(0, total, 'Carregando bibliotecas…');
+    try {
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+      const zip = new JSZip();
+      const nav = document.getElementById('nav');
+      nav.style.display = 'none';
+
+      for (let i = 0; i < total; i++) {
+        setProgress(i + 1, total, 'Capturando slides…');
+        /* mostrar apenas esse slide */
+        slides.forEach((s, j) => s.classList.toggle('active', j === i));
+        /* aguardar render + imagens */
+        await new Promise(r => setTimeout(r, 350));
+        const canvas = await html2canvas(document.body, {
+          scale: 1.5,
+          useCORS: true,
+          allowTaint: true,
+          logging: false,
+          width: window.innerWidth,
+          height: window.innerHeight,
+          x: 0, y: 0,
+          scrollX: 0, scrollY: 0,
+          windowWidth: window.innerWidth,
+          windowHeight: window.innerHeight,
+          ignoreElements: el => el.id === 'nav' || el.id === 'export-progress',
+        });
+        const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+        zip.file(`slide-${String(i + 1).padStart(2, '0')}.png`, blob);
+      }
+
+      nav.style.display = '';
+      goTo(current); /* restaurar slide atual */
+      setProgress(total, total, 'Comprimindo ZIP…');
+      const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'jAgendamento-Slides.zip'; a.click();
+      URL.revokeObjectURL(url);
+    } catch(e) { alert('Erro ao exportar PNG: ' + e.message); }
+    overlay.classList.remove('show');
+  }
+
+  /* Menu toggle */
+  document.getElementById('export-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    document.getElementById('export-dropdown').classList.toggle('open');
+  });
+  document.addEventListener('click', () =>
+    document.getElementById('export-dropdown').classList.remove('open')
+  );
+  document.getElementById('opt-pdf').addEventListener('click', () => {
+    document.getElementById('export-dropdown').classList.remove('open');
+    exportPDF();
+  });
+  document.getElementById('opt-png').addEventListener('click', () => {
+    document.getElementById('export-dropdown').classList.remove('open');
+    exportPNG();
+  });
+</script>
+</body>
+</html>
