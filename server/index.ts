@@ -90,6 +90,12 @@ const uploadsDir = path.join(process.cwd(), 'client', 'public', 'uploads')
 if (!fs.existsSync(uploadsDir)) { fs.mkdirSync(uploadsDir, { recursive: true }) }
 app.use('/uploads', express.static(uploadsDir))
 
+// Serve arquivos estáticos do frontend (React build) em produção — antes de qualquer rota
+if (env.NODE_ENV === 'production') {
+  const distPath = path.join(process.cwd(), 'dist')
+  app.use(express.static(distPath))
+}
+
 // Middleware de autenticação global (extrai user do token JWT quando disponível)
 app.use(authMiddleware)
 
@@ -1128,10 +1134,9 @@ app.use(appointmentRoutes)
 app.use('/api/appointments', appointmentsNewRoutes)
 app.use('/api/locations', locationsNewRoutes)
 
-// Serve frontend (React) em produção
+// Fallback para o React Router — todas as rotas não-API servem o index.html
 if (env.NODE_ENV === 'production') {
   const distPath = path.join(process.cwd(), 'dist')
-  app.use(express.static(distPath))
   app.get('/{*path}', (_req: Request, res: Response) => {
     res.sendFile(path.join(distPath, 'index.html'))
   })
