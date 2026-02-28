@@ -27,6 +27,7 @@ import configAdvancedRoutes from './routes/config-advanced.routes'
 import scheduledReportsRoutes from './routes/scheduledReports'
 import { startScheduledReportRunner } from './services/scheduledReportRunner'
 import { startScheduledBackupRunner } from './services/scheduledBackupRunner'
+import { runMigrations } from './services/migration.service'
 import reportExecutionLogsRoutes from './routes/reportExecutionLogs'
 import auditLogsRoutes from './routes/auditLogs'
 import notificationsRoutes from './routes/notifications'
@@ -1149,6 +1150,7 @@ app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
 
 const server = app.listen(PORT, async () => {
   console.log(`[server] API running on ${PORT}`)
+  await runMigrations()
   startScheduledReportRunner()
   startScheduledBackupRunner()
   // Garante que o admin padrão existe com a senha correta ao iniciar
