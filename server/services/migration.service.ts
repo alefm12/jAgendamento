@@ -117,12 +117,18 @@ CREATE TABLE IF NOT EXISTS usuarios (
     nome VARCHAR(150) NOT NULL,
     email VARCHAR(150) NOT NULL,
     senha_hash TEXT NOT NULL,
+    cpf VARCHAR(20),
+    telefone VARCHAR(50),
     perfil VARCHAR(50) NOT NULL DEFAULT 'secretaria',
     ativo BOOLEAN NOT NULL DEFAULT TRUE,
     criado_em TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMPTZ DEFAULT NOW(),
     CONSTRAINT usuarios_email_unique UNIQUE (prefeitura_id, email)
 );
+
+-- Adicionar colunas caso tabela já exista sem elas
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS cpf VARCHAR(20);
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS telefone VARCHAR(50);
 
 -- TABELA 8: USUARIO_METADATA
 CREATE TABLE IF NOT EXISTS usuario_metadata (
@@ -265,15 +271,27 @@ CREATE TABLE IF NOT EXISTS logs_execucao_relatorios (
 CREATE TABLE IF NOT EXISTS usuarios_secretaria (
     id SERIAL PRIMARY KEY,
     prefeitura_id INTEGER REFERENCES prefeituras(id) ON DELETE CASCADE,
-    nome VARCHAR(150) NOT NULL,
+    nome_completo VARCHAR(150) NOT NULL,
     email VARCHAR(150) NOT NULL,
+    cpf VARCHAR(20),
+    telefone VARCHAR(50),
+    usuario VARCHAR(80),
     senha_hash TEXT NOT NULL,
+    eh_admin BOOLEAN DEFAULT FALSE,
+    permissoes JSONB,
     cargo VARCHAR(100),
     ativo BOOLEAN DEFAULT TRUE,
-    permissions JSONB,
     criado_em TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     atualizado_em TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Adicionar colunas caso tabela já exista sem elas
+ALTER TABLE usuarios_secretaria ADD COLUMN IF NOT EXISTS nome_completo VARCHAR(150);
+ALTER TABLE usuarios_secretaria ADD COLUMN IF NOT EXISTS cpf VARCHAR(20);
+ALTER TABLE usuarios_secretaria ADD COLUMN IF NOT EXISTS telefone VARCHAR(50);
+ALTER TABLE usuarios_secretaria ADD COLUMN IF NOT EXISTS usuario VARCHAR(80);
+ALTER TABLE usuarios_secretaria ADD COLUMN IF NOT EXISTS eh_admin BOOLEAN DEFAULT FALSE;
+ALTER TABLE usuarios_secretaria ADD COLUMN IF NOT EXISTS permissoes JSONB;
 
 -- TABELA: TENANT_BRANDING (Identidade visual por prefeitura)
 CREATE TABLE IF NOT EXISTS tenant_branding (
