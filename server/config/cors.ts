@@ -16,8 +16,11 @@ export const corsOptions: CorsOptions = {
     // Em desenvolvimento, permite qualquer origem
     if (process.env.NODE_ENV !== 'production') return callback(null, true)
 
+    // Em produção, se não houver lista definida, permite todas (deploy inicial)
+    if (!rawOrigins) return callback(null, true)
+
     // Em produção, valida contra a lista de origens permitidas
-    if (rawOrigins && rawOrigins.includes(origin)) return callback(null, true)
+    if (rawOrigins.includes(origin)) return callback(null, true)
 
     return callback(new Error(`CORS: origem não autorizada — ${origin}`))
   },
