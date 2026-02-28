@@ -12,6 +12,7 @@ const DEFAULT_SECONDARY_BUTTON_COLOR = "#1E40AF"
 const DEFAULT_SUBTITLE = "SERVIÇO DE AGENDAMENTO DE CIN"
 
 const uploadsDir = path.join(process.cwd(), "client", "public", "uploads")
+if (!fs.existsSync(uploadsDir)) { fs.mkdirSync(uploadsDir, { recursive: true }) }
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {

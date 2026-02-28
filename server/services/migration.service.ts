@@ -275,6 +275,41 @@ CREATE TABLE IF NOT EXISTS usuarios_secretaria (
     atualizado_em TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- TABELA: TENANT_BRANDING (Identidade visual por prefeitura)
+CREATE TABLE IF NOT EXISTS tenant_branding (
+    prefeitura_id INT PRIMARY KEY REFERENCES prefeituras(id) ON DELETE CASCADE,
+    nome_exibicao TEXT,
+    subtitulo TEXT,
+    telefone_contato TEXT,
+    cor_principal TEXT,
+    cor_botao_agendar TEXT,
+    cor_botao_consultar TEXT,
+    logo_path TEXT,
+    fundo_path TEXT,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- TABELA: WHATSAPP_CONFIG
+CREATE TABLE IF NOT EXISTS whatsapp_config (
+    id SERIAL PRIMARY KEY,
+    prefeitura_id INTEGER UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+    api_url TEXT,
+    api_token TEXT,
+    instance_id TEXT,
+    numero_origem TEXT,
+    ativo BOOLEAN DEFAULT FALSE,
+    atualizado_por INTEGER,
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- TABELA: SYSTEM_CONFIG (configurações gerais do sistema)
+CREATE TABLE IF NOT EXISTS system_config (
+    id SERIAL PRIMARY KEY,
+    chave VARCHAR(100) UNIQUE NOT NULL,
+    valor TEXT,
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- ÍNDICES
 CREATE INDEX IF NOT EXISTS idx_prefeituras_slug ON prefeituras(slug);
 CREATE INDEX IF NOT EXISTS idx_prefeituras_ativo ON prefeituras(ativo);
