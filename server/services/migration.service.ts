@@ -556,11 +556,26 @@ ON CONFLICT (chave) DO NOTHING;
 
 export async function runMigrations(): Promise<void> {
   console.log('[migration] Verificando e criando tabelas...')
-  try {
-    await pool.query(MIGRATION_SQL)
-    console.log('[migration] ✅ Tabelas verificadas/criadas com sucesso!')
-  } catch (err: any) {
-    console.error('[migration] ❌ Erro na migração:', err.message)
-    // Não lança erro para não impedir o servidor de subir
+
+  // Divide o SQL em statements individuais e executa cada um separadamente.
+  // Assim, se um statement falhar (ex: ALTER TABLE em coluna já existente de outra forma),
+  // os demais continuam sendo executados normalmente.
+  const statements = MIGRATION_SQL
+    .split(';')
+    .map(s => s.trim())
+    .filter(s => s.length > 0 && !s.startsWith('--'))
+
+  let ok = 0
+  let errors = 0
+  for (const stmt of statements) {
+    try {
+      await pool.query(stmt)
+      ok++
+    } catch (err: any) {
+      errors++
+      console.warn(`[migration] ⚠️ Statement ignorado (${err.message.split('\n')[0]}): ${stmt.substring(0, 80)}...`)
+    }
   }
+
+  console.log(`[migration] ✅ Concluído: ${ok} ok, ${errors} ignorados`)
 }
