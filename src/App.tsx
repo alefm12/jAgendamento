@@ -176,6 +176,7 @@ function App({ initialView = 'user' }: AppProps) {
     }
   })
   const [currentView, setCurrentView] = useState<AppView>(initialView)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [showImportDialog, setShowImportDialog] = useState(false)
   const [activeTemplate, setActiveTemplate] = useState<ReportTemplate | null>(null)
   const shortCurrentUserName = toFirstAndSecondName(currentUser?.fullName) || currentUser?.fullName || ''
@@ -1934,12 +1935,22 @@ function App({ initialView = 'user' }: AppProps) {
           <ScrollToTop />
           {ConfirmDialogNode}
           
+          {/* Backdrop mobile */}
+          {currentUser && sidebarOpen && (
+            <div
+              className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+
           {currentUser && (
-            <motion.aside
-              initial={{ x: -280 }}
-              animate={{ x: 0 }}
-              transition={{ duration: 0.3 }}
-              className="w-72 border-r bg-card flex-shrink-0 sticky top-0 h-screen overflow-y-auto"
+            <aside
+              className={[
+                'w-72 border-r bg-card flex-shrink-0 h-screen overflow-y-auto',
+                'fixed top-0 left-0 z-50 transition-transform duration-300',
+                'lg:sticky lg:translate-x-0 lg:z-auto',
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+              ].join(' ')}
             >
               <div className="p-4 border-b">
                 {systemConfig?.logo ? (
@@ -1976,7 +1987,7 @@ function App({ initialView = 'user' }: AppProps) {
                 </div>
               </div>
 
-              <nav className="p-3 space-y-1">
+              <nav className="p-3 space-y-1" onClick={() => { if (window.innerWidth < 1024) setSidebarOpen(false) }}>
                 {canAccessView('user') && (
                   <Button
                     variant={currentView === 'user' ? 'secondary' : 'ghost'}
@@ -2201,7 +2212,7 @@ function App({ initialView = 'user' }: AppProps) {
                   <span>Sair do Sistema</span>
                 </Button>
               </div>
-            </motion.aside>
+            </aside>
           )}
 
           <div className="flex-1 flex flex-col min-h-screen">
@@ -2209,8 +2220,20 @@ function App({ initialView = 'user' }: AppProps) {
 
             {currentUser && (
               <div className="border-b bg-card flex-shrink-0 sticky top-0 z-40 shadow-sm">
-                <div className="px-6 py-4">
-                  <h1 className="text-2xl font-bold text-foreground">
+                <div className="px-4 lg:px-6 py-4 flex items-center gap-3">
+                  {/* Botão hamburger — visível apenas no mobile */}
+                  <button
+                    className="lg:hidden flex-shrink-0 p-2 rounded-md hover:bg-muted transition-colors"
+                    onClick={() => setSidebarOpen(prev => !prev)}
+                    aria-label="Abrir/fechar menu"
+                  >
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      {sidebarOpen
+                        ? <><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></>
+                        : <><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></>}
+                    </svg>
+                  </button>
+                  <h1 className="text-xl lg:text-2xl font-bold text-foreground truncate">
                     {currentView === 'user' && 'Página Pública'}
                     {currentView === 'secretary' && 'Painel da Secretaria'}
                     {currentView === 'atendimento' && 'Painel de Atendimento'}
