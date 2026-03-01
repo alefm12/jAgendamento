@@ -314,10 +314,175 @@ CREATE TABLE IF NOT EXISTS whatsapp_config (
     api_url TEXT,
     api_token TEXT,
     instance_id TEXT,
+    client_token TEXT,
     numero_origem TEXT,
     ativo BOOLEAN DEFAULT FALSE,
     atualizado_por INTEGER,
     atualizado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Adicionar colunas caso tabela já exista sem elas
+ALTER TABLE whatsapp_config ADD COLUMN IF NOT EXISTS client_token TEXT;
+
+-- TABELA: SMTP_CONFIG
+CREATE TABLE IF NOT EXISTS smtp_config (
+    id SERIAL PRIMARY KEY,
+    prefeitura_id INTEGER NOT NULL UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+    smtp_host VARCHAR(255),
+    smtp_port INTEGER DEFAULT 587,
+    smtp_user VARCHAR(255),
+    smtp_password VARCHAR(255),
+    smtp_from_name VARCHAR(255),
+    smtp_from_email VARCHAR(255),
+    smtp_secure BOOLEAN DEFAULT true,
+    ativo BOOLEAN DEFAULT true,
+    atualizado_por INTEGER,
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- TABELA: HORARIOS_CONFIG
+CREATE TABLE IF NOT EXISTS horarios_config (
+    id SERIAL PRIMARY KEY,
+    prefeitura_id INTEGER NOT NULL UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+    horarios_disponiveis TEXT,
+    max_agendamentos_por_horario INTEGER DEFAULT 2,
+    periodo_liberado_dias INTEGER DEFAULT 60,
+    atualizado_por INTEGER,
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- TABELA: LAYOUT_CONFIG
+CREATE TABLE IF NOT EXISTS layout_config (
+    id SERIAL PRIMARY KEY,
+    prefeitura_id INTEGER NOT NULL REFERENCES prefeituras(id) ON DELETE CASCADE,
+    area VARCHAR(100) DEFAULT 'geral',
+    cor_primaria VARCHAR(20) DEFAULT '#2563eb',
+    cor_secundaria VARCHAR(20) DEFAULT '#10b981',
+    cor_destaque VARCHAR(20) DEFAULT '#f59e0b',
+    cor_fundo VARCHAR(20) DEFAULT '#ffffff',
+    cor_texto VARCHAR(20) DEFAULT '#1f2937',
+    cor_texto_secundario VARCHAR(20) DEFAULT '#6b7280',
+    cor_botao_principal VARCHAR(20) DEFAULT '#2563eb',
+    cor_botao_principal_hover VARCHAR(20) DEFAULT '#1d4ed8',
+    cor_botao_secundario VARCHAR(20) DEFAULT '#10b981',
+    cor_botao_secundario_hover VARCHAR(20) DEFAULT '#059669',
+    cor_botao_cancelar VARCHAR(20) DEFAULT '#ef4444',
+    cor_botao_cancelar_hover VARCHAR(20) DEFAULT '#dc2626',
+    cor_status_pendente VARCHAR(20) DEFAULT '#f59e0b',
+    cor_status_confirmado VARCHAR(20) DEFAULT '#10b981',
+    cor_status_chamado VARCHAR(20) DEFAULT '#3b82f6',
+    cor_status_concluido VARCHAR(20) DEFAULT '#059669',
+    cor_status_cancelado VARCHAR(20) DEFAULT '#ef4444',
+    atualizado_por INTEGER,
+    atualizado_em TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(prefeitura_id, area)
+);
+
+-- TABELA: CHAMADAS_CONFIG
+CREATE TABLE IF NOT EXISTS chamadas_config (
+    id SERIAL PRIMARY KEY,
+    prefeitura_id INTEGER NOT NULL UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+    voz_tipo VARCHAR(50) DEFAULT 'google',
+    voz_idioma VARCHAR(10) DEFAULT 'pt-BR',
+    voz_genero VARCHAR(20) DEFAULT 'feminino',
+    voz_velocidade DECIMAL(3,1) DEFAULT 1.0,
+    voz_volume DECIMAL(3,1) DEFAULT 1.0,
+    voz_tom DECIMAL(3,1) DEFAULT 1.0,
+    cor_fundo_chamada VARCHAR(7) DEFAULT '#1f2937',
+    cor_texto_chamada VARCHAR(7) DEFAULT '#ffffff',
+    cor_destaque_chamada VARCHAR(7) DEFAULT '#3b82f6',
+    cor_botao_chamar VARCHAR(7) DEFAULT '#10b981',
+    cor_botao_chamar_hover VARCHAR(7) DEFAULT '#059669',
+    template_chamada TEXT DEFAULT 'Senha {protocol}, {name}, comparecer ao guichê {guiche}',
+    repetir_chamada BOOLEAN DEFAULT true,
+    numero_repeticoes INTEGER DEFAULT 2,
+    intervalo_repeticoes_segundos INTEGER DEFAULT 5,
+    atualizado_por INTEGER,
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- TABELA: GERAL_CONFIG
+CREATE TABLE IF NOT EXISTS geral_config (
+    id SERIAL PRIMARY KEY,
+    prefeitura_id INTEGER NOT NULL UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+    nome_secretaria VARCHAR(255),
+    endereco_completo TEXT,
+    telefone_contato VARCHAR(50),
+    email_contato VARCHAR(255),
+    site_url TEXT,
+    horario_funcionamento VARCHAR(255),
+    relatorios_ativos BOOLEAN DEFAULT true,
+    backup_ativo BOOLEAN DEFAULT false,
+    backup_periodicidade VARCHAR(20) DEFAULT 'diario',
+    backup_horario TIME DEFAULT '02:00:00',
+    backup_retencao_dias INTEGER DEFAULT 30,
+    backup_email_notificacao VARCHAR(255),
+    backup_output_dir TEXT,
+    backup_ultimo_em TIMESTAMPTZ,
+    log_auditoria_ativo BOOLEAN DEFAULT true,
+    log_auditoria_retencao_dias INTEGER DEFAULT 90,
+    atualizado_por INTEGER,
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- TABELA: CAMPOS_PERSONALIZADOS
+CREATE TABLE IF NOT EXISTS campos_personalizados (
+    id SERIAL PRIMARY KEY,
+    prefeitura_id INTEGER NOT NULL REFERENCES prefeituras(id) ON DELETE CASCADE,
+    nome_campo VARCHAR(100) NOT NULL,
+    label_campo VARCHAR(255) NOT NULL,
+    tipo_campo VARCHAR(50) DEFAULT 'text',
+    placeholder TEXT,
+    texto_ajuda TEXT,
+    obrigatorio BOOLEAN DEFAULT false,
+    ativo BOOLEAN DEFAULT true,
+    opcoes JSONB,
+    ordem INTEGER DEFAULT 0,
+    criado_em TIMESTAMPTZ DEFAULT NOW(),
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- TABELA: USUARIOS_PERMISSOES
+CREATE TABLE IF NOT EXISTS usuarios_permissoes (
+    id SERIAL PRIMARY KEY,
+    usuario_id INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    prefeitura_id INTEGER NOT NULL REFERENCES prefeituras(id) ON DELETE CASCADE,
+    secretaria_visualizar BOOLEAN DEFAULT true,
+    secretaria_criar BOOLEAN DEFAULT true,
+    secretaria_editar BOOLEAN DEFAULT true,
+    secretaria_excluir BOOLEAN DEFAULT false,
+    atendimento_visualizar BOOLEAN DEFAULT true,
+    atendimento_chamar BOOLEAN DEFAULT true,
+    atendimento_concluir BOOLEAN DEFAULT true,
+    atendimento_cancelar BOOLEAN DEFAULT true,
+    atendimento_reagendar BOOLEAN DEFAULT true,
+    analytics_visualizar BOOLEAN DEFAULT true,
+    analytics_exportar BOOLEAN DEFAULT false,
+    entrega_cin_visualizar BOOLEAN DEFAULT true,
+    entrega_cin_registrar BOOLEAN DEFAULT true,
+    entrega_cin_editar BOOLEAN DEFAULT false,
+    admin_config_sistema BOOLEAN DEFAULT false,
+    admin_usuarios BOOLEAN DEFAULT false,
+    admin_permissoes BOOLEAN DEFAULT false,
+    admin_backup BOOLEAN DEFAULT false,
+    locais_permitidos JSONB,
+    atualizado_por INTEGER,
+    atualizado_em TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(usuario_id, prefeitura_id)
+);
+
+-- TABELA: CANCELAMENTOS
+CREATE TABLE IF NOT EXISTS cancelamentos (
+    id SERIAL PRIMARY KEY,
+    agendamento_id INTEGER REFERENCES agendamentos(id) ON DELETE SET NULL,
+    prefeitura_id INTEGER REFERENCES prefeituras(id) ON DELETE CASCADE,
+    protocolo VARCHAR(50),
+    cancelado_por VARCHAR(20) NOT NULL CHECK (cancelado_por IN ('cidadao', 'secretaria', 'sistema')),
+    motivo TEXT,
+    codigo_cancelamento VARCHAR(20),
+    usuario_id INTEGER,
+    usuario_nome VARCHAR(255),
+    cancelado_em TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- TABELA: SYSTEM_CONFIG (configurações gerais do sistema)
@@ -325,8 +490,16 @@ CREATE TABLE IF NOT EXISTS system_config (
     id SERIAL PRIMARY KEY,
     chave VARCHAR(100) UNIQUE NOT NULL,
     valor TEXT,
+    working_hours JSONB,
+    max_appointments_per_slot INTEGER DEFAULT 2,
+    booking_window_days INTEGER DEFAULT 60,
     atualizado_em TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Adicionar colunas caso tabela já exista sem elas
+ALTER TABLE system_config ADD COLUMN IF NOT EXISTS working_hours JSONB;
+ALTER TABLE system_config ADD COLUMN IF NOT EXISTS max_appointments_per_slot INTEGER DEFAULT 2;
+ALTER TABLE system_config ADD COLUMN IF NOT EXISTS booking_window_days INTEGER DEFAULT 60;
 
 -- ÍNDICES
 CREATE INDEX IF NOT EXISTS idx_prefeituras_slug ON prefeituras(slug);
@@ -375,6 +548,10 @@ SELECT p.id, 'Secretaria Municipal', 'Rua Principal, 100 - Centro', 'sede', true
 FROM prefeituras p
 WHERE p.slug = 'iraucuba'
   AND NOT EXISTS (SELECT 1 FROM locais_atendimento WHERE prefeitura_id = p.id);
+
+INSERT INTO system_config (chave, valor, working_hours, max_appointments_per_slot, booking_window_days)
+VALUES ('default', 'active', '["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00"]', 2, 60)
+ON CONFLICT (chave) DO NOTHING;
 `
 
 export async function runMigrations(): Promise<void> {
