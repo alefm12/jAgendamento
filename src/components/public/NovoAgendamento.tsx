@@ -849,7 +849,7 @@ export function NovoAgendamento({
               setSelectedTime(time)
               setStep('form')
             }}
-            onBack={() => setStep('date')}
+            onBack={() => { setSelectedTime(undefined); setStep('date') }}
           />
         )}
 

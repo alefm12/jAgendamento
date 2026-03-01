@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Button } from '@/components/ui/button'
@@ -14,6 +15,15 @@ interface TimeSelectorProps {
 
 export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSelectorProps) {
   const availableSlots = slots.filter(slot => slot.available)
+
+  // Bloqueia interação por 350ms após montar para evitar "ghost touch" mobile
+  // (evento de toque da seleção de data passando para o botão de horário)
+  const [ready, setReady] = useState(false)
+  useEffect(() => {
+    setReady(false)
+    const t = setTimeout(() => setReady(true), 350)
+    return () => clearTimeout(t)
+  }, [date])
   
   return (
     <div>
@@ -45,13 +55,13 @@ export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSe
             </div>
           ) : (
             <div 
-              className="grid grid-cols-3 sm:grid-cols-4 gap-2.5"
+              className={`grid grid-cols-3 sm:grid-cols-4 gap-2.5 transition-opacity duration-200 ${ready ? 'opacity-100' : 'opacity-60 pointer-events-none'}`}
             >
               {slots.map((slot) => (
                 <Button
                   key={slot.time}
                   variant={selectedTime === slot.time ? "default" : "outline"}
-                  onClick={() => slot.available && onTimeSelect(slot.time)}
+                  onClick={() => ready && slot.available && onTimeSelect(slot.time)}
                   disabled={!slot.available}
                   className={`
                     w-full h-12 text-sm font-semibold rounded-xl transition-all
