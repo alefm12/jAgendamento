@@ -636,25 +636,27 @@ export function SecretaryPanel({
   const noNeighborhoodsForSelection = hasStructuredAddress && canSelectNeighborhood && filteredAddressNeighborhoods.length === 0
 
   return (
-    <div className="min-h-screen bg-background p-6 max-h-screen overflow-y-auto">
+    <div className="min-h-screen bg-background p-3 md:p-6 overflow-x-hidden">
       {ConfirmDialogNode}
       <ScrollToTop />
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
-          <div>
+        {/* Título: ocultado no mobile pois App.tsx já exibe no header fixo */}
+        <div className="mb-4 md:mb-8">
+          <div className="hidden md:block mb-4">
             <h1 className="text-3xl font-semibold text-foreground mb-2">Painel da Secretaria</h1>
             <p className="text-muted-foreground">Gerencie todos os agendamentos de CIN</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             {canViewReports && (
               <>
                 <Button
                   variant="outline"
+                  size="sm"
                   onClick={() => setShowStats(!showStats)}
-                  className="gap-2"
+                  className="gap-1.5 text-xs"
                 >
-                  <CalendarBlank size={18} />
-                  {showStats ? 'Ocultar' : 'Mostrar'} Estatísticas
+                  <CalendarBlank size={15} />
+                  <span className="hidden sm:inline">{showStats ? 'Ocultar' : 'Mostrar'} </span>Estatísticas
                 </Button>
                 <AuditReport appointments={appointments} />
               </>

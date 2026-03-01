@@ -165,18 +165,18 @@ export function StatsDashboard({ appointments, locations = [] }: StatsDashboardP
     <div className="space-y-6">
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-4">Visão Geral</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {statCards.map((stat) => {
             const Icon = stat.icon
             return (
-              <Card key={stat.title} className="card-scale-rotate p-6">
+              <Card key={stat.title} className="card-scale-rotate p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
-                    <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+                    <p className="text-xs text-muted-foreground mb-1">{stat.title}</p>
+                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                   </div>
-                  <div className={`w-12 h-12 rounded-full ${stat.bgColor} flex items-center justify-center`}>
-                    <Icon size={24} className={stat.color} weight="duotone" />
+                  <div className={`w-10 h-10 rounded-full ${stat.bgColor} flex items-center justify-center`}>
+                    <Icon size={20} className={stat.color} weight="duotone" />
                   </div>
                 </div>
               </Card>
@@ -187,18 +187,18 @@ export function StatsDashboard({ appointments, locations = [] }: StatsDashboardP
 
       <div>
         <h2 className="text-xl font-semibold text-foreground mb-4">Status dos Agendamentos</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3">
           {statusCards.map((stat) => {
             const Icon = stat.icon
             return (
-              <Card key={stat.title} className="card-glow-edge p-6">
-                <div className="flex items-center justify-between mb-3">
+              <Card key={stat.title} className="card-glow-edge p-4">
+                <div className="flex items-center justify-between mb-2">
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
-                    <p className="text-3xl font-bold text-foreground">{stat.value}</p>
+                    <p className="text-xs text-muted-foreground mb-1">{stat.title}</p>
+                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
                   </div>
-                  <div className={`w-12 h-12 rounded-full ${stat.bgColor} flex items-center justify-center`}>
-                    <Icon size={24} className={stat.color} weight="fill" />
+                  <div className={`w-10 h-10 rounded-full ${stat.bgColor} flex items-center justify-center`}>
+                    <Icon size={20} className={stat.color} weight="fill" />
                   </div>
                 </div>
                 <div className="space-y-1">
