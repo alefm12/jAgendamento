@@ -16,12 +16,12 @@ interface TimeSelectorProps {
 export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSelectorProps) {
   const availableSlots = slots.filter(slot => slot.available)
 
-  // Bloqueia interação por 350ms após montar para evitar "ghost touch" mobile
+  // Bloqueia interação por 600ms após montar para evitar "ghost touch" mobile
   // (evento de toque da seleção de data passando para o botão de horário)
   const [ready, setReady] = useState(false)
   useEffect(() => {
     setReady(false)
-    const t = setTimeout(() => setReady(true), 350)
+    const t = setTimeout(() => setReady(true), 600)
     return () => clearTimeout(t)
   }, [date])
   

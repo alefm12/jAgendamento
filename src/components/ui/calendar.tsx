@@ -138,7 +138,7 @@ function Calendar({
           "aria-selected:bg-primary aria-selected:text-primary-foreground aria-selected:rounded-r-lg",
         selected:
           "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground font-semibold shadow-lg scale-105",
-        today: "bg-accent/30 text-accent-foreground font-semibold border-2 border-accent",
+        today: "font-bold",
         outside:
           "text-muted-foreground/40 opacity-50",
         disabled: "text-muted-foreground/30 opacity-40 cursor-not-allowed hover:bg-transparent hover:scale-100 pointer-events-none",
