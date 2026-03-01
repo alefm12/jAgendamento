@@ -4,6 +4,8 @@ import { Toaster, toast } from 'sonner'
 import App from './App'
 import { NovoAgendamento } from '@/components/public/NovoAgendamento'
 import PublicHome from '@/components/public/PublicHome'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import { useTheme } from '@/hooks/use-theme'
 import { ConsultationStatus } from '@/components/public/ConsultationStatus'
 import { SuperAdminLogin } from '@/components/SuperAdminLogin'
 import { SuperAdminPanel } from '@/components/SuperAdminPanel'
@@ -84,6 +86,13 @@ const setTenantContext = (tenantId?: string, slug?: string) => {
   }
 }
 
+function ThemeInitializer() {
+  // Garante que o tema (dark/light) é sempre aplicado ao documentElement,
+  // inclusive para usuários públicos não autenticados.
+  useTheme()
+  return null
+}
+
 export default function MultiTenantApp() {
   return (
     <Router>
@@ -125,6 +134,7 @@ export default function MultiTenantApp() {
           <NotFoundScreen />
         </Route>
       </Switch>
+      <ThemeInitializer />
       <Toaster position="top-center" richColors />
     </Router>
   )
@@ -285,7 +295,7 @@ function SuperAdminShell() {
   if (view === 'users' && activeTenant) {
     if (isLoadingUsers) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <div className="min-h-screen flex items-center justify-center bg-background">
           <p className="text-muted-foreground">Carregando usuários...</p>
         </div>
       )
@@ -428,7 +438,7 @@ function TenantPublicScheduler({ tenantSlug }: { tenantSlug: string }) {
 
   if (isLoadingData && !hasLoadedData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <p className="text-muted-foreground">Carregando agenda pública...</p>
       </div>
     )
@@ -436,8 +446,8 @@ function TenantPublicScheduler({ tenantSlug }: { tenantSlug: string }) {
 
   if (errorMessage && !hasLoadedData) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 px-4 text-center">
-        <p className="text-lg font-semibold text-gray-900 mb-2">Ops!</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 text-center">
+        <p className="text-lg font-semibold text-foreground mb-2">Ops!</p>
         <p className="text-muted-foreground mb-6 max-w-md">{errorMessage}</p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <button
@@ -460,7 +470,7 @@ function TenantPublicScheduler({ tenantSlug }: { tenantSlug: string }) {
   }
 
   return (
-    <div className="force-light min-h-screen bg-gray-50" style={{ colorScheme: 'light' }}>
+    <div className="min-h-screen bg-background">
       <div className="mx-auto w-full max-w-5xl px-4 py-10">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <button
@@ -471,13 +481,16 @@ function TenantPublicScheduler({ tenantSlug }: { tenantSlug: string }) {
             <span aria-hidden="true">←</span>
             Voltar para o início
           </button>
-          <div className="text-right">
-            <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Prefeitura</p>
-            <p className="text-lg font-semibold text-foreground">{systemConfig?.systemName || tenantSlug}</p>
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">Prefeitura</p>
+              <p className="text-lg font-semibold text-foreground">{systemConfig?.systemName || tenantSlug}</p>
+            </div>
+            <ThemeToggle />
           </div>
         </div>
 
-        <div className="rounded-3xl bg-white p-6 shadow-xl shadow-black/5">
+        <div className="rounded-3xl bg-card p-6 shadow-xl shadow-black/5">
           <NovoAgendamento
             appointments={appointments}
             setAppointments={setAppointments}
@@ -534,8 +547,8 @@ function useTenantContextSync(tenantSlug?: string) {
 
 function NotFoundScreen() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 px-4 text-center gap-4">
-      <h1 className="text-2xl font-bold text-gray-900">Página não encontrada</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 text-center gap-4">
+      <h1 className="text-2xl font-bold text-foreground">Página não encontrada</h1>
       <p className="text-muted-foreground max-w-md">
         Verifique se a URL está correta ou retorne para a página inicial para escolher uma prefeitura.
       </p>

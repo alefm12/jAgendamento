@@ -7,8 +7,16 @@ interface UseThemeOptions {
   defaultTheme?: Theme
 }
 
+// Detecta preferência de cor do sistema operacional
+const getSystemTheme = (): Theme => {
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  return 'light'
+}
+
 export function useTheme(options?: UseThemeOptions) {
-  const defaultTheme = options?.defaultTheme || 'light'
+  const defaultTheme = options?.defaultTheme ?? getSystemTheme()
   const [theme, setTheme] = useKV<Theme>('app-theme', defaultTheme)
 
   useEffect(() => {

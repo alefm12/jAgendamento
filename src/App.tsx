@@ -2216,7 +2216,13 @@ function App({ initialView = 'user' }: AppProps) {
           )}
 
           <div className="flex-1 flex flex-col min-h-screen">
-            {!currentUser && <div className="h-6" />}
+            {!currentUser && (
+              <div className="border-b bg-card flex-shrink-0 sticky top-0 z-40">
+                <div className="px-4 py-2 flex justify-end">
+                  <ThemeToggle defaultTheme={systemConfig?.defaultTheme} />
+                </div>
+              </div>
+            )}
 
             {currentUser && (
               <div className="border-b bg-card flex-shrink-0 sticky top-0 z-40 shadow-sm">
