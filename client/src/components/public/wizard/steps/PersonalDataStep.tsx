@@ -34,7 +34,13 @@ const INITIAL_STATE: FormData = {
 }
 
 const INPUT_CLASS =
-  'w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 outline-none transition focus:border-transparent focus:ring-2 focus:ring-offset-0 dark:border-gray-700 dark:bg-gray-900 dark:text-white'
+  'w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 outline-none transition ' +
+  'placeholder:text-gray-400 ' +
+  'focus:border-transparent focus:ring-2 focus:ring-offset-0 ' +
+  'dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 ' +
+  'dark:placeholder:text-gray-500 ' +
+  'dark:focus:ring-offset-gray-800 ' +
+  'disabled:cursor-not-allowed disabled:opacity-50 dark:disabled:opacity-40'
 
 export function PersonalDataStep({ onFinish, loading, color }: PersonalDataStepProps) {
   const [data, setData] = useState<FormData>(INITIAL_STATE)
@@ -114,7 +120,7 @@ export function PersonalDataStep({ onFinish, loading, color }: PersonalDataStepP
       }}
     >
       <div className="space-y-4 rounded-3xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <h3 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400">
+        <h3 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
           <User size={14} /> Identificação
         </h3>
         <input
@@ -176,10 +182,10 @@ export function PersonalDataStep({ onFinish, loading, color }: PersonalDataStepP
 
       <div className="relative space-y-4 overflow-hidden rounded-3xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div
-          className="absolute left-0 top-0 h-full w-1 transition-colors"
-          style={{ backgroundColor: isAddressValid ? color : '#e5e7eb' }}
+          className={`absolute left-0 top-0 h-full w-1 transition-colors ${isAddressValid ? '' : 'bg-gray-200 dark:bg-gray-600'}`}
+          style={isAddressValid ? { backgroundColor: color } : {}}
         />
-        <h3 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400">
+        <h3 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
           <MapPin size={14} /> Endereço Residencial
         </h3>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -262,8 +268,8 @@ export function PersonalDataStep({ onFinish, loading, color }: PersonalDataStepP
       <button
         type="submit"
         disabled={!isFormValid || loading}
-        className="flex w-full items-center justify-center gap-2 rounded-xl py-4 text-lg font-bold text-white shadow-lg transition-all hover:-translate-y-1 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
-        style={{ backgroundColor: isFormValid ? color : '#9ca3af' }}
+        className="flex w-full items-center justify-center gap-2 rounded-xl py-4 text-lg font-bold text-white shadow-lg transition-all hover:-translate-y-1 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none dark:disabled:opacity-40"
+        style={{ backgroundColor: isFormValid ? color : '#6b7280' }}
       >
         {loading ? (
           <Loader2 className="animate-spin" />
