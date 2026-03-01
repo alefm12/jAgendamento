@@ -5,8 +5,58 @@ import { type AuthRequest } from '../middlewares/auth.middleware';
 const router = Router();
 
 const ensureGeralBackupColumns = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS geral_config (
+      id SERIAL PRIMARY KEY,
+      prefeitura_id INTEGER NOT NULL UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+      nome_secretaria VARCHAR(255),
+      endereco_completo TEXT,
+      telefone_contato VARCHAR(50),
+      email_contato VARCHAR(255),
+      site_url TEXT,
+      horario_funcionamento VARCHAR(255),
+      relatorios_ativos BOOLEAN DEFAULT true,
+      backup_ativo BOOLEAN DEFAULT false,
+      backup_periodicidade VARCHAR(20) DEFAULT 'diario',
+      backup_horario TIME DEFAULT '02:00:00',
+      backup_retencao_dias INTEGER DEFAULT 30,
+      backup_email_notificacao VARCHAR(255),
+      backup_output_dir TEXT,
+      backup_ultimo_em TIMESTAMPTZ,
+      log_auditoria_ativo BOOLEAN DEFAULT true,
+      log_auditoria_retencao_dias INTEGER DEFAULT 90,
+      atualizado_por INTEGER,
+      atualizado_em TIMESTAMPTZ DEFAULT NOW()
+    )
+  `)
   await pool.query(`ALTER TABLE geral_config ADD COLUMN IF NOT EXISTS backup_output_dir TEXT`)
   await pool.query(`ALTER TABLE geral_config ADD COLUMN IF NOT EXISTS backup_ultimo_em TIMESTAMPTZ`)
+}
+
+const ensureChamadasConfigTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS chamadas_config (
+      id SERIAL PRIMARY KEY,
+      prefeitura_id INTEGER NOT NULL UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+      voz_tipo VARCHAR(50) DEFAULT 'google',
+      voz_idioma VARCHAR(10) DEFAULT 'pt-BR',
+      voz_genero VARCHAR(20) DEFAULT 'feminino',
+      voz_velocidade DECIMAL(3,1) DEFAULT 1.0,
+      voz_volume DECIMAL(3,1) DEFAULT 1.0,
+      voz_tom DECIMAL(3,1) DEFAULT 1.0,
+      cor_fundo_chamada VARCHAR(7) DEFAULT '#1f2937',
+      cor_texto_chamada VARCHAR(7) DEFAULT '#ffffff',
+      cor_destaque_chamada VARCHAR(7) DEFAULT '#3b82f6',
+      cor_botao_chamar VARCHAR(7) DEFAULT '#10b981',
+      cor_botao_chamar_hover VARCHAR(7) DEFAULT '#059669',
+      template_chamada TEXT DEFAULT 'Senha {protocol}, {name}, comparecer ao guich\u00ea {guiche}',
+      repetir_chamada BOOLEAN DEFAULT true,
+      numero_repeticoes INTEGER DEFAULT 2,
+      intervalo_repeticoes_segundos INTEGER DEFAULT 5,
+      atualizado_por INTEGER,
+      atualizado_em TIMESTAMPTZ DEFAULT NOW()
+    )
+  `)
 }
 
 // ==================== CHAMADAS CONFIG ====================
@@ -14,6 +64,7 @@ const ensureGeralBackupColumns = async () => {
 // GET configurações de chamadas
 router.get('/chamadas/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureChamadasConfigTable()
     const { prefeituraId } = req.params;
     
     const result = await pool.query(
@@ -42,6 +93,7 @@ router.get('/chamadas/:prefeituraId', async (req: AuthRequest, res) => {
 // PUT atualizar configurações de chamadas
 router.put('/chamadas/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureChamadasConfigTable()
     const { prefeituraId } = req.params;
     const config = req.body;
     

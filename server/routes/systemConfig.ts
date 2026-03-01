@@ -9,6 +9,25 @@ const ensureWhatsappConfigColumns = async () => {
   await pool.query(`ALTER TABLE whatsapp_config ADD COLUMN IF NOT EXISTS client_token TEXT`)
 }
 
+const ensureSmtpConfigTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS smtp_config (
+      id SERIAL PRIMARY KEY,
+      prefeitura_id INTEGER NOT NULL UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+      smtp_host VARCHAR(255),
+      smtp_port INTEGER DEFAULT 587,
+      smtp_user VARCHAR(255),
+      smtp_password VARCHAR(255),
+      smtp_from_name VARCHAR(255),
+      smtp_from_email VARCHAR(255),
+      smtp_secure BOOLEAN DEFAULT true,
+      ativo BOOLEAN DEFAULT true,
+      atualizado_por INTEGER,
+      atualizado_em TIMESTAMPTZ DEFAULT NOW()
+    )
+  `)
+}
+
 // =================================================================================================
 // ROTAS DE CONFIGURAÇÃO DE SMTP
 // =================================================================================================
@@ -16,6 +35,7 @@ const ensureWhatsappConfigColumns = async () => {
 // GET - Obter configuração SMTP de uma prefeitura
 router.get('/smtp/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureSmtpConfigTable()
     const { prefeituraId } = req.params;
     const result = await pool.query(
       `SELECT id, prefeitura_id, smtp_host, smtp_port, smtp_user, smtp_password, 
@@ -34,6 +54,7 @@ router.get('/smtp/:prefeituraId', async (req: AuthRequest, res) => {
 // PUT - Atualizar ou criar configuração SMTP de uma prefeitura
 router.put('/smtp/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureSmtpConfigTable()
     const { prefeituraId } = req.params;
     const { 
       smtp_host, smtp_port, smtp_user, smtp_password, 

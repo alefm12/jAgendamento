@@ -4,11 +4,76 @@ import { type AuthRequest } from '../middlewares/auth.middleware';
 
 const router = Router();
 
+const ensureLayoutConfigTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS layout_config (
+      id SERIAL PRIMARY KEY,
+      prefeitura_id INTEGER NOT NULL REFERENCES prefeituras(id) ON DELETE CASCADE,
+      area VARCHAR(100) DEFAULT 'geral',
+      cor_primaria VARCHAR(20) DEFAULT '#2563eb',
+      cor_secundaria VARCHAR(20) DEFAULT '#10b981',
+      cor_destaque VARCHAR(20) DEFAULT '#f59e0b',
+      cor_fundo VARCHAR(20) DEFAULT '#ffffff',
+      cor_texto VARCHAR(20) DEFAULT '#1f2937',
+      cor_texto_secundario VARCHAR(20) DEFAULT '#6b7280',
+      cor_botao_principal VARCHAR(20) DEFAULT '#2563eb',
+      cor_botao_principal_hover VARCHAR(20) DEFAULT '#1d4ed8',
+      cor_botao_secundario VARCHAR(20) DEFAULT '#10b981',
+      cor_botao_secundario_hover VARCHAR(20) DEFAULT '#059669',
+      cor_botao_cancelar VARCHAR(20) DEFAULT '#ef4444',
+      cor_botao_cancelar_hover VARCHAR(20) DEFAULT '#dc2626',
+      cor_status_pendente VARCHAR(20) DEFAULT '#f59e0b',
+      cor_status_confirmado VARCHAR(20) DEFAULT '#10b981',
+      cor_status_chamado VARCHAR(20) DEFAULT '#3b82f6',
+      cor_status_concluido VARCHAR(20) DEFAULT '#059669',
+      cor_status_cancelado VARCHAR(20) DEFAULT '#ef4444',
+      atualizado_por INTEGER,
+      atualizado_em TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(prefeitura_id, area)
+    )
+  `)
+}
+
+const ensureHorariosConfigTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS horarios_config (
+      id SERIAL PRIMARY KEY,
+      prefeitura_id INTEGER NOT NULL UNIQUE REFERENCES prefeituras(id) ON DELETE CASCADE,
+      horarios_disponiveis TEXT,
+      max_agendamentos_por_horario INTEGER DEFAULT 2,
+      periodo_liberado_dias INTEGER DEFAULT 60,
+      atualizado_por INTEGER,
+      atualizado_em TIMESTAMPTZ DEFAULT NOW()
+    )
+  `)
+}
+
+const ensureCamposPersonalizadosTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS campos_personalizados (
+      id SERIAL PRIMARY KEY,
+      prefeitura_id INTEGER NOT NULL REFERENCES prefeituras(id) ON DELETE CASCADE,
+      nome_campo VARCHAR(100) NOT NULL,
+      label_campo VARCHAR(255) NOT NULL,
+      tipo_campo VARCHAR(50) DEFAULT 'text',
+      placeholder TEXT,
+      texto_ajuda TEXT,
+      obrigatorio BOOLEAN DEFAULT false,
+      ativo BOOLEAN DEFAULT true,
+      opcoes JSONB,
+      ordem INTEGER DEFAULT 0,
+      criado_em TIMESTAMPTZ DEFAULT NOW(),
+      atualizado_em TIMESTAMPTZ DEFAULT NOW()
+    )
+  `)
+}
+
 // ==================== LAYOUT CONFIG ====================
 
 // GET todas as configurações de layout de uma prefeitura
 router.get('/layout/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureLayoutConfigTable()
     const { prefeituraId } = req.params;
     
     const result = await pool.query(
@@ -44,6 +109,7 @@ router.get('/layout/:prefeituraId', async (req: AuthRequest, res) => {
 // PUT atualizar configuração de layout
 router.put('/layout/:id', async (req: AuthRequest, res) => {
   try {
+    await ensureLayoutConfigTable()
     const { id } = req.params;
     const config = req.body;
     
@@ -82,6 +148,7 @@ router.put('/layout/:id', async (req: AuthRequest, res) => {
 // POST restaurar padrões de layout
 router.post('/layout/:prefeituraId/restaurar', async (req: AuthRequest, res) => {
   try {
+    await ensureLayoutConfigTable()
     const { prefeituraId } = req.params;
     const { area } = req.body;
     
@@ -113,6 +180,7 @@ router.post('/layout/:prefeituraId/restaurar', async (req: AuthRequest, res) => 
 // GET configurações de horários
 router.get('/horarios/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureHorariosConfigTable()
     const { prefeituraId } = req.params;
     
     const result = await pool.query(
@@ -157,6 +225,7 @@ router.get('/horarios/:prefeituraId', async (req: AuthRequest, res) => {
 // PUT atualizar configurações de horários
 router.put('/horarios/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureHorariosConfigTable()
     const { prefeituraId } = req.params;
     const { horariosDisponiveis, maxAgendamentosPorHorario, periodoLiberadoDias } = req.body;
 
@@ -209,6 +278,7 @@ router.put('/horarios/:prefeituraId', async (req: AuthRequest, res) => {
 // GET campos personalizados
 router.get('/campos/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureCamposPersonalizadosTable()
     const { prefeituraId } = req.params;
     
     const result = await pool.query(
@@ -233,6 +303,7 @@ router.get('/campos/:prefeituraId', async (req: AuthRequest, res) => {
 // POST criar campo personalizado
 router.post('/campos/:prefeituraId', async (req: AuthRequest, res) => {
   try {
+    await ensureCamposPersonalizadosTable()
     const { prefeituraId } = req.params;
     const { nomeCampo, labelCampo, tipoCampo, placeholder, textoAjuda, obrigatorio, ativo, opcoes, ordem } = req.body;
     
@@ -255,6 +326,7 @@ router.post('/campos/:prefeituraId', async (req: AuthRequest, res) => {
 // PUT atualizar campo personalizado
 router.put('/campos/:id', async (req: AuthRequest, res) => {
   try {
+    await ensureCamposPersonalizadosTable()
     const { id } = req.params;
     const { labelCampo, tipoCampo, placeholder, textoAjuda, obrigatorio, ativo, opcoes, ordem } = req.body;
     
