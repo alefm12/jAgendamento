@@ -428,7 +428,7 @@ export function PersonalInfoForm({
                   <Sparkle size={20} weight="fill" className="text-pink-600" />
                 </motion.div>
               </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Preencha suas informações para concluir o agendamento</p>
+              <p className="text-sm mt-1" style={{ color: "#111827" }}>Preencha suas informações para concluir o agendamento</p>
             </div>
           </motion.div>
 
@@ -708,7 +708,7 @@ export function PersonalInfoForm({
                 <HouseLine size={20} weight="duotone" className="text-indigo-600" />
                 Seu Endereço Residencial
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Informações do local onde você mora</p>
+              <p className="text-sm mb-4" style={{ color: "#111827" }}>Informações do local onde você mora</p>
               
               <div className="space-y-4">
                 {hasStructuredAddress ? (
