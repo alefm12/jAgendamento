@@ -119,22 +119,22 @@ export function DateSelector({
 
   return (
     <div>
-      <Card className="p-6 bg-white border shadow-sm">
+      <Card className="p-6 bg-card border shadow-sm">
         <div>
           <div className="flex items-center gap-4 mb-6">
             <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow flex-shrink-0">
-              <CalendarBlank className="text-white" size={26} weight="duotone" />
+              <CalendarBlank className="text-primary-foreground" size={26} weight="duotone" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800">
+              <h2 className="text-2xl font-bold text-foreground">
                 Escolha a Data
               </h2>
-              <p className="text-sm text-gray-500 mt-0.5">Selecione o melhor dia para seu atendimento</p>
+              <p className="text-sm text-muted-foreground mt-0.5">Selecione o melhor dia para seu atendimento</p>
             </div>
           </div>
           
           <div className="flex justify-center">
-            <div className="bg-white rounded-xl p-2 border">
+            <div className="bg-card rounded-xl p-2 border">
               <Calendar
                 mode="single"
                 selected={selectedDate}
@@ -155,16 +155,16 @@ export function DateSelector({
             </div>
           </div>
 
-          <div className="mt-5 p-4 bg-blue-50 rounded-xl border border-blue-200">
+          <div className="mt-5 p-4 bg-primary/10 rounded-xl border border-primary/20">
             <div className="flex items-start gap-3">
               <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
-                <CalendarCheck size={20} weight="fill" className="text-white" />
+                <CalendarCheck size={20} weight="fill" className="text-primary-foreground" />
               </div>
               <div className="flex-1">
-                <p className="text-sm text-gray-700 leading-relaxed font-medium">
+                <p className="text-sm text-foreground leading-relaxed font-medium">
                   <span className="font-bold text-primary">Agendamentos disponíveis</span> {windowDescription}
                   {blockedDates.length > 0 && (
-                    <span className="block mt-2 text-xs text-gray-500">
+                    <span className="block mt-2 text-xs text-muted-foreground">
                       ⚠️ Datas bloqueadas (feriados/facultativos) e datas sem horários disponíveis não estão disponíveis para seleção
                     </span>
                   )}

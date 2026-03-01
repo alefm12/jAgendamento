@@ -35,29 +35,29 @@ export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSe
   
   return (
     <div>
-      <Card className="p-6 bg-white border shadow-sm">
+      <Card className="p-6 bg-card border shadow-sm">
         <div>
           <div className="flex items-start gap-4 mb-5">
             <div className="w-11 h-11 rounded-xl bg-primary flex items-center justify-center shadow flex-shrink-0">
-              <Clock className="text-white" size={22} weight="duotone" />
+              <Clock className="text-primary-foreground" size={22} weight="duotone" />
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className="text-xl font-bold text-foreground">
                 Escolha o Horário
               </h2>
-              <p className="text-sm text-gray-500 mt-0.5">
-                Para <span className="font-semibold text-gray-700">{format(date, "dd 'de' MMMM", { locale: ptBR })}</span>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                Para <span className="font-semibold text-foreground">{format(date, "dd 'de' MMMM", { locale: ptBR })}</span>
               </p>
             </div>
           </div>
 
           {availableSlots.length === 0 ? (
-            <div className="p-5 bg-red-50 rounded-xl border border-red-200">
+            <div className="p-5 bg-destructive/10 rounded-xl border border-destructive/20">
               <div className="flex items-center gap-3 justify-center text-center">
-                <Clock size={22} weight="fill" className="text-red-600" />
+                <Clock size={22} weight="fill" className="text-destructive" />
                 <div>
-                  <h3 className="font-bold text-red-800">Sem horários disponíveis</h3>
-                  <p className="text-sm text-red-700 mt-1">Por favor, escolha outra data</p>
+                  <h3 className="font-bold text-destructive">Sem horários disponíveis</h3>
+                  <p className="text-sm text-destructive/80 mt-1">Por favor, escolha outra data</p>
                 </div>
               </div>
             </div>
@@ -75,10 +75,10 @@ export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSe
                   className={`
                     w-full h-12 text-sm font-semibold rounded-xl transition-all
                     ${selectedTime === slot.time
-                      ? 'bg-primary text-white shadow ring-2 ring-primary/40'
+                      ? 'bg-primary text-primary-foreground shadow ring-2 ring-primary/40'
                       : slot.available
-                      ? 'bg-white border border-gray-300 text-gray-700 hover:border-primary hover:bg-primary/5'
-                      : 'bg-gray-50 border border-gray-200 text-gray-400 cursor-not-allowed opacity-50'
+                      ? 'bg-background border border-border text-foreground hover:border-primary hover:bg-primary/5'
+                      : 'bg-muted border border-border text-muted-foreground cursor-not-allowed opacity-50'
                     }
                   `}
                 >
@@ -93,10 +93,10 @@ export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSe
             </div>
           )}
 
-          <div className="mt-5 p-4 bg-blue-50 rounded-xl border border-blue-200">
+          <div className="mt-5 p-4 bg-primary/10 rounded-xl border border-primary/20">
             <div className="flex items-center gap-3">
               <CalendarCheck size={20} weight="fill" className="text-primary flex-shrink-0" />
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-foreground">
                 <span className="font-bold text-primary">{availableSlots.length} horário(s)</span> disponível(is). Selecione o melhor para você.
               </p>
             </div>

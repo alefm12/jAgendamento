@@ -123,7 +123,7 @@ function Calendar({
         week: "flex w-full justify-around gap-1 mt-1",
         day: cn(
           "relative w-10 h-10 p-0 font-medium rounded-lg cursor-pointer",
-          "flex items-center justify-center",
+          "flex items-center justify-center text-foreground",
           "transition-all duration-200",
           "hover:bg-accent hover:text-accent-foreground hover:scale-105",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
