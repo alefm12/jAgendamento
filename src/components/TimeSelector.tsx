@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Button } from '@/components/ui/button'
@@ -16,14 +16,22 @@ interface TimeSelectorProps {
 export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSelectorProps) {
   const availableSlots = slots.filter(slot => slot.available)
 
-  // Bloqueia interação por 600ms após montar para evitar "ghost touch" mobile
-  // (evento de toque da seleção de data passando para o botão de horário)
+  // Bloqueia interação por 700ms após montar/trocar data
+  // usando useRef com timestamp — imune a clicks sintéticos do iOS
+  // (o iOS gera um click sintético a partir do toque na data que cai sobre a grade de horários)
+  const mountedAtRef = useRef<number>(Date.now())
   const [ready, setReady] = useState(false)
   useEffect(() => {
     setReady(false)
-    const t = setTimeout(() => setReady(true), 600)
+    mountedAtRef.current = Date.now()
+    const t = setTimeout(() => setReady(true), 700)
     return () => clearTimeout(t)
   }, [date])
+
+  const handleTimeSelect = (time: string) => {
+    if (Date.now() - mountedAtRef.current < 700) return
+    onTimeSelect(time)
+  }
   
   return (
     <div>
@@ -61,8 +69,8 @@ export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSe
                 <Button
                   key={slot.time}
                   variant={selectedTime === slot.time ? "default" : "outline"}
-                  onTouchStart={(e) => { if (!ready || !slot.available) e.preventDefault() }}
-                  onClick={() => ready && slot.available && onTimeSelect(slot.time)}
+                  onTouchStart={(e) => { if (Date.now() - mountedAtRef.current < 700) e.preventDefault() }}
+                  onClick={() => slot.available && handleTimeSelect(slot.time)}
                   disabled={!slot.available}
                   className={`
                     w-full h-12 text-sm font-semibold rounded-xl transition-all
