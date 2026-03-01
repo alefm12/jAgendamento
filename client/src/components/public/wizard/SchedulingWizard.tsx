@@ -6,8 +6,6 @@ import {
   LayoutDashboard,
   CheckCircle2,
   ArrowRight,
-  Moon,
-  Sun,
   FileText,
   Loader2,
   Phone,
@@ -53,7 +51,6 @@ export default function SchedulingWizard() {
 
   const [config, setConfig] = useState<TenantConfig | null>(null)
   const [loading, setLoading] = useState(true)
-  const [isDark, setIsDark] = useState(false)
 
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
@@ -89,18 +86,6 @@ export default function SchedulingWizard() {
         setLoading(false)
       })
   }, [slug])
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-    // Remove .dark ao desmontar (ao navegar para outra página)
-    return () => {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [isDark])
 
   const themeColor = config?.cores?.agendar || '#059669'
 
@@ -184,13 +169,6 @@ export default function SchedulingWizard() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => setIsDark((prev) => !prev)}
-            className="rounded-full p-2 text-gray-500 transition hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
           <div className="flex rounded-lg border border-gray-200 bg-gray-100 p-1 transition dark:border-gray-600 dark:bg-gray-700">
             <button
               type="button"

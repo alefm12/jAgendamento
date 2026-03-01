@@ -1,13 +1,10 @@
-﻿import { useState, useEffect } from "react"
-import { useRoute } from "wouter"
+﻿import { useRoute } from "wouter"
 import {
   MapPin,
   Calendar,
   LayoutDashboard,
   CheckCircle2,
   ArrowRight,
-  Moon,
-  Sun,
   FileText
 } from "lucide-react"
 
@@ -20,19 +17,6 @@ const PUBLIC_PORTAL_BASE_URL = "http://localhost:5000"
 export default function SchedulingWizard({ tenantSlug }: SchedulingWizardProps) {
   const [, params] = useRoute<{ slug: string }>("/:slug/agendar")
   const slug = tenantSlug ?? params?.slug ?? "iraucuba"
-  const [isDark, setIsDark] = useState(false)
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-    }
-    // Remove .dark ao desmontar (ao navegar para outra página)
-    return () => {
-      document.documentElement.classList.remove("dark")
-    }
-  }, [isDark])
 
   const buildPortalUrl = (suffix: string) => {
     return `${PUBLIC_PORTAL_BASE_URL.replace(/\/$/, "")}/${slug}${suffix}`
@@ -65,14 +49,6 @@ export default function SchedulingWizard({ tenantSlug }: SchedulingWizardProps) 
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => setIsDark(!isDark)}
-            className="rounded-full p-2 text-gray-500 transition hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-            title={isDark ? "Mudar para Modo Claro" : "Mudar para Modo Escuro"}
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
           <div className="flex rounded-lg border border-gray-200 bg-gray-100 p-1 transition dark:border-gray-600 dark:bg-gray-700">
             <button
               type="button"

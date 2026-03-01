@@ -3,6 +3,7 @@ import { useRoute, useLocation } from "wouter"
 import { Calendar, Search, Phone, Loader2, Building2, Moon, Sun } from "lucide-react"
 import AccessibilityDropdown from "./AccessibilityDropdown"
 import { AylaButton } from "@/components/ayla/AylaButton"
+import { useTheme } from "@/hooks/use-theme"
 
 interface PublicConfig {
   nome: string
@@ -31,19 +32,7 @@ export default function TenantHome({ tenantSlug, onStartSchedule, onConsult }: P
   const [config, setConfig] = useState<PublicConfig | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const [isDark, setIsDark] = useState(false)
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark")
-    } else {
-      document.documentElement.classList.remove("dark")
-    }
-    // Remove .dark ao desmontar (ao navegar para outra página)
-    return () => {
-      document.documentElement.classList.remove("dark")
-    }
-  }, [isDark])
+  const { isDark, toggleTheme } = useTheme()
 
   useEffect(() => {
     if (!slug) return
@@ -104,7 +93,7 @@ export default function TenantHome({ tenantSlug, onStartSchedule, onConsult }: P
         <AccessibilityDropdown />
         <button
           type="button"
-          onClick={() => setIsDark(!isDark)}
+          onClick={toggleTheme}
           className="rounded-full border border-gray-200/50 bg-white/80 p-3 text-gray-700 shadow-sm backdrop-blur-md transition hover:shadow-md dark:border-gray-700/50 dark:bg-gray-800/80 dark:text-gray-200"
           title={isDark ? "Mudar para Modo Claro" : "Mudar para Modo Escuro"}
         >

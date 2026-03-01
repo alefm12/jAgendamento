@@ -18,8 +18,7 @@ function readStoredTheme(): Theme {
 
 /** Aplica imediatamente a classe `dark` no <html> */
 function applyThemeToDOM(t: Theme) {
-  const root = document.documentElement
-  root.classList.toggle('dark', t === 'dark')
+  document.documentElement.classList.toggle('dark', t === 'dark')
 }
 
 export function useTheme() {
