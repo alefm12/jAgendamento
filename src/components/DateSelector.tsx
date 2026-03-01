@@ -141,6 +141,9 @@ export function DateSelector({
                 onSelect={onDateSelect}
                 locale={ptBR}
                 defaultMonth={new Date()}
+                modifiersStyles={{
+                  today: { background: 'none', border: 'none', fontWeight: 'bold' }
+                }}
                 disabled={(date) => 
                   isBefore(date, today) || 
                   date > maxDate || 

@@ -61,6 +61,7 @@ export function TimeSelector({ date, slots, selectedTime, onTimeSelect }: TimeSe
                 <Button
                   key={slot.time}
                   variant={selectedTime === slot.time ? "default" : "outline"}
+                  onTouchStart={(e) => { if (!ready || !slot.available) e.preventDefault() }}
                   onClick={() => ready && slot.available && onTimeSelect(slot.time)}
                   disabled={!slot.available}
                   className={`
