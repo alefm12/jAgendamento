@@ -180,31 +180,31 @@ export function PersonalDataStep({
     <div className="space-y-6">
       {/* Mensagem quando CPF tem agendamento pendente */}
       {hasPendingAppointment && pendingAppointmentInfo && (
-        <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-6 shadow-lg">
+        <div className="bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-2xl p-6 shadow-lg">
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-amber-100 dark:bg-amber-800/40 rounded-full flex items-center justify-center">
                 <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-amber-900 mb-2">
+              <h3 className="text-lg font-bold text-amber-900 dark:text-amber-100 mb-2">
                 Você já possui um agendamento pendente
               </h3>
               <div className="space-y-2 mb-4">
-                <p className="text-amber-800">
+                <p className="text-amber-800 dark:text-amber-200">
                   <span className="font-semibold">Protocolo:</span> {pendingAppointmentInfo.protocolo}
                 </p>
                 {pendingAppointmentInfo.data && (
-                  <p className="text-amber-800">
+                  <p className="text-amber-800 dark:text-amber-200">
                     <span className="font-semibold">Data/Hora:</span>{' '}
                     {new Date(pendingAppointmentInfo.data).toLocaleDateString('pt-BR')} às {pendingAppointmentInfo.hora}
                   </p>
                 )}
               </div>
-              <p className="text-amber-900 mb-4">
+              <p className="text-amber-900 dark:text-amber-100 mb-4">
                 Para realizar um novo agendamento, você precisa cancelar o agendamento pendente atual. Por favor, vá na aba "CONSULTAR AGENDAMENTO" e realize o cancelamento.
               </p>
               <Button
@@ -236,7 +236,7 @@ export function PersonalDataStep({
             onCpfBlur={onCpfBlur}
           />
       {showLgpdConsent && (
-        <div className="space-y-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="space-y-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm">
           <div className="flex items-start gap-3">
             <Checkbox
               id="lgpd-toggle"
@@ -244,7 +244,7 @@ export function PersonalDataStep({
               onCheckedChange={() => onOpenLgpdModal?.()}
             />
             <Label htmlFor="lgpd-toggle" className="cursor-pointer space-y-1" onClick={onOpenLgpdModal}>
-              <span className="flex items-center gap-2 font-semibold text-gray-900">
+              <span className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100">
                 <ShieldCheck size={18} className="text-primary" weight="duotone" />
                 Li e concordo com os termos da LGPD
               </span>
@@ -263,7 +263,7 @@ export function PersonalDataStep({
           </button>
 
           {lgpdConsent && (
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+            <div className="rounded-2xl border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20 p-4 text-sm text-emerald-800 dark:text-emerald-200">
               Consentimento registrado em {new Date(lgpdConsent.consentDate).toLocaleString('pt-BR')} —
               notificações {lgpdConsent.notificationAccepted ? 'autorizadas' : 'não autorizadas'}.
             </div>
@@ -272,7 +272,7 @@ export function PersonalDataStep({
       )}
 
       {showLgpdConsent && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+        <div className="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm">
           <div className="flex items-start gap-3">
             <Checkbox
               id="notification-toggle"
@@ -280,7 +280,7 @@ export function PersonalDataStep({
               onCheckedChange={(checked) => onNotificationConsentChange?.(Boolean(checked))}
             />
             <Label htmlFor="notification-toggle" className="cursor-pointer space-y-1">
-              <span className="flex items-center gap-2 font-semibold text-gray-900">
+              <span className="flex items-center gap-2 font-semibold text-gray-900 dark:text-gray-100">
                 <Bell size={18} className="text-primary" weight="duotone" />
                 Aceito receber notificações (opcional)
               </span>

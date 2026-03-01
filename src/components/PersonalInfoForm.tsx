@@ -406,7 +406,7 @@ export function PersonalInfoForm({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="p-6 bg-white border shadow-sm">
+      <Card className="p-6 bg-white dark:bg-gray-800 dark:border-gray-700 border shadow-sm">
         
         <div className="">
           <motion.div 
@@ -428,7 +428,7 @@ export function PersonalInfoForm({
                   <Sparkle size={20} weight="fill" className="text-pink-600" />
                 </motion.div>
               </h2>
-              <p className="text-sm mt-1" style={{ color: "#111827" }}>Preencha suas informações para concluir o agendamento</p>
+              <p className="text-sm mt-1 text-gray-600 dark:text-gray-300">Preencha suas informações para concluir o agendamento</p>
             </div>
           </motion.div>
 
@@ -440,7 +440,7 @@ export function PersonalInfoForm({
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                <Label htmlFor="fullName" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                   <User size={16} weight="duotone" className="text-purple-600" />
                   Nome Completo <span className="text-red-500">*</span>
                 </Label>
@@ -479,7 +479,7 @@ export function PersonalInfoForm({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cpf" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                <Label htmlFor="cpf" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                   <IdentificationCard size={16} weight="duotone" className="text-blue-600" />
                   CPF <span className="text-red-500">*</span>
                 </Label>
@@ -528,7 +528,7 @@ export function PersonalInfoForm({
                 formData.rgType === '2ª via' ? "md:grid-cols-2" : "md:grid-cols-1"
               )}>
                 <div className="space-y-2">
-                  <Label htmlFor="rgType" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                  <Label htmlFor="rgType" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                     <CreditCard size={16} weight="duotone" className="text-violet-600" />
                     Tipo de CIN <span className="text-red-500">*</span>
                   </Label>
@@ -561,7 +561,7 @@ export function PersonalInfoForm({
 
                 {formData.rgType === '2ª via' && (
                   <div className="space-y-2 animate-in fade-in slide-in-from-right-2">
-                    <Label htmlFor="rg" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                    <Label htmlFor="rg" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                       <IdentificationCard size={16} weight="duotone" className="text-cyan-600" />
                       RG (se tiver)
                     </Label>
@@ -577,7 +577,7 @@ export function PersonalInfoForm({
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="gender" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                <Label htmlFor="gender" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                   <User size={16} weight="duotone" className="text-blue-600" />
                   Gênero <span className="text-red-500">*</span>
                 </Label>
@@ -619,7 +619,7 @@ export function PersonalInfoForm({
 
               {formData.gender?.startsWith('Outro:') && (
                 <div className="space-y-2 md:col-span-2 animate-in fade-in slide-in-from-top-2">
-                  <Label htmlFor="genderOther" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                  <Label htmlFor="genderOther" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                     <User size={16} weight="duotone" className="text-blue-600" />
                     Especifique seu gênero <span className="text-red-500">*</span>
                   </Label>
@@ -634,7 +634,7 @@ export function PersonalInfoForm({
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="phone" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                <Label htmlFor="phone" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                   <Phone size={16} weight="duotone" className="text-green-600" />
                   Telefone <span className="text-red-500">*</span>
                 </Label>
@@ -674,7 +674,7 @@ export function PersonalInfoForm({
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                   <EnvelopeSimple size={16} weight="duotone" className="text-orange-600" />
                   Email <span className="text-red-500">*</span>
                 </Label>
@@ -703,19 +703,19 @@ export function PersonalInfoForm({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-gray-200">
+            <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
               <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2 flex items-center gap-2">
                 <HouseLine size={20} weight="duotone" className="text-indigo-600" />
                 Seu Endereço Residencial
               </h3>
-              <p className="text-sm mb-4" style={{ color: "#111827" }}>Informações do local onde você mora</p>
+              <p className="text-sm mb-4 text-gray-600 dark:text-gray-300">Informações do local onde você mora</p>
               
               <div className="space-y-4">
                 {hasStructuredAddress ? (
                   <>
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                        <Label className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                           <MapTrifold size={16} weight="duotone" className="text-indigo-600" />
                           Escolha primeiro a região <span className="text-red-500">*</span>
                         </Label>
@@ -772,7 +772,7 @@ export function PersonalInfoForm({
                       {formData.regionType === 'Sede' && headquarters.length > 0 && (
                         headquarters.length > 1 ? (
                           <div className="space-y-2">
-                            <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                            <Label className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                               <Buildings size={16} weight="duotone" className="text-emerald-600" />
                               Qual Sede? <span className="text-red-500">*</span>
                             </Label>
@@ -799,7 +799,7 @@ export function PersonalInfoForm({
                             )}
                           </div>
                         ) : (
-                          <div className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                          <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/20 px-4 py-3 text-sm text-emerald-800 dark:text-emerald-200">
                             Sede selecionada automaticamente: <strong>{headquarters[0].nome}</strong>
                           </div>
                         )
@@ -808,7 +808,7 @@ export function PersonalInfoForm({
                       {formData.regionType === 'Distrito' && districts.length > 0 && (
                         showDistrictSelect ? (
                           <div className="space-y-2 animate-in fade-in">
-                            <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                            <Label className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                               <MapPin size={16} weight="duotone" className="text-emerald-600" />
                               Qual Distrito? <span className="text-red-500">*</span>
                             </Label>
@@ -838,7 +838,7 @@ export function PersonalInfoForm({
                             )}
                           </div>
                         ) : (
-                          <div className="rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-800">
+                          <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 px-4 py-3 text-sm text-blue-800 dark:text-blue-200">
                             Distrito selecionado automaticamente: <strong>{districts[0]?.nome}</strong>
                           </div>
                         )
@@ -847,7 +847,7 @@ export function PersonalInfoForm({
                       {shouldRenderStreetInputs && (
                         <div className="grid grid-cols-1 gap-4 animate-in fade-in slide-in-from-top-2 md:grid-cols-3">
                           <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor="street" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                            <Label htmlFor="street" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                               <HouseLine size={16} weight="duotone" className="text-indigo-600" />
                               Logradouro <span className="text-red-500">*</span>
                             </Label>
@@ -870,7 +870,7 @@ export function PersonalInfoForm({
                             )}
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="number" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                            <Label htmlFor="number" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                               <NumberCircleThree size={16} weight="duotone" className="text-pink-600" />
                               Número <span className="text-red-500">*</span>
                             </Label>
@@ -897,7 +897,7 @@ export function PersonalInfoForm({
 
                       {shouldShowNeighborhoodSelect && (
                         <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
-                          <Label className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                          <Label className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                             <HouseLine size={16} weight="duotone" className="text-indigo-600" />
                             Bairro / Comunidade <span className="text-red-500">*</span>
                           </Label>
@@ -935,16 +935,16 @@ export function PersonalInfoForm({
                 ) : (
                   <>
                     {addressOptionsError && (
-                      <div className="rounded-2xl border border-red-200 bg-red-50/80 p-4 text-sm text-red-900">
+                      <div className="rounded-2xl border border-red-200 dark:border-red-800 bg-red-50/80 dark:bg-red-900/20 p-4 text-sm text-red-900 dark:text-red-200">
                         {addressOptionsError}
                       </div>
                     )}
-                    <div className="rounded-2xl border border-dashed border-amber-300 bg-amber-50/80 p-4 text-sm text-amber-900">
+                    <div className="rounded-2xl border border-dashed border-amber-300 dark:border-amber-700 bg-amber-50/80 dark:bg-amber-900/20 p-4 text-sm text-amber-900 dark:text-amber-200">
                       Nenhum catálogo de regiões com bairros vinculados está disponível. Informe manualmente os dados do seu endereço.
                     </div>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                       <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="street" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                        <Label htmlFor="street" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                           <HouseLine size={16} weight="duotone" className="text-indigo-600" />
                           Logradouro <span className="text-red-500">*</span>
                         </Label>
@@ -967,7 +967,7 @@ export function PersonalInfoForm({
                         )}
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="number" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                        <Label htmlFor="number" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                           <NumberCircleThree size={16} weight="duotone" className="text-pink-600" />
                           Número <span className="text-red-500">*</span>
                         </Label>
@@ -990,7 +990,7 @@ export function PersonalInfoForm({
                         )}
                       </div>
                       <div className="space-y-2 md:col-span-3">
-                        <Label htmlFor="neighborhood" className="text-sm font-semibold flex items-center gap-2" style={{ color: "#111827" }}>
+                        <Label htmlFor="neighborhood" className="text-sm font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
                           <MapPin size={16} weight="duotone" className="text-teal-600" />
                           Bairro / Comunidade <span className="text-red-500">*</span>
                         </Label>
@@ -1019,8 +1019,8 @@ export function PersonalInfoForm({
             </div>
 
             {enabledCustomFields.length > 0 && (
-              <div className="pt-4 border-t border-gray-200">
-                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
                   <Sparkle size={20} weight="duotone" className="text-purple-600" />
                   Informações Adicionais
                 </h3>
@@ -1036,17 +1036,17 @@ export function PersonalInfoForm({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="mt-5 p-4 bg-blue-50 rounded-xl border border-blue-200 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+              className="mt-5 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-200 dark:border-blue-800 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
             >
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
                   <MapPin size={22} weight="fill" className="text-white" />
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-800 mb-1">Local selecionado:</p>
-                  <p className="text-sm text-gray-700 font-bold">{selectedLocation.name}</p>
-                  <p className="text-sm text-gray-600 mt-1">{selectedLocation.address}</p>
-                  <p className="text-xs text-gray-500 mt-1">{selectedLocation.city}</p>
+                  <p className="font-semibold text-gray-800 dark:text-gray-100 mb-1">Local selecionado:</p>
+                  <p className="text-sm text-gray-700 dark:text-gray-200 font-bold">{selectedLocation.name}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{selectedLocation.address}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{selectedLocation.city}</p>
                 </div>
               </div>
               <Button
@@ -1066,9 +1066,9 @@ export function PersonalInfoForm({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="mt-6 p-5 bg-yellow-50 border border-yellow-200 rounded-xl"
+              className="mt-6 p-5 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl"
             >
-              <p className="text-sm text-yellow-800 font-medium">
+              <p className="text-sm text-yellow-800 dark:text-yellow-200 font-medium">
                 Selecione um local de atendimento na etapa anterior para visualizar os detalhes aqui.
               </p>
             </motion.div>
