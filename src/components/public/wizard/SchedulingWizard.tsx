@@ -28,6 +28,10 @@ export default function SchedulingWizard({ tenantSlug }: SchedulingWizardProps) 
     } else {
       document.documentElement.classList.remove("dark")
     }
+    // Remove .dark ao desmontar (ao navegar para outra página)
+    return () => {
+      document.documentElement.classList.remove("dark")
+    }
   }, [isDark])
 
   const buildPortalUrl = (suffix: string) => {

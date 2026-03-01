@@ -96,6 +96,10 @@ export default function SchedulingWizard() {
     } else {
       document.documentElement.classList.remove('dark')
     }
+    // Remove .dark ao desmontar (ao navegar para outra página)
+    return () => {
+      document.documentElement.classList.remove('dark')
+    }
   }, [isDark])
 
   const themeColor = config?.cores?.agendar || '#059669'

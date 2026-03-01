@@ -39,6 +39,10 @@ export default function TenantHome({ tenantSlug, onStartSchedule, onConsult }: P
     } else {
       document.documentElement.classList.remove("dark")
     }
+    // Remove .dark ao desmontar (ao navegar para outra página)
+    return () => {
+      document.documentElement.classList.remove("dark")
+    }
   }, [isDark])
 
   useEffect(() => {

@@ -460,7 +460,7 @@ function TenantPublicScheduler({ tenantSlug }: { tenantSlug: string }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="force-light min-h-screen bg-gray-50" style={{ colorScheme: 'light' }}>
       <div className="mx-auto w-full max-w-5xl px-4 py-10">
         <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <button
