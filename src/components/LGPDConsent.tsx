@@ -18,17 +18,17 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
         </div>
         <div>
           <p className="text-sm font-semibold text-primary">Lei nº 13.709/2018</p>
-          <h2 className="text-2xl font-bold text-gray-900">Consentimento de Dados - LGPD</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Consentimento de Dados - LGPD</h2>
           <p className="text-sm text-muted-foreground">
             Leia atentamente o conteúdo abaixo antes de confirmar seu consentimento.
           </p>
         </div>
       </div>
 
-      <ScrollArea className="h-[460px] w-full rounded-2xl border border-gray-200 bg-white p-5 shadow-inner">
+      <ScrollArea className="h-[460px] w-full rounded-2xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 p-5 shadow-inner">
         <div className="space-y-5 text-sm">
           <div>
-            <h3 className="mb-2 flex items-center gap-2 text-base font-semibold">
+            <h3 className="mb-2 flex items-center gap-2 text-base font-semibold text-gray-800 dark:text-gray-100">
               <Info size={20} className="text-primary" />
               Coleta e Uso de Dados Pessoais
             </h3>
@@ -40,7 +40,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
 
           <div className="space-y-3 pl-4">
             <section>
-              <h4 className="font-medium">1. Dados coletados</h4>
+              <h4 className="font-medium text-gray-800 dark:text-gray-100">1. Dados coletados</h4>
               <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                 <li>Nome completo, CPF e CIN</li>
                 <li>Telefone e email para contato</li>
@@ -51,7 +51,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
             </section>
 
             <section>
-              <h4 className="font-medium">2. Finalidade do tratamento</h4>
+              <h4 className="font-medium text-gray-800 dark:text-gray-100">2. Finalidade do tratamento</h4>
               <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                 <li>Processamento e gerenciamento do agendamento</li>
                 <li>Comunicação sobre o status do atendimento</li>
@@ -63,7 +63,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
             </section>
 
             <section>
-              <h4 className="font-medium">3. Base legal (Art. 7º da LGPD)</h4>
+              <h4 className="font-medium text-gray-800 dark:text-gray-100">3. Base legal (Art. 7º da LGPD)</h4>
               <p className="text-muted-foreground">
                 O tratamento dos seus dados é necessário para a execução do serviço público de emissão de CIN,
                 fundamentado no cumprimento de obrigação legal e regulatória (inciso II) e na execução de políticas
@@ -72,7 +72,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
             </section>
 
             <section>
-              <h4 className="font-medium">4. Compartilhamento</h4>
+              <h4 className="font-medium text-gray-800 dark:text-gray-100">4. Compartilhamento</h4>
               <p className="text-muted-foreground">
                 Seus dados serão compartilhados apenas com servidores autorizados da prefeitura responsáveis pelo
                 atendimento e emissão do documento. Não compartilhamos seus dados com terceiros para fins comerciais.
@@ -80,7 +80,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
             </section>
 
             <section>
-              <h4 className="font-medium">5. Armazenamento e retenção</h4>
+              <h4 className="font-medium text-gray-800 dark:text-gray-100">5. Armazenamento e retenção</h4>
               <p className="text-muted-foreground">
                 Os dados serão armazenados de forma segura pelo período de {config?.lgpdSettings?.dataRetentionDays || 90} dias
                 após a conclusão do atendimento. Após esse período, os dados serão anonimizados ou excluídos conforme a
@@ -89,7 +89,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
             </section>
 
             <section>
-              <h4 className="font-medium">6. Direitos do titular (Art. 18)</h4>
+              <h4 className="font-medium text-gray-800 dark:text-gray-100">6. Direitos do titular (Art. 18)</h4>
               <ul className="list-disc list-inside space-y-1 text-muted-foreground">
                 <li>Confirmação da existência de tratamento</li>
                 <li>Acesso aos dados pessoais</li>
@@ -103,7 +103,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
             </section>
 
             <section>
-              <h4 className="font-medium">7. Segurança</h4>
+              <h4 className="font-medium text-gray-800 dark:text-gray-100">7. Segurança</h4>
               <p className="text-muted-foreground">
                 Adotamos medidas técnicas e administrativas para proteger seus dados pessoais contra acessos não
                 autorizados, situações acidentais ou ilícitas de destruição, perda, alteração ou comunicação.
@@ -112,7 +112,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
 
             {dpoInfo && (
               <section>
-                <h4 className="font-medium">8. Encarregado de Proteção de Dados (DPO)</h4>
+                <h4 className="font-medium text-gray-800 dark:text-gray-100">8. Encarregado de Proteção de Dados (DPO)</h4>
                 <div className="space-y-1 text-muted-foreground">
                   {dpoInfo.name && <p>Nome: {dpoInfo.name}</p>}
                   {dpoInfo.email && <p>Email: {dpoInfo.email}</p>}
@@ -123,7 +123,7 @@ export function LGPDConsent({ config }: LGPDConsentProps) {
           </div>
 
           {config?.lgpdSettings?.privacyPolicyUrl && (
-            <div className="mt-5 border-t pt-4">
+            <div className="mt-5 border-t border-gray-200 dark:border-gray-600 pt-4">
               <a
                 href={config.lgpdSettings.privacyPolicyUrl}
                 target="_blank"

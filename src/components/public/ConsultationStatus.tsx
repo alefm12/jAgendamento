@@ -190,29 +190,29 @@ export function ConsultationStatus({ onBack, tenantSlug }: ConsultationStatusPro
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-50 via-white to-white px-4 py-10">
-      <div className="mx-auto w-full max-w-2xl rounded-3xl bg-white p-8 shadow-2xl">
+    <div className="min-h-screen bg-gradient-to-b from-green-50 via-white to-white dark:from-gray-900 dark:via-gray-900 dark:to-gray-900 px-4 py-10">
+      <div className="mx-auto w-full max-w-2xl rounded-3xl bg-white dark:bg-gray-800 p-8 shadow-2xl">
         <button
           type="button"
           onClick={onBack}
-          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-green-700 hover:text-green-800"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-green-700 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300"
         >
           <ArrowLeft size={18} />
           Voltar
         </button>
 
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Consultar Agendamento</h2>
-        <p className="text-gray-500 mb-6 text-sm">Digite seu CPF para verificar seus agendamentos.</p>
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">Consultar Agendamento</h2>
+        <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">Digite seu CPF para verificar seus agendamentos.</p>
 
         <form onSubmit={handleSearch} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-1">CPF</label>
+            <label className="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">CPF</label>
             <input
               type="text"
               value={cpf}
               onChange={handleCpfChange}
               placeholder="000.000.000-00"
-              className="w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-3 border"
+              className="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder:text-gray-500 shadow-sm focus:border-green-500 focus:ring-green-500 p-3 border"
               maxLength={14}
             />
           </div>
@@ -236,10 +236,10 @@ export function ConsultationStatus({ onBack, tenantSlug }: ConsultationStatusPro
         </form>
 
         {result && (
-          <div className="mt-8 pt-6 border-t border-gray-100 space-y-4">
+          <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 space-y-4">
             {result.found && result.appointments.length > 0 ? (
               <>
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
                   Agendamentos Encontrados ({result.appointments.length})
                 </h3>
                 {result.appointments.map((appointment, index) => {
@@ -248,17 +248,17 @@ export function ConsultationStatus({ onBack, tenantSlug }: ConsultationStatusPro
                   
                   return (
                     <div key={appointment.id} className={`rounded-xl border-2 p-5 space-y-3 ${
-                      statusInfo.color === 'green' ? 'border-green-200 bg-green-50' :
-                      statusInfo.color === 'amber' ? 'border-amber-200 bg-amber-50' :
-                      statusInfo.color === 'blue' ? 'border-blue-200 bg-blue-50' :
-                      statusInfo.color === 'red' ? 'border-red-200 bg-red-50' :
+                      statusInfo.color === 'green' ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20' :
+                      statusInfo.color === 'amber' ? 'border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20' :
+                      statusInfo.color === 'blue' ? 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20' :
+                      statusInfo.color === 'red' ? 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20' :
                       'border-gray-200 bg-gray-50'
                     }`}>
                       <div className="flex items-start justify-between">
                         <div>
-                          <h4 className="font-bold text-gray-900 text-lg">{appointment.name}</h4>
+                          <h4 className="font-bold text-gray-900 dark:text-gray-100 text-lg">{appointment.name}</h4>
                           {appointment.protocol && (
-                            <p className="text-xs text-gray-600 mt-1">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                               Protocolo: <span className="font-mono font-semibold">{appointment.protocol}</span>
                             </p>
                           )}
@@ -270,38 +270,38 @@ export function ConsultationStatus({ onBack, tenantSlug }: ConsultationStatusPro
 
                       <div className="grid grid-cols-2 gap-3 text-sm">
                         <div>
-                          <span className="text-gray-600 font-semibold">Status:</span>
+                          <span className="text-gray-600 dark:text-gray-400 font-semibold">Status:</span>
                           <p className={`font-bold ${
-                            statusInfo.color === 'green' ? 'text-green-700' :
-                            statusInfo.color === 'amber' ? 'text-amber-700' :
-                            statusInfo.color === 'blue' ? 'text-blue-700' :
-                            statusInfo.color === 'red' ? 'text-red-700' :
+                            statusInfo.color === 'green' ? 'text-green-700 dark:text-green-400' :
+                            statusInfo.color === 'amber' ? 'text-amber-700 dark:text-amber-400' :
+                            statusInfo.color === 'blue' ? 'text-blue-700 dark:text-blue-400' :
+                            statusInfo.color === 'red' ? 'text-red-700 dark:text-red-400' :
                             'text-gray-700'
                           }`}>{statusInfo.label}</p>
                         </div>
                         <div>
-                          <span className="text-gray-600 font-semibold">Tipo:</span>
-                          <p className="text-gray-900">{appointment.cinType || 'CIN'}</p>
+                          <span className="text-gray-600 dark:text-gray-400 font-semibold">Tipo:</span>
+                          <p className="text-gray-900 dark:text-gray-100">{appointment.cinType || 'CIN'}</p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-4 text-sm bg-white p-3 rounded-lg">
+                      <div className="flex items-center gap-4 text-sm bg-white dark:bg-gray-700/50 p-3 rounded-lg">
                         <div className="flex items-center gap-2">
-                          <Calendar size={16} className="text-gray-600" />
-                          <span className="font-semibold text-gray-900">
+                          <Calendar size={16} className="text-gray-600 dark:text-gray-400" />
+                          <span className="font-semibold text-gray-900 dark:text-gray-100">
                             {formatDate(appointment.date)}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Clock size={16} className="text-gray-600" />
-                          <span className="font-semibold text-gray-900">
+                          <Clock size={16} className="text-gray-600 dark:text-gray-400" />
+                          <span className="font-semibold text-gray-900 dark:text-gray-100">
                             {appointment.time}
                           </span>
                         </div>
                       </div>
 
                       {appointment.location.name && (
-                        <div className="text-xs text-gray-600 bg-white p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-700/50 p-3 rounded-lg">
                           <strong>Local:</strong> {appointment.location.name}
                           {appointment.location.address && (
                             <span className="block mt-1">{appointment.location.address}</span>
@@ -310,7 +310,7 @@ export function ConsultationStatus({ onBack, tenantSlug }: ConsultationStatusPro
                       )}
 
                       {canCancel && (
-                        <div className="pt-3 border-t border-gray-200">
+                        <div className="pt-3 border-t border-gray-200 dark:border-gray-600">
                           <button
                             type="button"
                             onClick={() => handleOpenCancelDialog(appointment)}
@@ -329,10 +329,10 @@ export function ConsultationStatus({ onBack, tenantSlug }: ConsultationStatusPro
               <div className="text-center py-8 space-y-4">
                 <AlertCircle className="mx-auto text-gray-400" size={64} />
                 <div>
-                  <h3 className="text-lg font-bold text-gray-800 mb-2">
+                  <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-2">
                     Nenhum agendamento encontrado
                   </h3>
-                  <p className="text-gray-600 mb-6">
+                  <p className="text-gray-600 dark:text-gray-400 mb-6">
                     Não encontramos nenhum agendamento vinculado a este CPF.
                   </p>
                   <button

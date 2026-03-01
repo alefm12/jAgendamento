@@ -31,7 +31,7 @@ export function Modal({ isOpen, onClose, children }: ModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6" role="dialog" aria-modal="true">
       <div className="absolute inset-0" onClick={handleOverlayClick} aria-hidden="true" />
-      <div className="modal-shell relative z-10 w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+      <div className="modal-shell relative z-10 w-full max-w-lg rounded-2xl bg-white dark:bg-gray-800 shadow-2xl">
         <button
           type="button"
           onClick={onClose}
