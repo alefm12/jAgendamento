@@ -126,7 +126,7 @@ export default function TenantHome({ tenantSlug, onStartSchedule, onConsult }: P
       <div className="fixed inset-0 z-0 bg-white/30 backdrop-blur-[2px] transition-colors duration-300 dark:bg-black/50" />
 
       <div className="relative z-10 flex w-full max-w-7xl flex-1 flex-col items-center gap-10 px-6 py-24 md:flex-row md:items-center md:gap-4">
-        <div className="order-2 flex w-full flex-col items-center text-center md:order-1 md:w-1/2 md:items-start md:text-left">
+        <div className="order-1 flex w-full flex-col items-center text-center md:order-1 md:w-1/2 md:items-start md:text-left">
           <div className="mb-6 flex w-full justify-center md:justify-start">
             {config.logo ? (
               <img src={config.logo} alt="Brasão" className="h-32 w-auto drop-shadow-2xl transition hover:scale-105 md:h-48 lg:h-56" loading="lazy" />
@@ -182,7 +182,7 @@ export default function TenantHome({ tenantSlug, onStartSchedule, onConsult }: P
           </div>
         </div>
 
-        <div className="order-1 flex w-full items-center justify-center md:order-2 md:w-1/2 md:justify-end">
+        <div className="order-2 flex w-full items-center justify-center md:order-2 md:w-1/2 md:justify-end">
           <img src="/bonecos_rg.png" alt="Cidadãos" className="h-auto w-full max-w-[500px] object-contain drop-shadow-2xl" loading="lazy" />
         </div>
       </div>

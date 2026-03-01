@@ -440,7 +440,7 @@ export function PersonalInfoForm({
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <Label htmlFor="fullName" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                <Label htmlFor="fullName" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <User size={16} weight="duotone" className="text-purple-600" />
                   Nome Completo <span className="text-red-500">*</span>
                 </Label>
@@ -479,7 +479,7 @@ export function PersonalInfoForm({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cpf" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                <Label htmlFor="cpf" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <IdentificationCard size={16} weight="duotone" className="text-blue-600" />
                   CPF <span className="text-red-500">*</span>
                 </Label>
@@ -528,7 +528,7 @@ export function PersonalInfoForm({
                 formData.rgType === '2ª via' ? "md:grid-cols-2" : "md:grid-cols-1"
               )}>
                 <div className="space-y-2">
-                  <Label htmlFor="rgType" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                  <Label htmlFor="rgType" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                     <CreditCard size={16} weight="duotone" className="text-violet-600" />
                     Tipo de CIN <span className="text-red-500">*</span>
                   </Label>
@@ -561,7 +561,7 @@ export function PersonalInfoForm({
 
                 {formData.rgType === '2ª via' && (
                   <div className="space-y-2 animate-in fade-in slide-in-from-right-2">
-                    <Label htmlFor="rg" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                    <Label htmlFor="rg" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                       <IdentificationCard size={16} weight="duotone" className="text-cyan-600" />
                       RG (se tiver)
                     </Label>
@@ -577,7 +577,7 @@ export function PersonalInfoForm({
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="gender" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                <Label htmlFor="gender" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <User size={16} weight="duotone" className="text-blue-600" />
                   Gênero <span className="text-red-500">*</span>
                 </Label>
@@ -619,7 +619,7 @@ export function PersonalInfoForm({
 
               {formData.gender?.startsWith('Outro:') && (
                 <div className="space-y-2 md:col-span-2 animate-in fade-in slide-in-from-top-2">
-                  <Label htmlFor="genderOther" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                  <Label htmlFor="genderOther" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                     <User size={16} weight="duotone" className="text-blue-600" />
                     Especifique seu gênero <span className="text-red-500">*</span>
                   </Label>
@@ -634,7 +634,7 @@ export function PersonalInfoForm({
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="phone" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                <Label htmlFor="phone" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <Phone size={16} weight="duotone" className="text-green-600" />
                   Telefone <span className="text-red-500">*</span>
                 </Label>
@@ -674,7 +674,7 @@ export function PersonalInfoForm({
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="email" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                <Label htmlFor="email" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <EnvelopeSimple size={16} weight="duotone" className="text-orange-600" />
                   Email <span className="text-red-500">*</span>
                 </Label>
@@ -715,7 +715,7 @@ export function PersonalInfoForm({
                   <>
                     <div className="space-y-4">
                       <div className="space-y-2">
-                        <Label className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                        <Label className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                           <MapTrifold size={16} weight="duotone" className="text-indigo-600" />
                           Escolha primeiro a região <span className="text-red-500">*</span>
                         </Label>
@@ -772,7 +772,7 @@ export function PersonalInfoForm({
                       {formData.regionType === 'Sede' && headquarters.length > 0 && (
                         headquarters.length > 1 ? (
                           <div className="space-y-2">
-                            <Label className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                            <Label className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                               <Buildings size={16} weight="duotone" className="text-emerald-600" />
                               Qual Sede? <span className="text-red-500">*</span>
                             </Label>
@@ -808,7 +808,7 @@ export function PersonalInfoForm({
                       {formData.regionType === 'Distrito' && districts.length > 0 && (
                         showDistrictSelect ? (
                           <div className="space-y-2 animate-in fade-in">
-                            <Label className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                            <Label className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                               <MapPin size={16} weight="duotone" className="text-emerald-600" />
                               Qual Distrito? <span className="text-red-500">*</span>
                             </Label>
@@ -847,7 +847,7 @@ export function PersonalInfoForm({
                       {shouldRenderStreetInputs && (
                         <div className="grid grid-cols-1 gap-4 animate-in fade-in slide-in-from-top-2 md:grid-cols-3">
                           <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor="street" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                            <Label htmlFor="street" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                               <HouseLine size={16} weight="duotone" className="text-indigo-600" />
                               Logradouro <span className="text-red-500">*</span>
                             </Label>
@@ -870,7 +870,7 @@ export function PersonalInfoForm({
                             )}
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor="number" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                            <Label htmlFor="number" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                               <NumberCircleThree size={16} weight="duotone" className="text-pink-600" />
                               Número <span className="text-red-500">*</span>
                             </Label>
@@ -897,7 +897,7 @@ export function PersonalInfoForm({
 
                       {shouldShowNeighborhoodSelect && (
                         <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
-                          <Label className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                          <Label className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                             <HouseLine size={16} weight="duotone" className="text-indigo-600" />
                             Bairro / Comunidade <span className="text-red-500">*</span>
                           </Label>
@@ -944,7 +944,7 @@ export function PersonalInfoForm({
                     </div>
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                       <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="street" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                        <Label htmlFor="street" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                           <HouseLine size={16} weight="duotone" className="text-indigo-600" />
                           Logradouro <span className="text-red-500">*</span>
                         </Label>
@@ -967,7 +967,7 @@ export function PersonalInfoForm({
                         )}
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="number" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                        <Label htmlFor="number" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                           <NumberCircleThree size={16} weight="duotone" className="text-pink-600" />
                           Número <span className="text-red-500">*</span>
                         </Label>
@@ -990,7 +990,7 @@ export function PersonalInfoForm({
                         )}
                       </div>
                       <div className="space-y-2 md:col-span-3">
-                        <Label htmlFor="neighborhood" className="text-sm font-semibold text-gray-700 dark:text-gray-200 flex items-center gap-2">
+                        <Label htmlFor="neighborhood" className="text-sm font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                           <MapPin size={16} weight="duotone" className="text-teal-600" />
                           Bairro / Comunidade <span className="text-red-500">*</span>
                         </Label>
