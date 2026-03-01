@@ -2,8 +2,7 @@ import { format, addDays, isBefore, startOfDay } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Calendar } from '@/components/ui/calendar'
 import { Card } from '@/components/ui/card'
-import { CalendarBlank, Sparkle, CalendarCheck } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import { CalendarBlank, CalendarCheck } from '@phosphor-icons/react'
 import type { BlockedDate, Appointment } from '@/lib/types'
 
 interface DateSelectorProps {
@@ -119,46 +118,23 @@ export function DateSelector({
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4, type: "spring" }}
-    >
-      <Card className="card-lift p-10 shadow-2xl bg-gradient-to-br from-white to-blue-50/30 dark:from-gray-800 dark:to-gray-900 border-2 border-blue-100/50 dark:border-gray-700 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-100/40 to-transparent rounded-full blur-3xl -z-0" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-purple-100/40 to-transparent rounded-full blur-3xl -z-0" />
-        
-        <div className="relative z-10">
-          <motion.div 
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex items-center gap-4 mb-8"
-          >
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center shadow-xl shadow-blue-500/30">
-              <CalendarBlank className="text-white" size={32} weight="duotone" />
+    <div>
+      <Card className="p-6 bg-white border shadow-sm">
+        <div>
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center shadow flex-shrink-0">
+              <CalendarBlank className="text-white" size={26} weight="duotone" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
+              <h2 className="text-2xl font-bold text-gray-800">
                 Escolha a Data
-                <motion.div
-                  animate={{ rotate: [0, 15, -15, 0] }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                >
-                  <Sparkle size={24} weight="fill" className="text-purple-600" />
-                </motion.div>
               </h2>
-              <p className="text-base text-gray-600 mt-1">Selecione o melhor dia para seu atendimento</p>
+              <p className="text-sm text-gray-500 mt-0.5">Selecione o melhor dia para seu atendimento</p>
             </div>
-          </motion.div>
+          </div>
           
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex justify-center"
-          >
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-xl border-2 border-blue-100/50 dark:border-blue-900/50">
+          <div className="flex justify-center">
+            <div className="bg-white rounded-xl p-2 border">
               <Calendar
                 mode="single"
                 selected={selectedDate}
@@ -174,32 +150,27 @@ export function DateSelector({
                 className="rounded-xl"
               />
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div 
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-8 p-5 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl border-2 border-blue-200/50 dark:border-blue-800/50 shadow-lg"
-          >
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 dark:bg-blue-500 flex items-center justify-center flex-shrink-0 shadow-lg">
-                <CalendarCheck size={24} weight="fill" className="text-white" />
+          <div className="mt-5 p-4 bg-blue-50 rounded-xl border border-blue-200">
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center flex-shrink-0">
+                <CalendarCheck size={20} weight="fill" className="text-white" />
               </div>
               <div className="flex-1">
-                <p className="text-base text-gray-700 dark:text-gray-200 leading-relaxed font-medium">
-                  <span className="font-bold text-blue-700 dark:text-blue-400">Agendamentos disponíveis</span> {windowDescription}
+                <p className="text-sm text-gray-700 leading-relaxed font-medium">
+                  <span className="font-bold text-primary">Agendamentos disponíveis</span> {windowDescription}
                   {blockedDates.length > 0 && (
-                    <span className="block mt-2 text-sm text-gray-600 dark:text-gray-400">
+                    <span className="block mt-2 text-xs text-gray-500">
                       ⚠️ Datas bloqueadas (feriados/facultativos) e datas sem horários disponíveis não estão disponíveis para seleção
                     </span>
                   )}
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </Card>
-    </motion.div>
+    </div>
   )
 }

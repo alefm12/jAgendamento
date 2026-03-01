@@ -1946,9 +1946,9 @@ function App({ initialView = 'user' }: AppProps) {
           {currentUser && (
             <aside
               className={[
-                'w-72 border-r bg-card flex-shrink-0 h-screen overflow-y-auto',
+                'w-[82vw] max-w-[288px] border-r bg-card flex-shrink-0 h-screen overflow-y-auto',
                 'fixed top-0 left-0 z-50 transition-transform duration-300',
-                'lg:sticky lg:translate-x-0 lg:z-auto',
+                'lg:w-72 lg:sticky lg:translate-x-0 lg:z-auto',
                 sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
               ].join(' ')}
             >

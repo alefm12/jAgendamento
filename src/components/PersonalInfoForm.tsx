@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { User, IdentificationCard, Phone, EnvelopeSimple, CheckCircle, MapPin, HouseLine, Sparkle, NumberCircleThree, CreditCard, MapTrifold, Buildings } from '@phosphor-icons/react'
+import { User, IdentificationCard, Phone, EnvelopeSimple, CheckCircle, MapPin, HouseLine, NumberCircleThree, CreditCard, MapTrifold, Buildings } from '@phosphor-icons/react'
 import { validateCPF, validatePhone, formatCPF, formatPhone } from '@/lib/validators'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -406,11 +406,9 @@ export function PersonalInfoForm({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Card className="p-8 shadow-2xl bg-white dark:bg-gray-800 border-0 relative overflow-hidden">
-        <div className="absolute -top-20 -right-20 w-56 h-56 bg-gradient-to-bl from-purple-100/40 to-transparent rounded-full blur-3xl" />
-        <div className="absolute -bottom-20 -left-20 w-56 h-56 bg-gradient-to-tr from-blue-100/40 to-transparent rounded-full blur-3xl" />
+      <Card className="p-6 bg-white border shadow-sm">
         
-        <div className="relative z-10">
+        <div className="">
           <motion.div 
             initial={{ x: -20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -1038,7 +1036,7 @@ export function PersonalInfoForm({
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="mt-6 p-5 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+              className="mt-5 p-4 bg-blue-50 rounded-xl border border-blue-200 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
             >
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
