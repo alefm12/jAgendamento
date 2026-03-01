@@ -626,16 +626,16 @@ export function AnalyticsDashboard({ appointments, locations, systemName, curren
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Card className="bg-gradient-to-r from-primary/5 to-accent/5 border-2">
-        <CardHeader>
+        <CardHeader className="p-3 md:p-6">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="flex items-center gap-2">
-                <FunnelSimple size={24} weight="duotone" className="text-primary" />
+              <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+                <FunnelSimple size={20} weight="duotone" className="text-primary" />
                 Filtros de Análise
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="hidden md:block">
                 Filtre os dados por período, localidade, status, tipo de CIN, região, distrito/sede, bairro/comunidade, gênero e usuário
               </CardDescription>
             </div>
@@ -712,8 +712,8 @@ export function AnalyticsDashboard({ appointments, locations, systemName, curren
             />
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <CardContent className="space-y-3 p-3 md:p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
             <div className="space-y-2">
               <label className="text-sm font-medium flex items-center gap-2">
                 <CalendarBlank size={16} weight="duotone" />
@@ -1177,14 +1177,14 @@ export function AnalyticsDashboard({ appointments, locations, systemName, curren
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Agendamentos</CardTitle>
-            <Users size={20} className="text-muted-foreground" weight="duotone" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-4">
+            <CardTitle className="text-xs font-medium">Total de Agendamentos</CardTitle>
+            <Users size={16} className="text-muted-foreground" weight="duotone" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+          <CardContent className="p-3 md:p-4 pt-0">
+            <div className="text-xl font-bold">{stats.total}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Média de {stats.avgPerDay}/dia este mês
             </p>
@@ -1192,12 +1192,12 @@ export function AnalyticsDashboard({ appointments, locations, systemName, curren
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Hoje</CardTitle>
-            <Calendar size={20} className="text-muted-foreground" weight="duotone" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-4">
+            <CardTitle className="text-xs font-medium">Hoje</CardTitle>
+            <Calendar size={16} className="text-muted-foreground" weight="duotone" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.todayCount}</div>
+          <CardContent className="p-3 md:p-4 pt-0">
+            <div className="text-xl font-bold">{stats.todayCount}</div>
             <p className="text-xs text-muted-foreground mt-1">
               {stats.thisWeekCount} esta semana
             </p>
@@ -1205,12 +1205,12 @@ export function AnalyticsDashboard({ appointments, locations, systemName, curren
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Este Mês</CardTitle>
-            <TrendUp size={20} className="text-muted-foreground" weight="duotone" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-4">
+            <CardTitle className="text-xs font-medium">Este Mês</CardTitle>
+            <TrendUp size={16} className="text-muted-foreground" weight="duotone" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.thisMonthCount}</div>
+          <CardContent className="p-3 md:p-4 pt-0">
+            <div className="text-xl font-bold">{stats.thisMonthCount}</div>
             <p className="text-xs text-muted-foreground mt-1">
               {((stats.thisMonthCount / stats.total) * 100).toFixed(0)}% do total
             </p>
@@ -1218,12 +1218,12 @@ export function AnalyticsDashboard({ appointments, locations, systemName, curren
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">CINs Aguardando</CardTitle>
-            <Package size={20} className="text-purple-600" weight="duotone" />
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-3 md:p-4">
+            <CardTitle className="text-xs font-medium">CINs Aguardando</CardTitle>
+            <Package size={16} className="text-purple-600" weight="duotone" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{deliveryStats.totalPending}</div>
+          <CardContent className="p-3 md:p-4 pt-0">
+            <div className="text-xl font-bold">{deliveryStats.totalPending}</div>
             <p className="text-xs text-muted-foreground mt-1">
               {deliveryStats.delivered} já entregues
             </p>
@@ -1232,7 +1232,7 @@ export function AnalyticsDashboard({ appointments, locations, systemName, curren
       </div>
 
       <Tabs value={activeChartTab} onValueChange={setActiveChartTab} className="space-y-4">
-        <TabsList>
+        <TabsList className="flex flex-wrap h-auto gap-1">
           <TabsTrigger value="status">Por Status</TabsTrigger>
           <TabsTrigger value="rgtype">Tipo de CIN</TabsTrigger>
           <TabsTrigger value="location">Por Local</TabsTrigger>
@@ -1486,7 +1486,7 @@ export function AnalyticsDashboard({ appointments, locations, systemName, curren
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-3xl font-bold text-foreground">{stat.total}</div>
+                        <div className="text-xl font-bold text-foreground">{stat.total}</div>
                         <p className="text-xs text-muted-foreground">agendamentos</p>
                       </div>
                     </div>
