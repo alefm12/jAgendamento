@@ -18,6 +18,19 @@ const ensureCustomFieldColumn = async () => {
   customFieldColumnEnsured = true
 }
 
+let agendamentosTableEnsured = false
+const ensureAgendamentosTable = async () => {
+  if (agendamentosTableEnsured) return
+  // Remove a constraint que limita 1 agendamento por horário (impedia múltiplas vagas)
+  await pool.query(`ALTER TABLE agendamentos DROP CONSTRAINT IF EXISTS unique_agendamento`)
+  // Garante colunas extras que podem não existir em bancos antigos
+  await pool.query(`ALTER TABLE agendamentos ADD COLUMN IF NOT EXISTS genero VARCHAR(20)`)
+  await pool.query(`ALTER TABLE agendamentos ADD COLUMN IF NOT EXISTS ultima_modificacao TIMESTAMPTZ`)
+  await pool.query(`ALTER TABLE agendamentos ADD COLUMN IF NOT EXISTS custom_field_values JSONB DEFAULT '{}'::jsonb`)
+  customFieldColumnEnsured = true
+  agendamentosTableEnsured = true
+}
+
 // TEMPORARIAMENTE REMOVIDO - TESTE
 // router.use(tenantMiddleware)
 
@@ -306,7 +319,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req: AuthRequest, res) => {
   try {
-    await ensureCustomFieldColumn()
+    await ensureAgendamentosTable()
     console.log('[AGENDAMENTOS POST] Dados recebidos:', JSON.stringify(req.body, null, 2))
     
     // VALIDAÇÃO SIMPLIFICADA PARA DEBUG
@@ -374,7 +387,7 @@ router.post('/', async (req: AuthRequest, res) => {
         $13, $14, $15,
         $16, $17, 'pendente',
         $18, $19,
-        $20, $21, $22, $23
+        $20::jsonb, $21, $22::jsonb, $23::jsonb
       )
       RETURNING *
     `

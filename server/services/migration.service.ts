@@ -175,8 +175,7 @@ CREATE TABLE IF NOT EXISTS agendamentos (
     aceite_termos BOOLEAN DEFAULT FALSE,
     aceite_notificacoes BOOLEAN DEFAULT FALSE,
     criado_em TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em TIMESTAMPTZ DEFAULT NOW(),
-    CONSTRAINT unique_agendamento UNIQUE (local_id, data_agendamento, hora_agendamento)
+    atualizado_em TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- TABELA 10: DATAS_BLOQUEADAS
@@ -514,6 +513,14 @@ CREATE INDEX IF NOT EXISTS idx_agendamentos_data ON agendamentos(data_agendament
 CREATE INDEX IF NOT EXISTS idx_agendamentos_status ON agendamentos(status);
 CREATE INDEX IF NOT EXISTS idx_agendamentos_local ON agendamentos(local_id);
 CREATE INDEX IF NOT EXISTS idx_datas_bloqueadas_prefeitura ON datas_bloqueadas(prefeitura_id);
+
+-- Remove constraint que limitava 1 agendamento por horário (impedia múltiplas vagas)
+ALTER TABLE agendamentos DROP CONSTRAINT IF EXISTS unique_agendamento;
+
+-- Garante colunas extras que podem não existir em bancos antigos
+ALTER TABLE agendamentos ADD COLUMN IF NOT EXISTS genero VARCHAR(20);
+ALTER TABLE agendamentos ADD COLUMN IF NOT EXISTS ultima_modificacao TIMESTAMPTZ;
+ALTER TABLE agendamentos ADD COLUMN IF NOT EXISTS custom_field_values JSONB DEFAULT '{}'::jsonb;
 CREATE INDEX IF NOT EXISTS idx_datas_bloqueadas_data ON datas_bloqueadas(data);
 CREATE INDEX IF NOT EXISTS idx_logs_auditoria_prefeitura ON logs_auditoria(prefeitura_id);
 CREATE INDEX IF NOT EXISTS idx_logs_auditoria_criado_em ON logs_auditoria(criado_em);
