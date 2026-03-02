@@ -24,13 +24,21 @@ function readStoredTheme(): Theme {
   return 'light'
 }
 
-/** Aplica imediatamente a classe `dark` no <html>, color-scheme e a meta tag (iOS Safari) */
+/** Aplica imediatamente a classe `dark` no <html> E no <body> (para React Portals do Radix),
+ *  color-scheme e a meta tag (iOS Safari). */
 function applyThemeToDOM(t: Theme) {
+  const isDark = t === 'dark'
   const root = document.documentElement
-  root.classList.toggle('dark', t === 'dark')
-  root.style.colorScheme = t === 'dark' ? 'dark' : 'light'
+  root.classList.toggle('dark', isDark)
+  root.style.colorScheme = isDark ? 'dark' : 'light'
+  // Portais Radix (Dialog, Select, Popover, Sheet…) são filhos diretos de <body>.
+  // Aplicar a classe e color-scheme no body garante herança correta no iOS Safari.
+  if (document.body) {
+    document.body.classList.toggle('dark', isDark)
+    document.body.style.colorScheme = isDark ? 'dark' : 'light'
+  }
   const meta = document.getElementById('meta-color-scheme')
-  if (meta) meta.setAttribute('content', t === 'dark' ? 'dark' : 'light')
+  if (meta) meta.setAttribute('content', isDark ? 'dark' : 'light')
 }
 
 export function useTheme() {

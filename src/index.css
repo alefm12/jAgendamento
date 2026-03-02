@@ -228,24 +228,29 @@ html, body, #root {
 }
 
 /* =========================================================
-   TEMA: SEMPRE CLARO POR PADRÃO — ignorar configuração do SO
-   O modo escuro só ativa com a classe .dark no <html>,
-   colocada explicitamente pelo toggle do usuário.
+   TEMA: color-scheme explícito em html E body.
+   React Portals (Radix Dialog, Select, Popover, Sheet…) são
+   renderizados como filhos diretos de <body>. Para que herdem
+   o color-scheme corretamente no iOS Safari, <body> também
+   precisa ter a propriedade explicitamente declarada.
+   O JS (use-theme.ts) aplica a classe .dark no body também.
    ========================================================= */
-html {
+html,
+body {
   color-scheme: light;
 }
 
-html.dark {
+html.dark,
+html.dark body {
   color-scheme: dark;
 }
 
-/* Impede que qualquer regra CSS baseada em prefers-color-scheme
-   afete elementos quando o usuário não escolheu dark no app */
+/* Impede que regras baseadas em prefers-color-scheme afetem
+   html OU body quando o usuário não escolheu dark no app */
 @media (prefers-color-scheme: dark) {
-  html:not(.dark) {
+  html:not(.dark),
+  html:not(.dark) body {
     color-scheme: light !important;
-    /* Mantém o background branco nos inputs nativos do Safari iOS */
     background-color: initial;
   }
 }
