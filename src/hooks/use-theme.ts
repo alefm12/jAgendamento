@@ -16,11 +16,13 @@ function readStoredTheme(): Theme {
   return 'light'
 }
 
-/** Aplica imediatamente a classe `dark` no <html> e o color-scheme para mobile (iOS Safari) */
+/** Aplica imediatamente a classe `dark` no <html>, color-scheme e a meta tag (iOS Safari) */
 function applyThemeToDOM(t: Theme) {
   const root = document.documentElement
   root.classList.toggle('dark', t === 'dark')
   root.style.colorScheme = t === 'dark' ? 'dark' : 'light'
+  const meta = document.getElementById('meta-color-scheme')
+  if (meta) meta.setAttribute('content', t === 'dark' ? 'dark' : 'light')
 }
 
 export function useTheme() {

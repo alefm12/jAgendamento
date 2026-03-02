@@ -4,17 +4,22 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Aplica o tema ANTES do React carregar para evitar flash de conteúdo sem estilo -->
-    <!-- NÃO usa prefers-color-scheme: o tema é sempre o escolhido no app (padrão: claro) -->
+    <!-- Padrão LIGHT — ignorar configuração do SO. Atualizado via JS quando o usuário escolhe dark. -->
+    <meta id="meta-color-scheme" name="color-scheme" content="light" />
     <script>
       (function () {
         try {
           var stored = localStorage.getItem('jagendamento-theme');
+          var metaTag = document.getElementById('meta-color-scheme');
           if (stored === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.style.colorScheme = 'dark';
+            if (metaTag) metaTag.setAttribute('content', 'dark');
           } else {
+            /* Garante que nunca aplica dark mesmo se o SO estiver em dark mode */
+            document.documentElement.classList.remove('dark');
             document.documentElement.style.colorScheme = 'light';
+            if (metaTag) metaTag.setAttribute('content', 'light');
           }
         } catch (e) {}
       })();
