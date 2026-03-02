@@ -16,9 +16,12 @@ function readStoredTheme(): Theme {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
-/** Aplica imediatamente a classe `dark` no <html> */
+/** Aplica imediatamente a classe `dark` no <html> e sincroniza color-scheme para o browser */
 function applyThemeToDOM(t: Theme) {
-  document.documentElement.classList.toggle('dark', t === 'dark')
+  const root = document.documentElement
+  root.classList.toggle('dark', t === 'dark')
+  // Informa ao browser (especialmente Safari/iOS) o color-scheme ativo
+  root.style.colorScheme = t === 'dark' ? 'dark' : 'light'
 }
 
 export function useTheme() {
