@@ -2,13 +2,15 @@ import { useEffect, useState, useCallback } from 'react'
 
 type Theme = 'light' | 'dark'
 
-const STORAGE_KEY = 'jagendamento-ui-theme-v2'
+const STORAGE_KEY = 'jagendamento-ui-theme-v3'
 
 // Limpa chaves antigas que podem ter 'dark' salvo de versões anteriores
+// (incluindo v2, que podia ter 'dark' gravado por leitura do OS antes da correção)
 if (typeof window !== 'undefined') {
   try {
     localStorage.removeItem('jagendamento-theme')
     localStorage.removeItem('jagendamento-ui-theme')
+    localStorage.removeItem('jagendamento-ui-theme-v2')
   } catch { /* ignorar */ }
 }
 

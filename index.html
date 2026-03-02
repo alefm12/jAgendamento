@@ -9,22 +9,31 @@
     <script>
       (function () {
         try {
-          /* Remove chaves antigas que podiam ter 'dark' salvo */
+          /* Remove TODAS as chaves antigas, incluindo v2 que podia ter 'dark'
+             gravado por leitura do prefers-color-scheme do OS */
           localStorage.removeItem('jagendamento-theme');
           localStorage.removeItem('jagendamento-ui-theme');
+          localStorage.removeItem('jagendamento-ui-theme-v2');
 
-          var stored = localStorage.getItem('jagendamento-ui-theme-v2');
+          var stored = localStorage.getItem('jagendamento-ui-theme-v3');
           var metaTag = document.getElementById('meta-color-scheme');
+          /* Só aplica dark se o usuário EXPLICITAMENTE escolheu via toggle */
           if (stored === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.style.colorScheme = 'dark';
             if (metaTag) metaTag.setAttribute('content', 'dark');
           } else {
+            /* Padrão absoluto: LIGHT. Remove a classe dark mesmo se o OS estiver
+               em dark mode — o app ignora o sistema operacional. */
             document.documentElement.classList.remove('dark');
             document.documentElement.style.colorScheme = 'light';
             if (metaTag) metaTag.setAttribute('content', 'light');
           }
-        } catch (e) {}
+        } catch (e) {
+          /* Em caso de erro, garante light mode */
+          document.documentElement.classList.remove('dark');
+          document.documentElement.style.colorScheme = 'light';
+        }
       })();
     </script>
     <title>Sistema Multi-Prefeituras - Agendamento Online</title>
