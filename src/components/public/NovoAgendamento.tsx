@@ -888,11 +888,11 @@ export function NovoAgendamento({
       </div>
 
       <Modal isOpen={showLgpdModal} onClose={handleLgpdModalDecline}>
-        <div className="max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+        <div className="max-h-[92vh] w-full max-w-4xl overflow-hidden rounded-3xl bg-white dark:bg-gray-800 shadow-2xl">
           <div className="max-h-[78vh] overflow-y-auto px-6 py-6">
             <LGPDConsent config={systemConfig} />
           </div>
-          <div className="flex flex-col gap-3 border-t px-6 py-4 sm:flex-row">
+          <div className="flex flex-col gap-3 border-t dark:border-gray-700 px-6 py-4 sm:flex-row dark:bg-gray-800">
             <Button
               variant="outline"
               onClick={handleLgpdModalDecline}
