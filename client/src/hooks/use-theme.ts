@@ -2,7 +2,15 @@ import { useEffect, useState, useCallback } from 'react'
 
 type Theme = 'light' | 'dark'
 
-const STORAGE_KEY = 'jagendamento-theme'
+const STORAGE_KEY = 'jagendamento-ui-theme-v2'
+
+// Limpa chaves antigas que podem ter 'dark' salvo de versões anteriores
+if (typeof window !== 'undefined') {
+  try {
+    localStorage.removeItem('jagendamento-theme')
+    localStorage.removeItem('jagendamento-ui-theme')
+  } catch { /* ignorar */ }
+}
 
 /** Lê o tema salvo no localStorage — NÃO usa preferência do SO para não conflitar com o toggle do app */
 function readStoredTheme(): Theme {

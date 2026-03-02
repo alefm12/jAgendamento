@@ -9,14 +9,17 @@
     <script>
       (function () {
         try {
-          var stored = localStorage.getItem('jagendamento-theme');
+          /* Remove chaves antigas que podiam ter 'dark' salvo */
+          localStorage.removeItem('jagendamento-theme');
+          localStorage.removeItem('jagendamento-ui-theme');
+
+          var stored = localStorage.getItem('jagendamento-ui-theme-v2');
           var metaTag = document.getElementById('meta-color-scheme');
           if (stored === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.style.colorScheme = 'dark';
             if (metaTag) metaTag.setAttribute('content', 'dark');
           } else {
-            /* Garante que nunca aplica dark mesmo se o SO estiver em dark mode */
             document.documentElement.classList.remove('dark');
             document.documentElement.style.colorScheme = 'light';
             if (metaTag) metaTag.setAttribute('content', 'light');

@@ -227,13 +227,27 @@ html, body, #root {
   height: 100%;
 }
 
-/* Garante que iOS Safari use o esquema de cores correto para inputs nativos */
+/* =========================================================
+   TEMA: SEMPRE CLARO POR PADRÃO — ignorar configuração do SO
+   O modo escuro só ativa com a classe .dark no <html>,
+   colocada explicitamente pelo toggle do usuário.
+   ========================================================= */
 html {
   color-scheme: light;
 }
 
 html.dark {
   color-scheme: dark;
+}
+
+/* Impede que qualquer regra CSS baseada em prefers-color-scheme
+   afete elementos quando o usuário não escolheu dark no app */
+@media (prefers-color-scheme: dark) {
+  html:not(.dark) {
+    color-scheme: light !important;
+    /* Mantém o background branco nos inputs nativos do Safari iOS */
+    background-color: initial;
+  }
 }
 
 body {
