@@ -127,9 +127,9 @@ export function NovoAgendamento({
   } | null>(null)
   const [cpfTemAgendamentoPendente, setCpfTemAgendamentoPendente] = useState<boolean>(false)
   const [agendamentoPendenteInfo, setAgendamentoPendenteInfo] = useState<{
-    protocolo?: string;
-    data?: string;
-    hora?: string;
+    protocolo: string;
+    data: string;
+    hora: string;
   } | null>(null)
 
   const safeAppointments = appointments || []
@@ -390,8 +390,8 @@ export function NovoAgendamento({
     
     try {
       // 1. Verificar bloqueio
-      const responseBloqueio = await api.get(`/bloqueio/verificar/${cpf}`)
-      const bloqueio = responseBloqueio.data
+      const responseBloqueio = await api.get<any>(`/bloqueio/verificar/${cpf}`)
+      const bloqueio = responseBloqueio
       
       if (bloqueio.bloqueado) {
         setCpfBloqueado(true)
@@ -422,8 +422,8 @@ export function NovoAgendamento({
       
       // 2. Verificar se tem agendamento pendente
       try {
-        const responseConsulta = await api.get(`/agendamentos/consultar/${cpf}`)
-        const consultaData = responseConsulta.data
+        const responseConsulta = await api.get<any>(`/agendamentos/consultar/${cpf}`)
+        const consultaData = responseConsulta
         
         if (consultaData.found && consultaData.appointments) {
           const agendamentoPendente = consultaData.appointments.find((apt: any) => 
@@ -731,7 +731,7 @@ export function NovoAgendamento({
             lgpdConsent: { notificationAccepted: true }
           }
           const notificationResult = await sendConfirmationNotification(
-            appointmentWithConsent,
+            appointmentWithConsent as any,
             systemConfig,
             location?.address,
             location?.googleMapsUrl,
