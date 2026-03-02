@@ -4,7 +4,7 @@ type Theme = 'light' | 'dark'
 
 const STORAGE_KEY = 'jagendamento-theme'
 
-/** Lê o tema salvo no localStorage, com fallback para a preferência do SO */
+/** Lê o tema salvo no localStorage — NÃO usa preferência do SO para não conflitar com o toggle do app */
 function readStoredTheme(): Theme {
   if (typeof window === 'undefined') return 'light'
   try {
@@ -13,7 +13,7 @@ function readStoredTheme(): Theme {
   } catch {
     // localStorage pode estar bloqueado em alguns contextos
   }
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return 'light'
 }
 
 /** Aplica imediatamente a classe `dark` no <html> e o color-scheme para mobile (iOS Safari) */

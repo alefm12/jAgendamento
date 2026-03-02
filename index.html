@@ -5,12 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Aplica o tema ANTES do React carregar para evitar flash de conteúdo sem estilo -->
+    <!-- NÃO usa prefers-color-scheme: o tema é sempre o escolhido no app (padrão: claro) -->
     <script>
       (function () {
         try {
           var stored = localStorage.getItem('jagendamento-theme');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (stored === 'dark' || (!stored && prefersDark)) {
+          if (stored === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.style.colorScheme = 'dark';
           } else {
