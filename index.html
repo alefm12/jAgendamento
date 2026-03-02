@@ -10,17 +10,15 @@
         try {
           var stored = localStorage.getItem('jagendamento-theme');
           var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var isDark = stored === 'dark' || (!stored && prefersDark);
-          if (isDark) {
+          if (stored === 'dark' || (!stored && prefersDark)) {
             document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.style.colorScheme = 'light';
           }
-          // Sincroniza color-scheme para Safari/iOS respeitar o modo selecionado
-          // Sem isso, inputs/selects ficam escuros no iOS mesmo no modo claro
-          document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
         } catch (e) {}
       })();
     </script>
-    <meta name="color-scheme" content="light dark" />
     <title>Sistema Multi-Prefeituras - Agendamento Online</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -227,6 +227,15 @@ html, body, #root {
   height: 100%;
 }
 
+/* Garante que iOS Safari use o esquema de cores correto para inputs nativos */
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
 body {
   font-family: var(--font-body);
   overscroll-behavior: none;
