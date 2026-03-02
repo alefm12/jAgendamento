@@ -1,6 +1,6 @@
 /* @custom-variant dark aqui também garante que as utilities dark:
    neste arquivo usem class-based (.dark) e NÃO @media prefers-color-scheme */
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   * {
@@ -244,37 +244,6 @@ body {
 html.dark,
 html.dark body {
   color-scheme: dark;
-}
-
-/* Impede que regras baseadas em prefers-color-scheme afetem
-   html OU body quando o usuário não escolheu dark no app */
-@media (prefers-color-scheme: dark) {
-  html:not(.dark),
-  html:not(.dark) body {
-    color-scheme: light !important;
-    background-color: initial;
-    /* Re-assert light CSS vars para impedir que qualquer regra gerada
-       por @media prefers-color-scheme (ex: duplicata Tailwind) sobrescreva */
-    --background: oklch(0.97 0.003 250);
-    --foreground: oklch(0.15 0.01 250);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.15 0.01 250);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.15 0.01 250);
-    --primary: oklch(0.50 0.20 210);
-    --primary-foreground: oklch(0.99 0 0);
-    --secondary: oklch(0.60 0.15 270);
-    --secondary-foreground: oklch(0.99 0 0);
-    --muted: oklch(0.95 0.005 250);
-    --muted-foreground: oklch(0.45 0.01 250);
-    --accent: oklch(0.55 0.22 280);
-    --accent-foreground: oklch(0.99 0 0);
-    --destructive: oklch(0.55 0.22 25);
-    --destructive-foreground: oklch(0.99 0 0);
-    --border: oklch(0.90 0.005 250);
-    --input: oklch(0.93 0.005 250);
-    --ring: oklch(0.50 0.20 210);
-  }
 }
 
 body {

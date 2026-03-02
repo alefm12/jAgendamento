@@ -3,7 +3,7 @@
 /* DEVE vir logo após o import do tailwindcss para sobrescrever o
    variant dark padrão (que usa @media prefers-color-scheme)
    antes de qualquer outro @import que também puxe utilities. */
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @import './styles/theme.css';
 @import './index.css';
