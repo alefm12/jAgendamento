@@ -31,7 +31,6 @@ import { ReportExecutionHistory } from '@/components/ReportExecutionHistory'
 import { AuditLogViewer } from '@/components/AuditLogViewer'
 import { ReminderHistory } from '@/components/ReminderHistory'
 import { ReminderStatusIndicator } from '@/components/ReminderStatusIndicator'
-import { ThemeToggle } from '@/components/ThemeToggle'
 import { NotificationTestPanel } from '@/components/NotificationTestPanel'
 import { AtendimentoBoard } from '@/components/AtendimentoBoard'
 import { List, IdentificationCard, MapPin, Gear, SignOut, CalendarBlank, Package, ChartBar, Upload, Download, UserCircle, FilePlus, ClockClockwise, ClipboardText, ShieldCheck, Bell, PaperPlaneRight, UsersThree } from '@phosphor-icons/react'
@@ -2201,7 +2200,6 @@ function App({ initialView = 'user' }: AppProps) {
               <div className="p-4 mt-auto border-t">
                 <div className="flex items-center gap-2 mb-3">
                   <ReminderStatusIndicator config={systemConfig || DEFAULT_CONFIG} />
-                  <ThemeToggle defaultTheme={systemConfig?.defaultTheme} />
                 </div>
                 <Button
                   variant="outline"
@@ -2216,14 +2214,6 @@ function App({ initialView = 'user' }: AppProps) {
           )}
 
           <div className="flex-1 flex flex-col min-h-screen">
-            {!currentUser && (
-              <div className="border-b bg-card flex-shrink-0 sticky top-0 z-40">
-                <div className="px-4 py-2 flex justify-end">
-                  <ThemeToggle defaultTheme={systemConfig?.defaultTheme} />
-                </div>
-              </div>
-            )}
-
             {currentUser && (
               <div className="border-b bg-card flex-shrink-0 sticky top-0 z-40 shadow-sm">
                 <div className="px-4 lg:px-6 py-4 flex items-center gap-3">

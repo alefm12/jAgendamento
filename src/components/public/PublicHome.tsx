@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import { useRoute, useLocation } from "wouter"
-import { Calendar, Search, Phone, Loader2, Building2, Moon, Sun } from "lucide-react"
+import { Calendar, Search, Phone, Loader2, Building2 } from "lucide-react"
 import AccessibilityDropdown from "./AccessibilityDropdown"
 import { AylaButton } from "@/components/ayla/AylaButton"
-import { useTheme } from "@/hooks/use-theme"
 
 interface PublicConfig {
   nome: string
@@ -32,7 +31,6 @@ export default function TenantHome({ tenantSlug, onStartSchedule, onConsult }: P
   const [config, setConfig] = useState<PublicConfig | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-  const { isDark, toggleTheme } = useTheme()
 
   useEffect(() => {
     if (!slug) return
@@ -93,14 +91,6 @@ export default function TenantHome({ tenantSlug, onStartSchedule, onConsult }: P
         <AccessibilityDropdown />
         <button
           type="button"
-          onClick={toggleTheme}
-          className="rounded-full border border-gray-200/50 bg-white/80 p-3 text-gray-700 shadow-sm backdrop-blur-md transition hover:shadow-md dark:border-gray-700/50 dark:bg-gray-800/80 dark:text-gray-200"
-          title={isDark ? "Mudar para Modo Claro" : "Mudar para Modo Escuro"}
-        >
-          {isDark ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-        <button
-          type="button"
           onClick={handleOpenSecretariat}
           className="group flex items-center gap-3 rounded-full border border-gray-200/50 bg-white/90 pl-3 pr-5 py-2 text-sm font-bold text-gray-700 shadow-sm backdrop-blur-md transition hover:bg-white dark:border-gray-700/50 dark:bg-gray-800/90 dark:text-gray-200"
         >
@@ -127,7 +117,7 @@ export default function TenantHome({ tenantSlug, onStartSchedule, onConsult }: P
           </div>
           <h1
             className="mb-4 w-full break-words text-3xl font-black uppercase leading-tight drop-shadow md:text-5xl lg:text-6xl"
-            style={{ color: config.cores.principal, textShadow: isDark ? "2px 2px 0px #000" : "2px 2px 0px #fff" }}
+            style={{ color: config.cores.principal, textShadow: "2px 2px 0px #fff" }}
           >
             {config.nome}
           </h1>

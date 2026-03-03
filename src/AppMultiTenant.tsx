@@ -4,8 +4,6 @@ import { Toaster, toast } from 'sonner'
 import App from './App'
 import { NovoAgendamento } from '@/components/public/NovoAgendamento'
 import PublicHome from '@/components/public/PublicHome'
-import { ThemeToggle } from '@/components/ThemeToggle'
-import { useTheme } from '@/hooks/use-theme'
 import { ConsultationStatus } from '@/components/public/ConsultationStatus'
 import { SuperAdminLogin } from '@/components/SuperAdminLogin'
 import { SuperAdminPanel } from '@/components/SuperAdminPanel'
@@ -86,13 +84,6 @@ const setTenantContext = (tenantId?: string, slug?: string) => {
   }
 }
 
-function ThemeInitializer() {
-  // Garante que o tema (dark/light) é sempre aplicado ao documentElement,
-  // inclusive para usuários públicos não autenticados.
-  useTheme()
-  return null
-}
-
 export default function MultiTenantApp() {
   return (
     <Router>
@@ -134,7 +125,6 @@ export default function MultiTenantApp() {
           <NotFoundScreen />
         </Route>
       </Switch>
-      <ThemeInitializer />
       <Toaster position="top-center" richColors />
     </Router>
   )
