@@ -21,6 +21,7 @@ import { AnalyticsDashboard } from '@/components/AnalyticsDashboard'
 import { DataImportDialog } from '@/components/DataImportDialog'
 import { NovoAgendamento } from '@/components/public/NovoAgendamento'
 import { ScrollToTop } from '@/components/ScrollToTop'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { SmoothScrollWrapper, SmoothScrollContainer, FadeIn, ScaleIn } from '@/components/SmoothScrollWrapper'
 import { FilteredReportExport } from '@/components/FilteredReportExport'
 import { ReportTemplateManager } from '@/components/ReportTemplateManager'
@@ -2200,6 +2201,7 @@ function App({ initialView = 'user' }: AppProps) {
               <div className="p-4 mt-auto border-t">
                 <div className="flex items-center gap-2 mb-3">
                   <ReminderStatusIndicator config={systemConfig || DEFAULT_CONFIG} />
+                  <ThemeToggle />
                 </div>
                 <Button
                   variant="outline"

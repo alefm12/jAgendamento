@@ -1,24 +1,49 @@
-// Dark mode removido — sistema sempre em modo claro
-if (typeof window !== 'undefined') {
-  try {
-    localStorage.removeItem('jagendamento-theme')
-    localStorage.removeItem('jagendamento-ui-theme')
-    localStorage.removeItem('jagendamento-ui-theme-v2')
-    localStorage.removeItem('jagendamento-ui-theme-v3')
-  } catch { /* ignorar */ }
-  document.documentElement.classList.remove('dark')
-  document.documentElement.style.colorScheme = 'light'
-  if (document.body) {
-    document.body.classList.remove('dark')
-    document.body.style.colorScheme = 'light'
+import { useState, useEffect } from 'react'
+
+const THEME_KEY = 'jagendamento-ui-theme-v3'
+
+function applyTheme(theme: 'light' | 'dark') {
+  const root = document.documentElement
+  if (theme === 'dark') {
+    root.classList.add('dark')
+    root.style.colorScheme = 'dark'
+  } else {
+    root.classList.remove('dark')
+    root.style.colorScheme = 'light'
   }
 }
 
-export function useTheme(_options?: unknown) {
+interface UseThemeOptions {
+  defaultTheme?: 'light' | 'dark'
+}
+
+export function useTheme(options?: UseThemeOptions) {
+  const [theme, setThemeState] = useState<'light' | 'dark'>(() => {
+    if (typeof window === 'undefined') return options?.defaultTheme ?? 'light'
+    try {
+      const stored = localStorage.getItem(THEME_KEY) as 'light' | 'dark' | null
+      if (stored === 'light' || stored === 'dark') return stored
+    } catch { /* ignorar */ }
+    return options?.defaultTheme ?? 'light'
+  })
+
+  useEffect(() => {
+    applyTheme(theme)
+    try { localStorage.setItem(THEME_KEY, theme) } catch { /* ignorar */ }
+  }, [theme])
+
+  const setTheme = (t: string) => {
+    if (t === 'light' || t === 'dark') setThemeState(t)
+  }
+
+  const toggleTheme = () => {
+    setThemeState(prev => (prev === 'dark' ? 'light' : 'dark'))
+  }
+
   return {
-    theme: 'light' as const,
-    setTheme: (_t: string) => {},
-    toggleTheme: () => {},
-    isDark: false
+    theme,
+    setTheme,
+    toggleTheme,
+    isDark: theme === 'dark'
   }
 }

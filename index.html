@@ -12,14 +12,16 @@
     <script>
       (function () {
         try {
-          /* Limpa chaves de dark mode antigas e força sempre light mode */
-          localStorage.removeItem('jagendamento-theme');
-          localStorage.removeItem('jagendamento-ui-theme');
-          localStorage.removeItem('jagendamento-ui-theme-v2');
-          localStorage.removeItem('jagendamento-ui-theme-v3');
+          /* Aplica tema salvo para evitar FOUC (Flash of Unstyled Content) */
+          var theme = localStorage.getItem('jagendamento-ui-theme-v3');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.colorScheme = 'light';
+          }
         } catch (e) { /* ignorar */ }
-        document.documentElement.classList.remove('dark');
-        document.documentElement.style.colorScheme = 'light';
       })();
     </script>
     <title>Sistema Multi-Prefeituras - Agendamento Online</title>
