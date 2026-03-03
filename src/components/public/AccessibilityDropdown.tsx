@@ -68,7 +68,7 @@ export default function AccessibilityDropdown() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex items-center gap-2 rounded-full border border-gray-200/50 bg-white/80 px-4 py-2.5 text-gray-700 shadow-sm backdrop-blur-md transition hover:shadow-md dark:border-gray-700/50 dark:bg-gray-800/80 dark:text-gray-200"
+        className="group flex items-center gap-2 rounded-full border border-gray-200/50 bg-white/80 px-4 py-2.5 text-gray-700 shadow-sm backdrop-blur-md transition hover:shadow-md"
         title="Acessibilidade"
       >
         <svg
@@ -95,17 +95,17 @@ export default function AccessibilityDropdown() {
             className="fixed inset-0 z-[60]" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-gray-200/50 bg-white/95 p-4 shadow-xl backdrop-blur-md dark:border-gray-700/50 dark:bg-gray-800/95 z-[70]">
+          <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-gray-200/50 bg-white/95 p-4 shadow-xl backdrop-blur-md z-[70]">
             <div className="space-y-4">
               <div>
-                <label className="mb-2 block text-xs font-bold text-gray-700 dark:text-gray-300">
+                <label className="mb-2 block text-xs font-bold text-gray-700">
                   Tamanho da Fonte
                 </label>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={decreaseFontSize}
                     disabled={fontSize <= 70}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-700 dark:hover:bg-gray-600"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
                     title="Diminuir fonte"
                   >
                     <Minus size={16} />
@@ -114,7 +114,7 @@ export default function AccessibilityDropdown() {
                   <button
                     onClick={increaseFontSize}
                     disabled={fontSize >= 150}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-gray-700 dark:hover:bg-gray-600"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
                     title="Aumentar fonte"
                   >
                     <Plus size={16} />
@@ -123,7 +123,7 @@ export default function AccessibilityDropdown() {
               </div>
 
               <div>
-                <label className="mb-2 block text-xs font-bold text-gray-700 dark:text-gray-300">
+                <label className="mb-2 block text-xs font-bold text-gray-700">
                   Alto Contraste
                 </label>
                 <button
@@ -131,7 +131,7 @@ export default function AccessibilityDropdown() {
                   className={`flex w-full items-center justify-center gap-2 rounded-lg py-2 text-sm font-semibold transition ${
                     highContrast
                       ? 'bg-yellow-500 text-black hover:bg-yellow-600'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
                   <SunDim size={16} />
@@ -141,7 +141,7 @@ export default function AccessibilityDropdown() {
 
               <button
                 onClick={resetSettings}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-50 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-50 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100"
               >
                 <RotateCcw size={16} />
                 Restaurar Padrão

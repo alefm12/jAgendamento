@@ -37,30 +37,30 @@ export default function SchedulingWizard({ tenantSlug }: SchedulingWizardProps) 
   const normalizedCity = slug.charAt(0).toUpperCase() + slug.slice(1)
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 transition-colors dark:bg-gray-900 dark:text-gray-100">
-      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800">
+    <div className="min-h-screen bg-gray-50 text-gray-900 transition-colors">
+      <header className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 shadow-sm transition-colors">
         <div className="flex items-center gap-3">
           <div className="rounded-lg bg-emerald-600 p-2 text-white">
             <FileText size={24} />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-gray-800 transition-colors dark:text-white">Agendamento CIN</h1>
-            <p className="text-xs text-gray-500 transition-colors dark:text-gray-400">Sistema de Agendamento da Carteira de Identidade Nacional</p>
+            <h1 className="text-lg font-bold text-gray-800 transition-colors">Agendamento CIN</h1>
+            <p className="text-xs text-gray-500 transition-colors">Sistema de Agendamento da Carteira de Identidade Nacional</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex rounded-lg border border-gray-200 bg-gray-100 p-1 transition dark:border-gray-600 dark:bg-gray-700">
+          <div className="flex rounded-lg border border-gray-200 bg-gray-100 p-1 transition">
             <button
               type="button"
               onClick={handleOpenScheduling}
-              className="flex items-center gap-2 rounded-md bg-white px-4 py-1.5 text-xs font-bold text-gray-800 shadow-sm transition-colors hover:bg-gray-50 dark:bg-gray-600 dark:text-white"
+              className="flex items-center gap-2 rounded-md bg-white px-4 py-1.5 text-xs font-bold text-gray-800 shadow-sm transition-colors hover:bg-gray-50"
             >
               <Calendar size={14} /> Agendar
             </button>
             <button
               type="button"
               onClick={handleOpenSecretariat}
-              className="flex items-center gap-2 rounded-md px-4 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-200/50 hover:text-gray-800 dark:text-gray-300 dark:hover:bg-gray-600/50 dark:hover:text-white"
+              className="flex items-center gap-2 rounded-md px-4 py-1.5 text-xs font-medium text-gray-500 transition-colors hover:bg-gray-200/50 hover:text-gray-800"
               title="Acessar Área Restrita (Nova Aba)"
             >
               <LayoutDashboard size={14} /> Secretaria
@@ -81,18 +81,18 @@ export default function SchedulingWizard({ tenantSlug }: SchedulingWizardProps) 
       <div className="mx-auto mt-6 max-w-6xl px-4 pb-20">
         <div className="mb-6">
           <span className="rounded bg-emerald-50 px-2 py-1 text-xs font-bold uppercase tracking-wider text-emerald-600">Passo 1</span>
-          <h2 className="mt-2 text-2xl font-bold text-gray-800 transition-colors dark:text-white">Escolha o Local de Atendimento</h2>
-          <p className="text-sm text-gray-500 transition-colors dark:text-gray-400">As próximas etapas serão liberadas após selecionar um local disponível.</p>
+          <h2 className="mt-2 text-2xl font-bold text-gray-800 transition-colors">Escolha o Local de Atendimento</h2>
+          <p className="text-sm text-gray-500 transition-colors">As próximas etapas serão liberadas após selecionar um local disponível.</p>
         </div>
 
-        <div className="flex items-center justify-between rounded-2xl border-2 border-emerald-500 bg-white p-6 shadow-md transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-gray-800">
+        <div className="flex items-center justify-between rounded-2xl border-2 border-emerald-500 bg-white p-6 shadow-md transition hover:-translate-y-0.5 hover:shadow-lg">
           <div className="flex items-start gap-5">
-            <div className="rounded-full border border-emerald-100 bg-emerald-50 p-4 text-emerald-600 dark:bg-emerald-900/30">
+            <div className="rounded-full border border-emerald-100 bg-emerald-50 p-4 text-emerald-600">
               <MapPin size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-800 transition-colors dark:text-white">SIPS - Secretaria de Identificação</h3>
-              <p className="mt-1 text-sm text-gray-500 transition-colors dark:text-gray-400">
+              <h3 className="text-xl font-bold text-gray-800 transition-colors">SIPS - Secretaria de Identificação</h3>
+              <p className="mt-1 text-sm text-gray-500 transition-colors">
                 R. Jorge Domingues Araújo, 962 - Centro, {normalizedCity} - CE
               </p>
               <span className="mt-3 inline-block rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-green-700">Disponível</span>
@@ -107,7 +107,7 @@ export default function SchedulingWizard({ tenantSlug }: SchedulingWizardProps) 
           <button
             type="button"
             onClick={handleContinue}
-            className="flex items-center gap-2 rounded-xl bg-emerald-700 px-10 py-3.5 font-bold text-white shadow-lg shadow-emerald-200 transition hover:-translate-y-1 hover:bg-emerald-800 dark:shadow-none"
+            className="flex items-center gap-2 rounded-xl bg-emerald-700 px-10 py-3.5 font-bold text-white shadow-lg shadow-emerald-200 transition hover:-translate-y-1 hover:bg-emerald-800"
           >
             Continuar <ArrowRight size={20} />
           </button>
@@ -128,8 +128,8 @@ function StepIndicator({ num, label, active }: StepIndicatorProps) {
     <div
       className={`flex min-w-[150px] flex-1 items-center justify-center gap-2 rounded-full border py-3.5 text-sm font-bold transition-colors ${
         active
-          ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm dark:border-emerald-500 dark:bg-emerald-900/20 dark:text-emerald-400"
-          : "border-gray-200 bg-white text-gray-400 dark:border-gray-700 dark:bg-gray-800"
+          ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
+          : "border-gray-200 bg-white text-gray-400"
       }`}
     >
       <span
