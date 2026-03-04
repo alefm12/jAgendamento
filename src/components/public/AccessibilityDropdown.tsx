@@ -95,7 +95,7 @@ export default function AccessibilityDropdown() {
             className="fixed inset-0 z-[60]" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 top-full mt-2 w-64 rounded-xl border border-gray-200/50 bg-white/95 p-4 shadow-xl backdrop-blur-md z-[70]">
+          <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-2 w-64 max-w-[calc(100vw-1rem)] rounded-xl border border-gray-200/50 bg-white/95 p-4 shadow-xl backdrop-blur-md z-[70]">
             <div className="space-y-4">
               <div>
                 <label className="mb-2 block text-xs font-bold text-gray-700">
